@@ -1,0 +1,129 @@
+"use client";
+import { rgbDataURL } from "@/lib/image";
+import login from "@/public/login.png";
+import Image from "next/image";
+import Link from "next/link";
+import { ChangeEvent, useState } from "react";
+
+export default function Login() {
+  const [userDetail, setuserDetail] = useState({ email: "", password: "" });
+  function handleUserDetailUpdate(e: ChangeEvent<HTMLInputElement>) {
+    setuserDetail((user) => ({ ...user, [e.target.name]: [e.target.value] }));
+  }
+
+  return (
+    <section className="px-6 py-4 lg:px-8 overflow-hidden bg-white sm:py-6">
+      {/* <div className="overflow-hidden bg-white py-24 sm:py-32">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
+          <div className="lg:pr-8 lg:pt-4">
+            <div className="lg:max-w-lg">
+              <h2 className="text-base font-semibold leading-7 text-indigo-600">Deploy faster</h2>
+              <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">A better workflow</p>
+              <p className="mt-6 text-lg leading-8 text-gray-600">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque,
+                iste dolor cupiditate blanditiis ratione.
+              </p>
+              
+            </div>
+          </div>
+          <div className="relative">
+          <Image
+            src={"/login.png"}
+            alt={"Login Splash Image"}
+            // className={'h-full w-full object-cover'}
+            width={500}
+            height={500}
+            // fill={true}
+          // />
+            className="w-[48rem] max-w-none rounded-xl shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0"
+            // width={2432}
+            // height={1442}
+          />
+          </div>
+        </div>
+      </div>
+    </div> */}
+      <div className="grid md:grid-cols-12 gap-x-8 gap-y-16 sm:gap-y-20 max-w-7xl items-center my-auto m-auto bg-white sm:py-5 sm:px-6">
+        <div className="relative block h-16 md:order-last md:col-span-5 md:h-full">
+          <Image
+            src={login}
+            alt={"Login Splash Image"}
+            className={"h-full w-full object-cover"}
+            blurDataURL={rgbDataURL(255, 255, 255)}
+            placeholder="blur"
+            // width={500}
+            // height={500}
+            // fill={true}
+          />
+        </div>
+        <div className="flex flex-col md:col-span-7 w-full mx-auto justify-center items-center ">
+          <div className="text-center flex justify-center items-start sm:mx-auto sm:w-full sm:max-w-sm">
+            <h1 className="text-xl font-bold md:text-3xl text-blue-500">
+              Login
+            </h1>
+          </div>
+          <form action={""} method="post" className="w-full sm:max-w-md">
+            <div className="mt-6">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-slate-700"
+              >
+                Email
+              </label>
+              <div className="mt-1">
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  className="px-3 py-3 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none block w-full rounded-md sm:text-sm focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:leading-6 invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500"
+                  placeholder="you@example.com"
+                  onChange={handleUserDetailUpdate}
+                />
+              </div>
+            </div>
+            <div className="mt-6">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-slate-700"
+              >
+                Password
+              </label>
+              <div className="mt-1">
+                <input
+                  type="password"
+                  name="password"
+                  id="password"
+                  className="px-3 py-3 bg-white border shadow-sm border-slate-300 placeholder-slate-400  
+                  focus:outline-none block w-full rounded-md sm:text-sm focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:leading-6"
+                  placeholder="password"
+                  onChange={handleUserDetailUpdate}
+                />
+              </div>
+            </div>
+            <div className="grid mt-6 text-center items-center">
+              {/* <input
+                type="submit"
+                value="Login"
+                className="w-3/4 cursor-pointer bg-sky-500 bg-gradient-to-r from-blue-500 to-rose-500 hover:bg-sky-700 px-5 py-2.5 text-sm leading-5 font-semibold hover:bg-none focus:outline-none focus:ring focus:bg-opacity-70 text-white"
+              /> */}
+              <input
+                type="submit"
+                value="Sign In"
+                className="flex w-auto justify-center rounded-md bg-indigo-600 px-6 py-2 mb-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              />
+              <div className="w-full text-sm">
+                <p className="text-gray-500">
+                  {`Don't have an account?`}{" "}
+                  <Link href={"/register"} className="text-blue-400 underline">
+                    Sign up
+                  </Link>
+                </p>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  );
+}
