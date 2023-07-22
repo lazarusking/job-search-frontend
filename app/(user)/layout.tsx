@@ -1,11 +1,14 @@
 import Navbar from "@/components/navbar/Navbar";
+import { AuthProvider } from "@/context/auth";
 import { ReactNode } from "react";
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <>
-      <Navbar />
-      {children}
+      <AuthProvider>
+        <Navbar />
+        {children}
+      </AuthProvider>
     </>
   );
 }

@@ -1,15 +1,59 @@
 "use client";
+import { useAuth } from "@/context/auth";
 import { rgbDataURL } from "@/lib/image";
-import login from "@/public/login.png";
+import loginImage from "@/public/login.png";
 import Image from "next/image";
 import Link from "next/link";
-import { ChangeEvent, useState } from "react";
+import { useRouter } from "next/navigation";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 
+type LoginError = {
+  email: string;
+  password: string;
+  detail: string;
+};
 export default function Login() {
-  const [userDetail, setuserDetail] = useState({ email: "", password: "" });
+  const [userDetail, setUserDetail] = useState({ email: "", password: "" });
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
   function handleUserDetailUpdate(e: ChangeEvent<HTMLInputElement>) {
-    setuserDetail((user) => ({ ...user, [e.target.name]: [e.target.value] }));
+    setUserDetail((user) => ({ ...user, [e.target.name]: e.target.value }));
   }
+  const [error, setErrorMessage] = useState<Partial<LoginError>>({});
+  const { loading, isAuthenticated, login } = useAuth();
+  const router = useRouter();
+  useEffect(() => {
+    setUserDetail((userDetail) => ({
+      ...userDetail,
+      email: emailRef.current.value,
+    }));
+    setUserDetail((userDetail) => ({
+      ...userDetail,
+      password: passwordRef.current!.value,
+    }));
+  }, []);
+
+  const handleSubmit = async (
+    event: FormEvent<HTMLFormElement>
+  ): Promise<void> => {
+    event.preventDefault();
+    setErrorMessage({});
+    // try {
+    console.log(userDetail);
+    const resp = await login(userDetail.email, userDetail.password);
+    console.log(resp.response);
+
+    if (resp.response && resp.response.status === 400) {
+      console.log(resp.response.data);
+      setErrorMessage(resp.response.data);
+    }
+    if (resp.response && resp.response.status === 401) {
+      setErrorMessage({ detail: "Invalid login credentials" });
+    }
+    // } catch (ex: any) {
+    // }
+    if (!loading && isAuthenticated) router.push("/");
+  };
 
   return (
     <section className="px-6 py-4 lg:px-8 overflow-hidden bg-white sm:py-6">
@@ -47,7 +91,7 @@ export default function Login() {
       <div className="grid md:grid-cols-12 gap-x-8 gap-y-16 sm:gap-y-20 max-w-7xl items-center my-auto m-auto bg-white sm:py-5 sm:px-6">
         <div className="relative block h-16 md:order-last md:col-span-5 md:h-full">
           <Image
-            src={login}
+            src={loginImage}
             alt={"Login Splash Image"}
             className={"h-full w-full object-cover"}
             blurDataURL={rgbDataURL(255, 255, 255)}
@@ -63,7 +107,13 @@ export default function Login() {
               Login
             </h1>
           </div>
-          <form action={""} method="post" className="w-full sm:max-w-md">
+          <form
+            method="post"
+            className="w-full sm:max-w-md"
+            onSubmit={handleSubmit}
+          >
+            {error.detail && <ErrorMessage msg={error.detail} />}
+
             <div className="mt-6">
               <label
                 htmlFor="email"
@@ -73,6 +123,7 @@ export default function Login() {
               </label>
               <div className="mt-1">
                 <input
+                  ref={emailRef}
                   type="email"
                   name="email"
                   id="email"
@@ -81,6 +132,7 @@ export default function Login() {
                   onChange={handleUserDetailUpdate}
                 />
               </div>
+              {error.email && <ErrorMessage msg={error.email} />}
             </div>
             <div className="mt-6">
               <label
@@ -91,6 +143,7 @@ export default function Login() {
               </label>
               <div className="mt-1">
                 <input
+                  ref={passwordRef}
                   type="password"
                   name="password"
                   id="password"
@@ -100,6 +153,7 @@ export default function Login() {
                   onChange={handleUserDetailUpdate}
                 />
               </div>
+              {error.password && <ErrorMessage msg={error.password} />}
             </div>
             <div className="grid mt-6 text-center items-center">
               {/* <input
@@ -110,7 +164,7 @@ export default function Login() {
               <input
                 type="submit"
                 value="Sign In"
-                className="flex w-auto justify-center rounded-md bg-indigo-600 px-6 py-2 mb-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="flex w-auto cursor-pointer justify-center rounded-md bg-indigo-600 px-6 py-2 mb-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               />
               <div className="w-full text-sm">
                 <p className="text-gray-500">
@@ -126,4 +180,7 @@ export default function Login() {
       </div>
     </section>
   );
+}
+function ErrorMessage({ msg }: { msg: string }) {
+  return <p className="text-rose-400">{msg}</p>;
 }
