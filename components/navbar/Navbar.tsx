@@ -58,7 +58,9 @@ const Navbar = () => {
               </div>
             ) : (
               <div className="flex items-center gap-4">
+                <Link className="text-blue-600" href="/profile">
                 <p>{user.username}</p>
+                </Link>
                 <Link
                   className="rounded-md text-blue-600 px-2.5 py-2.5 text-sm font-medium"
                   href="/logout"

@@ -3,6 +3,7 @@ import { authAxios } from "@/lib/auth";
 import { AxiosResponse } from "axios";
 import jwtDecode from "jwt-decode";
 import React, { useState, useEffect, useContext } from "react";
+import { useLocalStorage } from "usehooks-ts";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_HOST;
 
@@ -55,7 +56,7 @@ const fetchNewToken = async (): Promise<AxiosResponse<any>> => {
   //   credentials: "include",
   // });
   const token = localStorage.getItem("refresh_token");
-  const res = await authAxios.post("/auth/login/refresh", { refresh: token });
+  const res = await authAxios.post("/auth/login/refresh/", { refresh: token });
   return res;
 };
 
@@ -101,7 +102,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState<User | UserToken | null>(null);
-  const [accessToken, setAccessToken] = useState<string>("");
+  const [accessToken, setAccessToken] = useLocalStorage("access_token", "");
+  const [refreshToken, setRefreshToken] = useLocalStorage("refresh_token", "");
   const [accessTokenExpiry, setAccessTokenExpiry] = useState<number>(0);
 
   const setNotAuthenticated = (): void => {
@@ -118,8 +120,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     if (accessToken === "") {
       return false;
     }
-    const expiry = new Date(accessTokenExpiry);
-    console.log("Checking token expiry:", expiry);
+    const expiry = new Date(accessTokenExpiry*1000);
+    console.log("Checking token expiry:", expiry, accessTokenExpiry);
+    console.log(expiry.getTime() > Date.now());
     return expiry.getTime() > Date.now();
   };
 
@@ -127,16 +130,16 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setLoading(true);
     if (!accessTokenIsValid()) {
       console.log("Invalid access token so refetching");
-      await refreshToken();
+      await TokenRefresh();
     } else {
       setIsAuthenticated(true);
       setLoading(false);
     }
   };
 
-  //   useEffect(() => {
-  //     initAuth();
-  //   }, []);
+  useEffect(() => {
+    initAuth();
+  }, []);
 
   const initUser = async (token: string): Promise<void> => {
     // const resp = await fetchUser(token);
@@ -146,9 +149,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setUser(user);
   };
 
-  const refreshToken = async (): Promise<string> => {
+  const TokenRefresh = async (): Promise<string> => {
     setLoading(true);
     try {
+
       const resp = await fetchNewToken();
       const tokenData = await resp.data;
       handleNewToken(tokenData);
@@ -211,7 +215,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       return Promise.resolve(accessToken);
     } else {
       console.log("Getting access token.. getting a new token");
-      const token = await refreshToken();
+      const token = await TokenRefresh();
       return token;
     }
   };

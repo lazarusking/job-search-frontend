@@ -15,6 +15,28 @@ export interface User {
 export interface UserList extends Pagination {
   results: User[];
 }
+
+export interface UserProfile {
+  user: User
+  slug: string
+  avatar: any
+  phone_number: string
+  description: string
+  country: string
+  created_at: string
+  gender: string
+  address: string
+  date_of_birth: any
+  looking_for: string
+  resume: any
+  updated_at: string
+  linkedin: string
+  facebook: string
+  github: string
+  website: string
+}
+
+
 export interface Recruiter {
   id: number;
   user: User;

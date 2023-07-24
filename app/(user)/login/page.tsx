@@ -41,7 +41,7 @@ export default function Login() {
     // try {
     console.log(userDetail);
     const resp = await login(userDetail.email, userDetail.password);
-    console.log(resp.response);
+    console.log(await resp.response);
 
     if (resp.response && resp.response.status === 400) {
       console.log(resp.response.data);
@@ -54,6 +54,11 @@ export default function Login() {
     // }
     if (!loading && isAuthenticated) router.push("/");
   };
+  useEffect(() => {
+    if (!loading && isAuthenticated) router.push("/");
+
+  }, [isAuthenticated, loading, router])
+  
 
   return (
     <section className="px-6 py-4 lg:px-8 overflow-hidden bg-white sm:py-6">

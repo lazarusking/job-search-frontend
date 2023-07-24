@@ -1,9 +1,11 @@
+"use client";
+
 import { verifyToken } from "@/context/auth";
 import { User } from "@/lib/interfaces";
 import { useRouter } from "next/navigation";
 import { ComponentType, useEffect, useState } from "react";
 
-export default function AuthWrapper<T extends User>(WrappedComponent: ComponentType<T>) {
+export default function withAuth<T extends User>(WrappedComponent: ComponentType<T>) {
   const MyComp = (props: any) => {
     const router = useRouter();
     const [verified, setVerified] = useState(false);

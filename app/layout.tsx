@@ -1,9 +1,10 @@
 import Navbar from "@/components/navbar/Navbar";
 import { Inter, Mulish, Montserrat, Poppins } from "next/font/google";
 import "./globals.css";
+import { ReactNode } from "react";
 const { TWITTER_CREATOR, TWITTER_SITE, SITE_NAME } = process.env;
 
-const inter = Montserrat({
+const inter = Mulish({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800", "900"],
 });
@@ -24,7 +25,7 @@ export const metadata = {
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <html lang="en">
