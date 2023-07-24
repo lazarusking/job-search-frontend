@@ -4,6 +4,15 @@ export interface Pagination {
   previous: any;
   //   results: Result[];
 }
+export interface UserToken {
+  token_type: string;
+  exp: number;
+  iat: number;
+  jti: string;
+  user_id: number;
+  username: string;
+  email: string;
+}
 
 export interface User {
   id: number;

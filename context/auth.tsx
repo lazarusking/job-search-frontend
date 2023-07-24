@@ -1,32 +1,17 @@
 "use client";
 import { authAxios } from "@/lib/auth";
+import { UserToken } from "@/lib/interfaces";
 import { AxiosResponse } from "axios";
 import jwtDecode from "jwt-decode";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_HOST;
-
-interface User {
-  id: string;
-  email: string;
-  name: string;
-  username: string;
-}
 
 interface TokenResponse {
   access: string;
   access_expires: number;
   refresh: string;
-}
-export interface UserToken {
-  token_type: string;
-  exp: number;
-  iat: number;
-  jti: string;
-  user_id: number;
-  username: string;
-  email: string;
 }
 
 const makeUrl = (endpoint: string): string => {
@@ -55,14 +40,14 @@ const fetchNewToken = async (): Promise<AxiosResponse<any>> => {
   //   },
   //   credentials: "include",
   // });
-  const token = localStorage.getItem("refresh_token");
+  const token = JSON.parse(localStorage.getItem("refresh_token"));
   const res = await authAxios.post("/auth/login/refresh/", { refresh: token });
   return res;
 };
 
 export const verifyToken = async (token: string) => {
   try {
-    const res = await authAxios.post("auth/login/verify/", { token });
+    const res = await authAxios.post("auth/login/verify/", { token: token });
     if (res.status === 200) {
       return true;
     } else {
@@ -86,7 +71,7 @@ async function fetchUser(token: string): Promise<Response> {
 type AuthContextProps = {
   isAuthenticated: boolean;
   loading: boolean;
-  user: User | UserToken | null;
+  user: UserToken | null;
   // login: (email: string, password: string) => Promise<AxiosResponse<any>>;
   logout: () => void;
   getToken: () => Promise<string>;
@@ -101,34 +86,55 @@ interface AuthProviderProps {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState<User | UserToken | null>(null);
+  const [user, setUser] = useState<UserToken | null>(null);
   const [accessToken, setAccessToken] = useLocalStorage("access_token", "");
   const [refreshToken, setRefreshToken] = useLocalStorage("refresh_token", "");
   const [accessTokenExpiry, setAccessTokenExpiry] = useState<number>(0);
-
   const setNotAuthenticated = (): void => {
     setIsAuthenticated(false);
     setLoading(false);
     setUser(null);
     setAccessToken("");
+    setRefreshToken("");
     setAccessTokenExpiry(0);
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
+    // localStorage.removeItem("access_token");
+    // localStorage.removeItem("refresh_token");
   };
 
-  const accessTokenIsValid = (): boolean => {
+  const accessTokenIsValid = async (): Promise<boolean> => {
+    const token = JSON.parse(localStorage.getItem("access_token"));
+    // console.log(token, accessToken);
     if (accessToken === "") {
+      console.log(accessToken || token === "");
       return false;
     }
-    const expiry = new Date(accessTokenExpiry*1000);
-    console.log("Checking token expiry:", expiry, accessTokenExpiry);
-    console.log(expiry.getTime() > Date.now());
-    return expiry.getTime() > Date.now();
+    try {
+      const verified = await verifyToken(accessToken);
+      console.log(verified);
+      if (verified) {
+        console.log("verified");
+        const user: UserToken = jwtDecode(token);
+        initUser(token);
+        const expiry = new Date(user.exp * 1000);
+        console.log("Checking token expiry:", expiry, accessTokenExpiry, token);
+        console.log(expiry.getTime() > Date.now());
+
+        return expiry.getTime() > Date.now();
+        // return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      return false;
+    }
   };
 
   const initAuth = async (): Promise<void> => {
     setLoading(true);
-    if (!accessTokenIsValid()) {
+    const valid = await accessTokenIsValid();
+    console.log(valid);
+
+    if (!valid) {
       console.log("Invalid access token so refetching");
       await TokenRefresh();
     } else {
@@ -152,7 +158,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const TokenRefresh = async (): Promise<string> => {
     setLoading(true);
     try {
-
       const resp = await fetchNewToken();
       const tokenData = await resp.data;
       handleNewToken(tokenData);
@@ -162,7 +167,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       }
       return tokenData.access;
     } catch (error) {
-      setNotAuthenticated();
+      // setNotAuthenticated();
       return "";
     }
   };
@@ -170,12 +175,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const handleNewToken = (data: TokenResponse): void => {
     const user: UserToken = jwtDecode(data.access);
     setAccessToken(data.access);
+    setRefreshToken(data.access);
     const expiryInt = user.exp * 1000;
     setAccessTokenExpiry(expiryInt);
     setIsAuthenticated(true);
     setLoading(false);
-    localStorage.setItem("access_token", data.access);
-    localStorage.setItem("refresh_token", data.refresh);
+    // localStorage.setItem("access_token", data.access);
+    // localStorage.setItem("refresh_token", data.refresh);
     authAxios.defaults.headers["Authorization"] = "Bearer " + data.access;
   };
 
@@ -204,7 +210,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const getToken = async (): Promise<string> => {
     // Returns an access token if there's one or refetches a new one
     console.log("Getting access token..");
-    if (accessTokenIsValid()) {
+    if (await accessTokenIsValid()) {
       console.log("Getting access token.. existing token still valid");
       return Promise.resolve(accessToken);
     } else if (loading) {
@@ -222,6 +228,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const logout = (): void => {
     setAccessToken("");
+    setRefreshToken("");
     setAccessTokenExpiry(0);
     setNotAuthenticated();
     // const url = makeUrl("/token/logout/");
@@ -239,9 +246,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     login,
     logout,
     getToken,
+    accessToken,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-export const useAuth = (): any => useContext(AuthContext);
+export const useAuth = () => useContext(AuthContext);

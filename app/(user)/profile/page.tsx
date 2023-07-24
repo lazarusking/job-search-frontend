@@ -1,6 +1,11 @@
 "use client";
 import withAuth from "@/components/AuthWrapper";
-import { UserProfile } from "@/lib/interfaces";
+import ProfileInput from "@/components/input";
+import { useAuth } from "@/context/auth";
+import { updateUser } from "@/lib/api";
+import { authAxios } from "@/lib/auth";
+import { useRouter } from "next/navigation";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 
 // {
 //   user: User
@@ -21,12 +26,91 @@ import { UserProfile } from "@/lib/interfaces";
 //   github: string
 //   website: string
 // }
+const init = {
+  user: { id: "", email: "", first_name: "", last_name: "", username: "" },
+  slug: "",
+  avatar: null,
+  phone_number: "",
+  description: "",
+  country: "",
+  created_at: "",
+  gender: "",
+  address: "",
+  date_of_birth: null,
+  looking_for: "",
+  resume: null,
+  updated_at: "",
+  linkedin: "",
+  facebook: "",
+  github: "",
+  website: "",
+};
 export default withAuth(Profile);
+
 function Profile() {
+  const [form, setForm] = useState({ ...init });
+  const { loading, isAuthenticated, user: usertoken } = useAuth();
+  const [isUpdating, setUpdating] = useState(false);
+  const [profile, setProfile] = useState({});
+  const { user, address } = form;
+
+  const router = useRouter();
+  const getProfile = async () => {
+    try {
+      let res = await authAxios.get(`users/${usertoken?.user_id}`);
+      let data = res.data;
+      console.log(data);
+      if (res.status === 200) {
+        setProfile(data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setForm((previousState) => ({
+      ...previousState,
+      [e.target.name]: e.target.value,
+    }));
+  };
+  const onFormSubmitted = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setUpdating(true);
+
+    const { data, error } = await updateUser(usertoken, profile);
+    console.log(data);
+
+    if (error) {
+      console.error("An error occurred");
+      return;
+    }
+
+    // updateState(data);
+
+    setUpdating(false);
+
+    console.info("Changes made successfully");
+  };
+  useEffect(() => {
+    initForm();
+  }, []);
+
+  const initForm = () => {
+    getProfile();
+    setForm({
+      // email: usertoken?.email,
+      // // first_name: usertoken?.first_name,
+      // user: user,
+    });
+  };
   return (
     <section className="bg-gray-50 py-4">
       <div className="container px-4 mx-auto">
-        <div className="p-6 h-full border border-gray-100 overflow-hidden bg-white rounded-md shadow-dashboard">
+        <form
+          onSubmit={onFormSubmitted}
+          className="p-6 h-full border border-gray-100 overflow-hidden bg-white rounded-md shadow-dashboard"
+        >
           <div className="pb-6 border-b border-gray-100">
             <div className="flex flex-wrap items-center justify-between -m-2">
               <div className="w-full md:w-auto p-2">
@@ -34,7 +118,7 @@ function Profile() {
                   Personal info
                 </h2>
                 <p className="text-xs text-gray-500 font-medium">
-                  Lorem ipsum dolor sit amet
+                  Change your personal details here {usertoken?.username}!
                 </p>
               </div>
               <div className="w-full md:w-auto p-2">
@@ -45,9 +129,11 @@ function Profile() {
                     </button>
                   </div>
                   <div className="w-full md:w-auto p-1.5">
-                    <button className="flex flex-wrap justify-center w-full px-4 py-2 bg-green-500 hover:bg-green-600 font-medium text-sm text-white border border-green-500 rounded-md shadow-button">
-                      <p>Save</p>
-                    </button>
+                    <input
+                      type="submit"
+                      value="Save"
+                      className="flex flex-wrap justify-center w-full px-4 py-2 bg-green-500 hover:bg-green-600 font-medium text-sm text-white border border-green-500 rounded-md shadow-button"
+                    />
                   </div>
                 </div>
               </div>
@@ -63,6 +149,8 @@ function Profile() {
                   <input
                     className="w-full px-4 py-2.5 text-base text-gray-900 font-normal outline-none focus:border-green-500 border border-gray-200 rounded-lg shadow-input"
                     type="text"
+                    name="first_name"
+                    id="first_name"
                     placeholder="John"
                   />
                 </div>
@@ -71,6 +159,8 @@ function Profile() {
                     className="w-full px-4 py-2.5 text-base text-gray-900 font-normal outline-none focus:border-green-500 border border-gray-200 rounded-lg shadow-input"
                     type="text"
                     placeholder="Doe"
+                    name="last_name"
+                    id="last_name"
                   />
                 </div>
               </div>
@@ -88,12 +178,42 @@ function Profile() {
                   <input
                     className="w-full px-4 py-2.5 text-base text-gray-900 font-normal outline-none focus:border-green-500 border border-gray-200 rounded-lg shadow-input"
                     type="text"
+                    name="email"
+                    id="email"
                     placeholder="johndoe@flex.co"
                   />
                 </div>
               </div>
             </div>
           </div>
+          <ProfileInput
+            title={"Email Address"}
+            placeholder={"johndoe@flex.co"}
+            name={"email"}
+            type="text"
+            onChangeFunc={onInputChange}
+          />
+          <ProfileInput
+            title={"Date of Birth"}
+            placeholder={""}
+            name={"date_of_birth"}
+            type="datetime-local"
+            onChangeFunc={onInputChange}
+          />
+          <ProfileInput
+            title={"Email Address"}
+            placeholder={"John Doe"}
+            name={"email"}
+            type="text"
+            onChangeFunc={onInputChange}
+          />
+          <ProfileInput
+            title={"Email Address"}
+            placeholder={"John Doe"}
+            name={"email"}
+            type="text"
+            onChangeFunc={onInputChange}
+          />
           <div className="py-6 border-b border-gray-100">
             <div className="w-full md:w-9/12">
               <div className="flex flex-wrap -m-3">
@@ -136,6 +256,8 @@ function Profile() {
                     <input
                       className="absolute top-0 left-0 w-full h-full opacity-0"
                       type="file"
+                      name="avatar"
+                      id="avatar"
                     />
                   </div>
                 </div>
@@ -146,13 +268,15 @@ function Profile() {
             <div className="w-full md:w-9/12">
               <div className="flex flex-wrap -m-3">
                 <div className="w-full md:w-1/3 p-3">
-                  <p className="text-sm text-gray-800 font-semibold">Role</p>
+                  <p className="text-sm text-gray-800 font-semibold">
+                    Looking For
+                  </p>
                 </div>
                 <div className="w-full md:flex-1 p-3">
                   <input
                     className="w-full px-4 py-2.5 text-base text-gray-900 font-normal outline-none focus:border-green-500 border border-gray-200 rounded-lg shadow-input"
                     type="text"
-                    placeholder="Frontend Developer"
+                    placeholder=""
                   />
                 </div>
               </div>
@@ -282,7 +406,7 @@ function Profile() {
               </div>
             </div>
           </div>
-        </div>
+        </form>
       </div>
     </section>
   );
