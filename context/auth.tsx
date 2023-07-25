@@ -3,7 +3,12 @@ import { authAxios } from "@/lib/auth";
 import { UserToken } from "@/lib/interfaces";
 import { AxiosResponse } from "axios";
 import jwtDecode from "jwt-decode";
-import React, { useContext, useEffect, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { useLocalStorage } from "usehooks-ts";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_HOST;
@@ -101,61 +106,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     // localStorage.removeItem("access_token");
     // localStorage.removeItem("refresh_token");
   };
-
-  const accessTokenIsValid = async (): Promise<boolean> => {
-    const token = JSON.parse(localStorage.getItem("access_token"));
-    // console.log(token, accessToken);
-    if (accessToken === "") {
-      console.log(accessToken || token === "");
-      return false;
-    }
-    try {
-      const verified = await verifyToken(accessToken);
-      console.log(verified);
-      if (verified) {
-        console.log("verified");
-        const user: UserToken = jwtDecode(token);
-        initUser(token);
-        const expiry = new Date(user.exp * 1000);
-        console.log("Checking token expiry:", expiry, accessTokenExpiry);
-        console.log(expiry.getTime() > Date.now());
-
-        return expiry.getTime() > Date.now();
-        // return true;
-      } else {
-        return false;
-      }
-    } catch (error) {
-      return false;
-    }
-  };
-
-  const initAuth = async (): Promise<void> => {
-    setLoading(true);
-    const valid = await accessTokenIsValid();
-    console.log(`valid token ${valid}`);
-
-    if (!valid) {
-      console.log("Invalid access token so refetching");
-      await TokenRefresh();
-    } else {
-      setIsAuthenticated(true);
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    initAuth();
-  }, []);
-
-  const initUser = async (token: string): Promise<void> => {
-    // const resp = await fetchUser(token);
-    // const user = await resp.json();
-    const user: UserToken = jwtDecode(token);
-    console.log(user);
-    setUser(user);
-  };
-
   const TokenRefresh = async (): Promise<string> => {
     setLoading(true);
     try {
@@ -171,6 +121,60 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       // setNotAuthenticated();
       return "";
     }
+  };
+
+  const accessTokenIsValid = async (): Promise<boolean> => {
+    const token = JSON.parse(localStorage.getItem("access_token"));
+    // console.log(token, accessToken);
+    if (accessToken === "") {
+      console.log(accessToken || token === "");
+      return false;
+    }
+    try {
+      const verified = await verifyToken(accessToken);
+      console.log(verified);
+      if (verified) {
+        console.log("verified");
+        const user: UserToken = jwtDecode(accessToken);
+        initUser(accessToken);
+        const expiry = new Date(user.exp * 1000);
+        console.log("Checking token expiry:", expiry, accessTokenExpiry);
+        console.log(expiry.getTime() > Date.now());
+
+        return expiry.getTime() > Date.now();
+        // return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const initAuth = useCallback(async (): Promise<void> => {
+    setLoading(true);
+    const valid = await accessTokenIsValid();
+    console.log(`valid token ${valid}`);
+
+    if (!valid) {
+      console.log("Invalid access token so refetching");
+      await TokenRefresh();
+    } else {
+      setIsAuthenticated(true);
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    initAuth();
+  }, [initAuth]);
+
+  const initUser = async (token: string): Promise<void> => {
+    // const resp = await fetchUser(token);
+    // const user = await resp.json();
+    const user: UserToken = jwtDecode(token);
+    console.log(user);
+    setUser(user);
   };
 
   const handleNewToken = (data: TokenResponse): void => {

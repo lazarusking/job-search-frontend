@@ -8,10 +8,10 @@ import { ComponentType, useEffect, useState } from "react";
 export default function withAuth<T extends User>(
   WrappedComponent: ComponentType<T>
 ) {
-  const MyComp = (props: any) => {
+  const Component = (props: any) => {
     const router = useRouter();
     const [verified, setVerified] = useState(false);
-    const { accessToken } = useAuth();
+    const { accessToken,user } = useAuth();
 
     useEffect(() => {
       async function verify() {
@@ -34,11 +34,11 @@ export default function withAuth<T extends User>(
         }
       }
       verify();
-    }, [router]);
+    }, [accessToken, router]);
 
     if (verified) {
-      return <WrappedComponent {...props} />;
+      return <WrappedComponent {...props} user={user} />;
     }
   };
-  return MyComp;
+  return Component;
 }

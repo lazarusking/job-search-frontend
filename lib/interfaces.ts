@@ -26,25 +26,24 @@ export interface UserList extends Pagination {
 }
 
 export interface UserProfile {
-  user: User
-  slug: string
-  avatar: any
-  phone_number: string
-  description: string
-  country: string
-  created_at: string
-  gender: string
-  address: string
-  date_of_birth: any
-  looking_for: string
-  resume: any
-  updated_at: string
-  linkedin: string
-  facebook: string
-  github: string
-  website: string
+  user: User;
+  slug: string;
+  avatar: any;
+  phone_number: string;
+  description: string;
+  country: string;
+  created_at: string;
+  gender: string;
+  address: string;
+  date_of_birth: any;
+  looking_for: string;
+  resume: any;
+  updated_at: string;
+  linkedin: string;
+  facebook: string;
+  github: string;
+  website: string;
 }
-
 
 export interface Recruiter {
   id: number;
@@ -112,245 +111,234 @@ export interface Applicant {
   email: string;
 }
 
-
-// 
+//
 export interface Extra {
-  name: string
-  description: string
-  renders: string[]
-  parses: string[]
-  actions: Actions
+  name: string;
+  description: string;
+  renders: string[];
+  parses: string[];
+  actions: Actions;
 }
 
 export interface Actions {
-  POST: Post
+  POST: Post;
 }
 
 export interface Post {
-  url: Url
-  user: UserOption
-  slug: Slug
-  avatar: Avatar
-  phone_number: PhoneNumber
-  description: Description
-  country: Country
-  created_at: CreatedAt
-  gender: Gender
-  address: Address
-  date_of_birth: DateOfBirth
-  looking_for: LookingFor
-  resume: Resume
-  updated_at: UpdatedAt
-  linkedin: Linkedin
-  facebook: Facebook
-  github: Github
-  website: Website
+  url: Url;
+  user: UserOption;
+  slug: Slug;
+  avatar: Avatar;
+  phone_number: PhoneNumber;
+  description: Description;
+  country: Country;
+  created_at: CreatedAt;
+  gender: Gender;
+  address: Address;
+  date_of_birth: DateOfBirth;
+  looking_for: LookingFor;
+  resume: Resume;
+  updated_at: UpdatedAt;
+  linkedin: Linkedin;
+  facebook: Facebook;
+  github: Github;
+  website: Website;
 }
 
 export interface Url {
-  type: string
-  required: boolean
-  read_only: boolean
-  label: string
+  type: string;
+  required: boolean;
+  read_only: boolean;
+  label: string;
 }
 
 export interface UserOption {
-  type: string
-  required: boolean
-  read_only: boolean
-  label: string
-  children: Children
+  type: string;
+  required: boolean;
+  read_only: boolean;
+  label: string;
+  children: Children;
 }
 
 export interface Children {
-  url: Url2
-  id: Id
-  username: Username
-  first_name: FirstName
-  last_name: LastName
-  email: Email
+  url: Url2;
+  id: Id;
+  username: Username;
+  first_name: FirstName;
+  last_name: LastName;
+  email: Email;
 }
 
 export interface Url2 {
-  type: string
-  required: boolean
-  read_only: boolean
-  label: string
+  type: string;
+  required: boolean;
+  read_only: boolean;
+  label: string;
 }
 
 export interface Id {
-  type: string
-  required: boolean
-  read_only: boolean
-  label: string
+  type: string;
+  required: boolean;
+  read_only: boolean;
+  label: string;
 }
 
 export interface Username {
-  type: string
-  required: boolean
-  read_only: boolean
-  label: string
-  help_text: string
-  max_length: number
+  type: string;
+  required: boolean;
+  read_only: boolean;
+  label: string;
+  help_text: string;
+  max_length: number;
 }
 
 export interface FirstName {
-  type: string
-  required: boolean
-  read_only: boolean
-  label: string
-  max_length: number
+  type: string;
+  required: boolean;
+  read_only: boolean;
+  label: string;
+  max_length: number;
 }
 
 export interface LastName {
-  type: string
-  required: boolean
-  read_only: boolean
-  label: string
-  max_length: number
+  type: string;
+  required: boolean;
+  read_only: boolean;
+  label: string;
+  max_length: number;
 }
 
 export interface Email {
-  type: string
-  required: boolean
-  read_only: boolean
-  label: string
+  type: string;
+  required: boolean;
+  read_only: boolean;
+  label: string;
 }
 
 export interface Slug {
-  type: string
-  required: boolean
-  read_only: boolean
-  label: string
+  type: string;
+  required: boolean;
+  read_only: boolean;
+  label: string;
 }
 
 export interface Avatar {
-  type: string
-  required: boolean
-  read_only: boolean
-  label: string
-  max_length: number
+  type: string;
+  required: boolean;
+  read_only: boolean;
+  label: string;
+  max_length: number;
 }
 
 export interface PhoneNumber {
-  type: string
-  required: boolean
-  read_only: boolean
-  label: string
-  max_length: number
+  type: string;
+  required: boolean;
+  read_only: boolean;
+  label: string;
+  max_length: number;
 }
 
 export interface Description {
-  type: string
-  required: boolean
-  read_only: boolean
-  label: string
+  type: string;
+  required: boolean;
+  read_only: boolean;
+  label: string;
 }
 
 export interface Country {
-  type: string
-  required: boolean
-  read_only: boolean
-  label: string
-  choices: Choice[]
+  type: string;
+  required: boolean;
+  read_only: boolean;
+  label: string;
+  choices: Choice[];
 }
 
 export interface Choice {
-  value: string
-  display_name: string
+  value: string;
+  display_name: string;
 }
 
 export interface CreatedAt {
-  type: string
-  required: boolean
-  read_only: boolean
-  label: string
+  type: string;
+  required: boolean;
+  read_only: boolean;
+  label: string;
 }
 
 export interface Gender {
-  type: string
-  required: boolean
-  read_only: boolean
-  label: string
-  choices: Choice2[]
-}
-
-export interface Choice2 {
-  value: string
-  display_name: string
+  type: string;
+  required: boolean;
+  read_only: boolean;
+  label: string;
+  choices: Choice[];
 }
 
 export interface Address {
-  type: string
-  required: boolean
-  read_only: boolean
-  label: string
-  max_length: number
+  type: string;
+  required: boolean;
+  read_only: boolean;
+  label: string;
+  max_length: number;
 }
 
 export interface DateOfBirth {
-  type: string
-  required: boolean
-  read_only: boolean
-  label: string
+  type: string;
+  required: boolean;
+  read_only: boolean;
+  label: string;
 }
 
 export interface LookingFor {
-  type: string
-  required: boolean
-  read_only: boolean
-  label: string
-  choices: Choice3[]
-}
-
-export interface Choice3 {
-  value: string
-  display_name: string
+  type: string;
+  required: boolean;
+  read_only: boolean;
+  label: string;
+  choices: Choice[];
 }
 
 export interface Resume {
-  type: string
-  required: boolean
-  read_only: boolean
-  label: string
-  max_length: number
+  type: string;
+  required: boolean;
+  read_only: boolean;
+  label: string;
+  max_length: number;
 }
 
 export interface UpdatedAt {
-  type: string
-  required: boolean
-  read_only: boolean
-  label: string
+  type: string;
+  required: boolean;
+  read_only: boolean;
+  label: string;
 }
 
 export interface Linkedin {
-  type: string
-  required: boolean
-  read_only: boolean
-  label: string
-  max_length: number
+  type: string;
+  required: boolean;
+  read_only: boolean;
+  label: string;
+  max_length: number;
 }
 
 export interface Facebook {
-  type: string
-  required: boolean
-  read_only: boolean
-  label: string
-  max_length: number
+  type: string;
+  required: boolean;
+  read_only: boolean;
+  label: string;
+  max_length: number;
 }
 
 export interface Github {
-  type: string
-  required: boolean
-  read_only: boolean
-  label: string
-  max_length: number
+  type: string;
+  required: boolean;
+  read_only: boolean;
+  label: string;
+  max_length: number;
 }
 
 export interface Website {
-  type: string
-  required: boolean
-  read_only: boolean
-  label: string
-  max_length: number
+  type: string;
+  required: boolean;
+  read_only: boolean;
+  label: string;
+  max_length: number;
 }
