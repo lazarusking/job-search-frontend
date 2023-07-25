@@ -69,6 +69,7 @@ async function fetchUser(token: string): Promise<Response> {
 }
 
 type AuthContextProps = {
+  accessToken: string;
   isAuthenticated: boolean;
   loading: boolean;
   user: UserToken | null;
@@ -116,7 +117,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         const user: UserToken = jwtDecode(token);
         initUser(token);
         const expiry = new Date(user.exp * 1000);
-        console.log("Checking token expiry:", expiry, accessTokenExpiry, token);
+        console.log("Checking token expiry:", expiry, accessTokenExpiry);
         console.log(expiry.getTime() > Date.now());
 
         return expiry.getTime() > Date.now();
@@ -132,7 +133,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const initAuth = async (): Promise<void> => {
     setLoading(true);
     const valid = await accessTokenIsValid();
-    console.log(valid);
+    console.log(`valid token ${valid}`);
 
     if (!valid) {
       console.log("Invalid access token so refetching");

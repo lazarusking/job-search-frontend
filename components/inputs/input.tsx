@@ -5,7 +5,9 @@ type Props = {
   placeholder: any;
   type: React.HTMLInputTypeAttribute;
   name: any;
+  value: any;
   onChangeFunc: any;
+  readOnly?: boolean;
 };
 
 export default function ProfileInput({
@@ -13,7 +15,9 @@ export default function ProfileInput({
   placeholder,
   type,
   name,
+  value,
   onChangeFunc,
+  readOnly,
 }: Props) {
   return (
     <div className="py-6 border-b border-gray-100">
@@ -24,12 +28,17 @@ export default function ProfileInput({
           </div>
           <div className="w-full md:flex-1 p-3">
             <input
-              className="w-full px-4 py-2.5 text-base text-gray-900 font-normal outline-none focus:border-green-500 border border-gray-200 rounded-lg shadow-input"
+              className={`${
+                readOnly && "disabled:bg-gray-400"
+              } w-full px-4 py-2.5 text-base text-gray-900 font-normal outline-none focus:border-green-500 border border-gray-200 rounded-lg shadow-input`}
               type={type}
               name={name}
               id={name}
+              defaultValue={value}
               placeholder={placeholder}
               onChange={onChangeFunc}
+              readOnly={readOnly}
+              disabled={readOnly}
             />
           </div>
         </div>

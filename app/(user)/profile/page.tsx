@@ -1,11 +1,19 @@
 "use client";
 import withAuth from "@/components/AuthWrapper";
-import ProfileInput from "@/components/input";
+import NameInputs from "@/components/inputs/NameInputs";
+import ProfileInput from "@/components/inputs/input";
 import { useAuth } from "@/context/auth";
 import { updateUser } from "@/lib/api";
 import { authAxios } from "@/lib/auth";
+import { Extra } from "@/lib/interfaces";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  FormEvent,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 
 // {
 //   user: User
@@ -47,28 +55,74 @@ const init = {
 };
 export default withAuth(Profile);
 
+interface Country {
+  [code: string]: string;
+}
+export interface Gender {
+  type: string
+  required: boolean
+  read_only: boolean
+  label: string
+  choices: Choice2[]
+}
+
+export interface Choice2 {
+  value: string
+  display_name: string
+}
 function Profile() {
   const [form, setForm] = useState({ ...init });
-  const { loading, isAuthenticated, user: usertoken } = useAuth();
+  const { user: usertoken } = useAuth();
   const [isUpdating, setUpdating] = useState(false);
-  const [profile, setProfile] = useState({});
+  const [profile, setProfile] = useState({ ...init });
+  const [extra, setExtra] = useState<Extra>();
+  const [countries, setCountries] = useState<Country>();
   const { user, address } = form;
 
   const router = useRouter();
-  const getProfile = async () => {
+  const getProfile = useCallback(async () => {
     try {
-      let res = await authAxios.get(`users/${usertoken?.user_id}`);
+      let res = await authAxios.get(`/users/${usertoken?.user_id}`);
+      let res_options = await authAxios.options(`users/`);
       let data = res.data;
       console.log(data);
       if (res.status === 200) {
         setProfile(data);
       }
+      if (res_options.status === 200) {
+        setExtra(res_options.data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, [usertoken?.user_id]);
+  const getCountries = async () => {
+    try {
+      let res = await authAxios.options(`countries/`);
+      let data = res.data;
+      console.log(data);
+      if (res.status === 200) {
+        setCountries(data);
+      }
     } catch (error) {
       console.error(error);
     }
   };
-
-  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const getCountriesContent = (countries: Country) => {
+    let content = [];
+    for (let idx in countries) {
+      const item = countries[idx];
+      content.push(
+        <option key={idx} value={idx}>
+          {item}
+        </option>
+      );
+    }
+    return content;
+  };
+  const onInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setForm((previousState) => ({
       ...previousState,
       [e.target.name]: e.target.value,
@@ -92,18 +146,22 @@ function Profile() {
 
     console.info("Changes made successfully");
   };
-  useEffect(() => {
-    initForm();
-  }, []);
 
-  const initForm = () => {
+  const initForm = useCallback(() => {
+    // console.log("__run__");
+
     getProfile();
-    setForm({
-      // email: usertoken?.email,
-      // // first_name: usertoken?.first_name,
-      // user: user,
-    });
-  };
+    getCountries();
+    // setForm({
+    //   // email: usertoken?.email,
+    //   // // first_name: usertoken?.first_name,
+    //   // user: user,
+    // });
+  }, [getProfile]);
+  useEffect(() => {
+    if (usertoken) initForm();
+  }, [initForm, usertoken]);
+
   return (
     <section className="bg-gray-50 py-4">
       <div className="container px-4 mx-auto">
@@ -139,88 +197,36 @@ function Profile() {
               </div>
             </div>
           </div>
-          <div className="py-6 border-b border-gray-100">
-            <div className="w-full md:w-9/12">
-              <div className="flex flex-wrap -m-3">
-                <div className="w-full md:w-1/3 p-3">
-                  <p className="text-sm text-gray-800 font-semibold">Name</p>
-                </div>
-                <div className="w-full md:w-1/3 p-3">
-                  <input
-                    className="w-full px-4 py-2.5 text-base text-gray-900 font-normal outline-none focus:border-green-500 border border-gray-200 rounded-lg shadow-input"
-                    type="text"
-                    name="first_name"
-                    id="first_name"
-                    placeholder="John"
-                  />
-                </div>
-                <div className="w-full md:w-1/3 p-3">
-                  <input
-                    className="w-full px-4 py-2.5 text-base text-gray-900 font-normal outline-none focus:border-green-500 border border-gray-200 rounded-lg shadow-input"
-                    type="text"
-                    placeholder="Doe"
-                    name="last_name"
-                    id="last_name"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="py-6 border-b border-gray-100">
-            <div className="w-full md:w-9/12">
-              <div className="flex flex-wrap -m-3">
-                <div className="w-full md:w-1/3 p-3">
-                  <p className="text-sm text-gray-800 font-semibold">
-                    Email address
-                  </p>
-                </div>
-                <div className="w-full md:flex-1 p-3">
-                  <input
-                    className="w-full px-4 py-2.5 text-base text-gray-900 font-normal outline-none focus:border-green-500 border border-gray-200 rounded-lg shadow-input"
-                    type="text"
-                    name="email"
-                    id="email"
-                    placeholder="johndoe@flex.co"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+          <NameInputs
+            first_name={profile.user.first_name}
+            last_name={profile.user.last_name}
+            onChangeFunc={onInputChange}
+          />
           <ProfileInput
             title={"Email Address"}
             placeholder={"johndoe@flex.co"}
             name={"email"}
             type="text"
+            value={profile.user.email}
             onChangeFunc={onInputChange}
+            readOnly={true}
           />
           <ProfileInput
             title={"Date of Birth"}
             placeholder={""}
             name={"date_of_birth"}
-            type="datetime-local"
+            type="date"
             onChangeFunc={onInputChange}
+            value={profile.date_of_birth}
           />
-          <ProfileInput
-            title={"Email Address"}
-            placeholder={"John Doe"}
-            name={"email"}
-            type="text"
-            onChangeFunc={onInputChange}
-          />
-          <ProfileInput
-            title={"Email Address"}
-            placeholder={"John Doe"}
-            name={"email"}
-            type="text"
-            onChangeFunc={onInputChange}
-          />
+
           <div className="py-6 border-b border-gray-100">
             <div className="w-full md:w-9/12">
               <div className="flex flex-wrap -m-3">
                 <div className="w-full md:w-1/3 p-3">
                   <p className="text-sm text-gray-800 font-semibold">Photo</p>
                   <p className="text-xs text-gray-500 font-medium">
-                    Lorem ipsum dolor sit amet
+                    Your profile picture
                   </p>
                 </div>
                 <div className="w-full md:w-auto p-3">
@@ -303,10 +309,12 @@ function Profile() {
                         fill="#8896AB"
                       />
                     </svg>
-                    <select className="appearance-none w-full py-2.5 px-4 text-gray-900 text-base font-normal bg-white border outline-none border-gray-200 focus:border-green-500 rounded-lg shadow-input">
+                    <select
+                      onChange={onInputChange}
+                      className="appearance-none w-full py-2.5 px-4 text-gray-900 text-base font-normal bg-white border outline-none border-gray-200 focus:border-green-500 rounded-lg shadow-input"
+                    >
                       <option>United States</option>
-                      <option>Poland</option>
-                      <option>France</option>
+                      {countries && getCountriesContent(countries)}
                     </select>
                   </div>
                 </div>
@@ -394,13 +402,15 @@ function Profile() {
                 <div className="w-full md:w-1/3 p-3">
                   <p className="text-sm text-gray-800 font-semibold">Bio</p>
                   <p className="text-xs text-gray-500 font-medium">
-                    Lorem ipsum dolor sit amet
+                    Write something about yourself
                   </p>
                 </div>
                 <div className="w-full md:flex-1 p-3">
                   <textarea
                     className="block w-full h-64 p-6 text-base text-gray-900 font-normal outline-none focus:border-green-500 border border-gray-200 rounded-lg shadow-input resize-none"
-                    defaultValue={""}
+                    defaultValue={profile.description}
+                    name="description"
+                    onChange={onInputChange}
                   />
                 </div>
               </div>
