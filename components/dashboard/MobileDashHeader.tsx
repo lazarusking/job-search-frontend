@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default function MobileDashHeader() {
+export default function MobileDashHeader({ toggle }: any) {
   return (
     <nav className="lg:hidden py-6 px-6 border-b">
       <div className="flex items-center justify-between">
@@ -17,7 +17,10 @@ export default function MobileDashHeader() {
             ISEARCH
           </h1>
         </a>
-        <button className="navbar-burger flex items-center rounded focus:outline-none">
+        <button
+          onClick={toggle}
+          className="navbar-burger flex items-center rounded focus:outline-none"
+        >
           <svg
             className="text-white bg-indigo-500 hover:bg-indigo-600 block h-8 w-8 p-2 rounded"
             viewBox="0 0 20 20"

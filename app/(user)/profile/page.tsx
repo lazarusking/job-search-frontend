@@ -132,23 +132,27 @@ function Profile() {
     const choices = extra.actions.POST.country.choices;
     for (let idx in choices) {
       const item = choices[idx];
-      {
-        profile.country === item.value
-          ? content.push(
-              <option
-                defaultValue={profile.country}
-                key={idx}
-                value={item.value}
-              >
-                {item.display_name}
-              </option>
-            )
-          : content.push(
-              <option key={idx} value={item.value}>
-                {item.display_name}
-              </option>
-            );
+      if (profile.country === item.value) {
+        console.log(profile.country, item.value);
       }
+      // {
+      //   profile.country === item.value
+      //     ? content.push(
+      //         <option defaultValue={item.value} key={idx} value={item.value}>
+      //           {item.display_name}
+      //         </option>
+      //       )
+      //     : content.push(
+      //         <option key={idx} value={item.value}>
+      //           {item.display_name}
+      //         </option>
+      //       );
+      // }
+      content.push(
+        <option key={idx} value={item.value}>
+          {item.display_name}
+        </option>
+      );
     }
     return content;
   };
@@ -157,23 +161,28 @@ function Profile() {
     const choices = extra.actions.POST.looking_for.choices;
     for (let idx in choices) {
       const item = choices[idx];
-      {
-        profile.looking_for === item.value
-          ? content.push(
-              <option
-                defaultValue={profile.looking_for}
-                key={idx}
-                value={item.value}
-              >
-                {item.display_name}
-              </option>
-            )
-          : content.push(
-              <option key={idx} value={item.value}>
-                {item.display_name}
-              </option>
-            );
-      }
+      // {
+      //   profile.looking_for === item.value
+      //     ? content.push(
+      //         <option
+      //           defaultValue={profile.looking_for}
+      //           key={idx}
+      //           value={item.value}
+      //         >
+      //           {item.display_name}
+      //         </option>
+      //       )
+      //     : content.push(
+      //         <option key={idx} value={item.value}>
+      //           {item.display_name}
+      //         </option>
+      //       );
+      // }
+      content.push(
+        <option key={idx} value={item.value}>
+          {item.display_name}
+        </option>
+      );
     }
     return content;
   };
@@ -490,6 +499,7 @@ function Profile() {
             onChangeFunc={onInputChange}
             getList={getJobType}
             value={extra}
+            selected={profile.looking_for}
           />
           <SelectInput
             title="Country"
@@ -497,6 +507,7 @@ function Profile() {
             onChangeFunc={onInputChange}
             getList={getCountriesContent}
             value={extra}
+            selected={profile.country}
           />
 
           <UrlInput

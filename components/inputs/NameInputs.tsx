@@ -26,6 +26,7 @@ export default function NameInputs({
           id="first_name"
           placeholder="John"
           defaultValue={first_name}
+          aria-label={first_name}
           onChange={onChangeFunc}
         />
       </div>
@@ -36,6 +37,7 @@ export default function NameInputs({
           placeholder="Doe"
           name="last_name"
           id="last_name"
+          aria-label={last_name}
           defaultValue={last_name}
           onChange={onChangeFunc}
         />

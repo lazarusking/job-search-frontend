@@ -1,7 +1,9 @@
 import Navbar from "@/components/navbar/Navbar";
 import { Inter, Mulish, Montserrat, Poppins } from "next/font/google";
 import "./globals.css";
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react";
+import Loading from "./loading";
+import { AuthProvider } from "@/context/auth";
 const { TWITTER_CREATOR, TWITTER_SITE, SITE_NAME } = process.env;
 
 const inter = Mulish({
@@ -22,17 +24,15 @@ export const metadata = {
     }),
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
+      {/* <Suspense fallback={<Loading />}> */}
       <body className={inter.className}>
         {/* <Navbar /> */}
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
+      {/* </Suspense> */}
     </html>
   );
 }

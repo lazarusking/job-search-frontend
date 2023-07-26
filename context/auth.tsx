@@ -3,12 +3,7 @@ import { authAxios } from "@/lib/auth";
 import { UserToken } from "@/lib/interfaces";
 import { AxiosResponse } from "axios";
 import jwtDecode from "jwt-decode";
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_HOST;
@@ -92,10 +87,10 @@ interface AuthProviderProps {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState<UserToken | null>(null);
   const [accessToken, setAccessToken] = useLocalStorage("access_token", "");
   const [refreshToken, setRefreshToken] = useLocalStorage("refresh_token", "");
   const [accessTokenExpiry, setAccessTokenExpiry] = useState<number>(0);
+  const [user, setUser] = useState<UserToken | null>(jwtDecode(accessToken));
   const setNotAuthenticated = (): void => {
     setIsAuthenticated(false);
     setLoading(false);
@@ -106,7 +101,20 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     // localStorage.removeItem("access_token");
     // localStorage.removeItem("refresh_token");
   };
-  const TokenRefresh = async (): Promise<string> => {
+  const handleNewToken = useCallback((data: TokenResponse): void => {
+    const user: UserToken = jwtDecode(data.access);
+    setAccessToken(data.access);
+    setRefreshToken(data.access);
+    const expiryInt = user.exp * 1000;
+    setAccessTokenExpiry(expiryInt);
+    setIsAuthenticated(true);
+    setLoading(false);
+    // localStorage.setItem("access_token", data.access);
+    // localStorage.setItem("refresh_token", data.refresh);
+    authAxios.defaults.headers["Authorization"] = "Bearer " + data.access;
+  },[setAccessToken, setRefreshToken]);
+
+  const TokenRefresh = useCallback(async (): Promise<string> => {
     setLoading(true);
     try {
       const resp = await fetchNewToken();
@@ -121,9 +129,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       // setNotAuthenticated();
       return "";
     }
-  };
+  },[handleNewToken, user]);
 
-  const accessTokenIsValid = async (): Promise<boolean> => {
+  const accessTokenIsValid = useCallback(async (): Promise<boolean> => {
     const token = JSON.parse(localStorage.getItem("access_token"));
     // console.log(token, accessToken);
     if (accessToken === "") {
@@ -149,10 +157,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     } catch (error) {
       return false;
     }
-  };
+  },[accessToken, accessTokenExpiry]);
 
   const initAuth = useCallback(async (): Promise<void> => {
     setLoading(true);
+    // const user: UserToken = jwtDecode(accessToken);
+    // initUser(accessToken);
     const valid = await accessTokenIsValid();
     console.log(`valid token ${valid}`);
 
@@ -163,11 +173,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setIsAuthenticated(true);
       setLoading(false);
     }
-  }, []);
+  }, [TokenRefresh, accessTokenIsValid]);
 
   useEffect(() => {
     initAuth();
-  }, [initAuth]);
+  }, []);
 
   const initUser = async (token: string): Promise<void> => {
     // const resp = await fetchUser(token);
@@ -177,18 +187,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setUser(user);
   };
 
-  const handleNewToken = (data: TokenResponse): void => {
-    const user: UserToken = jwtDecode(data.access);
-    setAccessToken(data.access);
-    setRefreshToken(data.access);
-    const expiryInt = user.exp * 1000;
-    setAccessTokenExpiry(expiryInt);
-    setIsAuthenticated(true);
-    setLoading(false);
-    // localStorage.setItem("access_token", data.access);
-    // localStorage.setItem("refresh_token", data.refresh);
-    authAxios.defaults.headers["Authorization"] = "Bearer " + data.access;
-  };
 
   const login = async (
     email: string,

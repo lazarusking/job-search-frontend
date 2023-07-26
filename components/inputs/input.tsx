@@ -30,7 +30,6 @@ export default function ProfileInput({
       <div className="w-full md:flex-1 p-3">
         {!children ? (
           <>
-            <label htmlFor={name}></label>
             <input
               className={`${
                 readOnly ? "disabled:bg-gray-300" : ""
@@ -38,6 +37,7 @@ export default function ProfileInput({
               type={type}
               name={name}
               id={name}
+              aria-label={title}
               defaultValue={value}
               placeholder={placeholder}
               onChange={onChangeFunc}

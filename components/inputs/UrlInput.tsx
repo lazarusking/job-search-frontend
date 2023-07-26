@@ -29,6 +29,7 @@ export default function UrlInput({
             placeholder={placeholder}
             name={name}
             id={name}
+            aria-label={title}
             defaultValue={value}
             onChange={onChangeFunc}
           />

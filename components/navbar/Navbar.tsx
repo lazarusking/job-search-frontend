@@ -8,7 +8,7 @@ import { useAuth } from "@/context/auth";
 
 const Navbar = () => {
   const [show, toggle] = useToggle();
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user,loading,accessToken } = useAuth();
 
   return (
     <header aria-label="Site Header" className="bg-white">
@@ -23,7 +23,7 @@ const Navbar = () => {
       <div className="mx-auto container max-w-screen-xl px-4 py-4 sm:px-6 lg:px-8">
         <div className="flex flex-wrap items-center justify-between">
           <div className="flex flex-row items-center">
-            <a className="block text-sky-600" href="/">
+            <Link className="flex items-center text-sky-600" href="/">
               <span className="sr-only">Home</span>
               <Image
                 src="/logo.svg"
@@ -33,13 +33,13 @@ const Navbar = () => {
                 height={24}
                 priority
               />
-            </a>
-            <span className="ml-2 text-sky-600 font-extrabold lg:text-2xl sm:text-xl">
-              ISEARCH
-            </span>
+              <span className="ml-2 text-sky-600 font-extrabold lg:text-2xl sm:text-xl">
+                ISEARCH
+              </span>
+            </Link>
           </div>
           <div className="flex items-center gap-4 md:order-2">
-            {!isAuthenticated ? (
+            {!user ? (
               <div className="sm:flex sm:gap-4">
                 <Link
                   className="rounded-md bg-blue-600 px-5 py-2.5 text-sm font-medium text-white shadow"
@@ -59,7 +59,7 @@ const Navbar = () => {
             ) : (
               <div className="flex items-center gap-4">
                 <Link className="text-blue-600" href="/profile">
-                <p>{user.username}</p>
+                  <p>{user?.username}</p>
                 </Link>
                 <Link
                   className="rounded-md text-blue-600 px-2.5 py-2.5 text-sm font-medium"
@@ -73,6 +73,7 @@ const Navbar = () => {
               <button
                 className="rounded bg-gray-100 p-2 text-gray-600 transition hover:text-gray-600/75"
                 aria-expanded="true"
+                aria-label="toggle"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
