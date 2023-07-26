@@ -1,5 +1,4 @@
 export default function LoadingAnimation() {
-  console.log("Loading..........");
 
   return (
     <>

@@ -9,7 +9,7 @@ import { ReactNode } from "react";
 
 type DashLinkType = {
   name: string;
-  href: string | null;
+  href?: string | null;
   Icon: ReactNode;
 };
 //text-neutral-500 hover:bg-indigo-50 text-white bg-indigo-500

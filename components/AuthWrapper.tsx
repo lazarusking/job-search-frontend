@@ -4,6 +4,7 @@ import { useAuth, verifyToken } from "@/context/auth";
 import { User } from "@/lib/interfaces";
 import { useRouter } from "next/navigation";
 import { ComponentType, useEffect, useState } from "react";
+import LoadingAnimation from "./Loading";
 
 export default function withAuth<T extends User>(
   WrappedComponent: ComponentType<T>
@@ -11,13 +12,13 @@ export default function withAuth<T extends User>(
   const Component = (props: any) => {
     const router = useRouter();
     const [verified, setVerified] = useState(false);
-    const { accessToken,user } = useAuth();
+    const { accessToken, user, loading } = useAuth();
 
     useEffect(() => {
       async function verify() {
         // const accessToken = localStorage.getItem("access_token");
         // console.log(accessToken);
-        
+
         if (!accessToken) {
           router.replace("/login");
           return;
@@ -36,6 +37,9 @@ export default function withAuth<T extends User>(
       verify();
     }, [accessToken, router]);
 
+    // if (loading) {
+    //   return <LoadingAnimation />;
+    // }
     if (verified) {
       return <WrappedComponent {...props} user={user} />;
     }

@@ -7,7 +7,7 @@ let baseClass =
 
 const paths = [
   { name: "Home", href: "/" },
-  { name: "About Us", href: "#about" },
+  { name: "About Us", href: "/about" },
   { name: "Services", href: "/services" },
 ];
 
@@ -18,7 +18,8 @@ export function NavLink() {
     <>
       <ul className="flex flex-col font-medium p-1 sm:p-4 md:p-0 mt-4 border border-gray-100 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white">
         {paths.map((link) => {
-          const isActive = pathname.startsWith(link.href);
+          const isActive = pathname === link.href;
+
           return (
             <li key={link.name}>
               <Link

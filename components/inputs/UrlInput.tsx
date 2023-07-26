@@ -3,10 +3,18 @@ import InputWrapper from "./InputWrapper";
 type Props = {
   title: string;
   name: string;
+  value: any;
+  placeholder: any;
   onChangeFunc: any;
 };
 
-export default function UrlInput({ title, name, onChangeFunc }: Props) {
+export default function UrlInput({
+  placeholder,
+  value,
+  title,
+  name,
+  onChangeFunc,
+}: Props) {
   return (
     <InputWrapper>
       <div className="w-full md:w-1/3 p-3">
@@ -18,9 +26,10 @@ export default function UrlInput({ title, name, onChangeFunc }: Props) {
           <input
             className="w-full px-4 py-2.5 text-base text-gray-900 font-normal outline-none border-l"
             type="url/"
-            placeholder="flex.co"
+            placeholder={placeholder}
             name={name}
             id={name}
+            defaultValue={value}
             onChange={onChangeFunc}
           />
         </div>

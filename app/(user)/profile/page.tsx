@@ -3,11 +3,11 @@ import withAuth from "@/components/AuthWrapper";
 import NameInputs from "@/components/inputs/NameInputs";
 import SelectInput from "@/components/inputs/SelectInput";
 import UrlInput from "@/components/inputs/UrlInput";
-import ProfileInput from "@/components/inputs/input";
+import ProfileInput from "@/components/inputs/Input";
 import { useAuth } from "@/context/auth";
-import { updateUser } from "@/lib/api";
+import { updateUser, updateUserInfo } from "@/lib/api";
 import { authAxios } from "@/lib/auth";
-import { Extra } from "@/lib/interfaces";
+import { Extra, User, UserProfile, UserToken } from "@/lib/interfaces";
 import Image from "next/image";
 import {
   ChangeEvent,
@@ -37,7 +37,7 @@ import {
 //   website: string
 // }
 const init = {
-  user: { id: "", email: "", first_name: "", last_name: "", username: "" },
+  user: { id: 0, email: "", first_name: "", last_name: "", username: "" },
   slug: "",
   avatar: null,
   phone_number: "",
@@ -74,10 +74,12 @@ export interface Choice2 {
 }
 
 function Profile() {
-  const [form, setForm] = useState({ ...init });
+  const [form, setForm] = useState<Partial<UserProfile>>({});
+  const [userDetail, setUserDetail] = useState<Partial<User>>({});
+  const [fileNames, setFileName] = useState<any>({});
   const { user: usertoken } = useAuth();
   const [isUpdating, setUpdating] = useState(false);
-  const [profile, setProfile] = useState({ ...init });
+  const [profile, setProfile] = useState<UserProfile>({ ...init });
   const [extra, setExtra] = useState<Extra>();
   const [countries, setCountries] = useState<Country>();
   // const { user, address } = form;
@@ -85,12 +87,16 @@ function Profile() {
   // const router = useRouter();
   const getProfile = useCallback(async () => {
     try {
-      let res = await authAxios.get(`/users/${usertoken?.user_id}`);
+      if (!usertoken) {
+        return;
+      }
+      let res = await authAxios.get(`/users/${usertoken.user_id}`);
       let res_options = await authAxios.options(`users/`);
       let data = res.data;
       console.log(data);
       if (res.status === 200) {
         setProfile(data);
+        setUserDetail(data.user);
       }
       if (res_options.status === 200) {
         setExtra(res_options.data);
@@ -98,7 +104,7 @@ function Profile() {
     } catch (error) {
       console.error(error);
     }
-  }, [usertoken?.user_id]);
+  }, [usertoken]);
   const getCountries = async () => {
     try {
       let res = await authAxios.options(`countries/`);
@@ -126,11 +132,23 @@ function Profile() {
     const choices = extra.actions.POST.country.choices;
     for (let idx in choices) {
       const item = choices[idx];
-      content.push(
-        <option key={idx} value={item.value}>
-          {item.display_name}
-        </option>
-      );
+      {
+        profile.country === item.value
+          ? content.push(
+              <option
+                defaultValue={profile.country}
+                key={idx}
+                value={item.value}
+              >
+                {item.display_name}
+              </option>
+            )
+          : content.push(
+              <option key={idx} value={item.value}>
+                {item.display_name}
+              </option>
+            );
+      }
     }
     return content;
   };
@@ -139,11 +157,23 @@ function Profile() {
     const choices = extra.actions.POST.looking_for.choices;
     for (let idx in choices) {
       const item = choices[idx];
-      content.push(
-        <option key={idx} value={item.value}>
-          {item.display_name}
-        </option>
-      );
+      {
+        profile.looking_for === item.value
+          ? content.push(
+              <option
+                defaultValue={profile.looking_for}
+                key={idx}
+                value={item.value}
+              >
+                {item.display_name}
+              </option>
+            )
+          : content.push(
+              <option key={idx} value={item.value}>
+                {item.display_name}
+              </option>
+            );
+      }
     }
     return content;
   };
@@ -158,6 +188,7 @@ function Profile() {
           <input
             type="radio"
             defaultChecked={profile.gender === item.value}
+            value={item.value}
             name={"gender"}
             onChange={onInputChange}
           />
@@ -175,12 +206,36 @@ function Profile() {
       [e.target.name]: e.target.value,
     }));
   };
+  const onUserDetailChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    setUserDetail((previousState) => ({
+      ...previousState,
+      [e.target.name]: e.target.value,
+    }));
+  };
   const onFormSubmitted = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setUpdating(true);
-
-    const { data, error } = await updateUser(usertoken, profile);
+    const formData = new FormData(e.currentTarget);
+    // form["user"] = userDetail;
+    const newData = { ...form, ...userDetail };
+    formData.append("avatar", newData.avatar);
+    Object.entries(userDetail).map((item, value) => {
+      formData.append(item[0], item[1]);
+      console.log(item[0], item[1], value);
+    });
+    console.log(formData.get("avatar"));
+    console.log(formData.get("resume"));
+    formData.append("user", JSON.stringify(userDetail));
+    // setForm((previousState) => ({...previousState,user:userDetail}));
+    const { data, error } = await updateUser(usertoken as UserToken, newData);
+    // const { data: data1, error: error1 } = await updateUserInfo(
+    //   usertoken as UserToken,
+    //   userDetail
+    // );
     console.log(data);
+    // console.log(data1);
 
     if (error) {
       console.error("An error occurred");
@@ -198,7 +253,7 @@ function Profile() {
     // console.log("__run__");
 
     getProfile();
-    getCountries();
+    // getCountries();
     // setForm({
     //   // email: usertoken?.email,
     //   // // first_name: usertoken?.first_name,
@@ -214,6 +269,7 @@ function Profile() {
     <section className="bg-gray-50 py-4">
       <div className="container px-4 mx-auto">
         <form
+          encType="multipart/form-data"
           onSubmit={onFormSubmitted}
           className="p-6 h-full border border-gray-100 overflow-hidden bg-white rounded-md shadow-dashboard"
         >
@@ -248,7 +304,7 @@ function Profile() {
           <NameInputs
             first_name={profile.user.first_name}
             last_name={profile.user.last_name}
-            onChangeFunc={onInputChange}
+            onChangeFunc={onUserDetailChange}
           />
           <ProfileInput
             title={"Email Address"}
@@ -256,7 +312,7 @@ function Profile() {
             name={"email"}
             type="text"
             value={profile.user.email}
-            onChangeFunc={onInputChange}
+            onChangeFunc={onUserDetailChange}
             readOnly={true}
           />
           <ProfileInput
@@ -306,12 +362,14 @@ function Profile() {
                 <div className="w-full md:w-auto p-3 relative">
                   <Image
                     src={
-                      profile.avatar ||
-                      "https://shuffle.dev/flex-ui-assets/images/dashboard/forms/avatar.png"
+                      profile.avatar
+                        ? `${process.env.NEXT_PUBLIC_BASE_URL}${profile.avatar}`
+                        : "https://shuffle.dev/flex-ui-assets/images/dashboard/forms/avatar.png"
                     }
                     alt="Avatar"
-                    width={64}
-                    height={64}
+                    className="rounded-full"
+                    width={100}
+                    height={104}
                   />
                 </div>
                 <div className="w-full md:flex-1 p-3">
@@ -338,12 +396,21 @@ function Profile() {
                     <p className="text-xs text-gray-500 font-medium">
                       PNG, JPG, GIF or up to 10MB
                     </p>
+                    <p>{fileNames?.avatar}</p>
                     <input
                       className="absolute top-0 left-0 w-full h-full opacity-0"
                       type="file"
                       name="avatar"
                       id="avatar"
-                      onChange={onInputChange}
+                      onChange={(e) => {
+                        setForm((prev) => ({
+                          ...prev,
+                          [e.target.name]: e.target.files,
+                        }));
+                        setFileName({
+                          avatar: e.target.files![0].name,
+                        });
+                      }}
                     />
                   </div>
                 </div>
@@ -351,15 +418,17 @@ function Profile() {
             </div>
           </div>
 
-          <ProfileInput
-            name={"resume"}
-            placeholder={""}
-            onChangeFunc={onInputChange}
-            title="Resume"
-            type="file"
-            value={profile.resume}
-          >
+          <ProfileInput title="Resume">
             <div className="w-full md:flex-1 p-3">
+              {profile.resume && (
+                <div className="inline-block z-10 space-y-2 px-2 m-4 relative text-green-500 focus-within:border-green-500 border border-dashed border-gray-200 rounded-lg">
+                  <a
+                    href={`${process.env.NEXT_PUBLIC_BASE_URL}${profile.resume}`}
+                  >
+                    Resume.pdf
+                  </a>
+                </div>
+              )}
               <div className="relative flex flex-col items-center justify-center p-6 h-44 text-center text-green-500 focus-within:border-green-500 border border-dashed border-gray-200 rounded-lg">
                 <svg
                   className="mb-1.5"
@@ -374,20 +443,42 @@ function Profile() {
                     fill="currentColor"
                   />
                 </svg>
-                <p className="mb-1 text-sm text-gray-800 font-medium">
-                  <span className="text-green-500">
-                    Click to Upload a file{" "}
-                  </span>
-                  <span>or drag and drop</span>
-                </p>
-                <p className="text-xs text-gray-500 font-medium">
-                  PDF up to 10MB
-                </p>
+                {fileNames.resume ? (
+                  <a
+                    className="z-10"
+                    href={`${process.env.NEXT_PUBLIC_BASE_URL}${profile.resume}`}
+                  >
+                    {fileNames?.resume}
+                  </a>
+                ) : (
+                  <>
+                    <p className="mb-1 text-sm text-gray-800 font-medium">
+                      <span className="text-green-500">
+                        Click to Upload a file{" "}
+                      </span>
+                      <span>or drag and drop</span>
+                    </p>
+                    <p className="text-xs text-gray-500 font-medium">
+                      PDF up to 10MB
+                    </p>
+                  </>
+                )}
+
                 <input
                   className="absolute top-0 left-0 w-full h-full opacity-0"
                   type="file"
-                  name="avatar"
-                  id="avatar"
+                  accept="application/pdf"
+                  name="resume"
+                  id="resume"
+                  onChange={(e) => {
+                    setForm((prev) => ({
+                      ...prev,
+                      [e.target.name]: e.target.files![0],
+                    }));
+                    setFileName({
+                      resume: e.target.files![0].name,
+                    });
+                  }}
                 />
               </div>
             </div>
@@ -411,18 +502,30 @@ function Profile() {
           <UrlInput
             title="LinkedIn"
             name="linkedin"
+            placeholder="linkedin.com/"
             onChangeFunc={onInputChange}
+            value={profile.linkedin}
           />
           <UrlInput
             title="Facebook"
             name="facebook"
+            placeholder="facebook.com/"
             onChangeFunc={onInputChange}
+            value={profile.facebook}
           />
-          <UrlInput title="GitHub" name="github" onChangeFunc={onInputChange} />
+          <UrlInput
+            title="GitHub"
+            name="github"
+            placeholder="github.com"
+            onChangeFunc={onInputChange}
+            value={profile.github}
+          />
           <UrlInput
             title="Website"
             name="website"
+            placeholder="website.com"
             onChangeFunc={onInputChange}
+            value={profile.website}
           />
           <div className="pt-6">
             <div className="w-full md:w-9/12">

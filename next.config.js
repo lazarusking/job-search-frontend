@@ -5,6 +5,10 @@ const nextConfig = {images: {
         protocol: 'https',
         hostname: 'shuffle.dev',
       },
+      {
+        protocol: 'http',
+        hostname: '127.0.0.1',
+      },
     ],
   },}
 

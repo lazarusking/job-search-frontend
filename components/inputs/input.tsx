@@ -21,7 +21,7 @@ export default function ProfileInput({
   onChangeFunc,
   children,
   readOnly,
-}: Props) {
+}: Partial<Props>) {
   return (
     <InputWrapper>
       <div className="w-full md:w-1/3 p-3">
@@ -30,7 +30,7 @@ export default function ProfileInput({
       <div className="w-full md:flex-1 p-3">
         {!children ? (
           <>
-            <label htmlFor={name}>{title}</label>
+            <label htmlFor={name}></label>
             <input
               className={`${
                 readOnly ? "disabled:bg-gray-300" : ""
