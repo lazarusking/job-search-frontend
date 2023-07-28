@@ -27,12 +27,12 @@ export const metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      {/* <Suspense fallback={<Loading />}> */}
+      <Suspense fallback={<Loading />}>
       <body className={inter.className}>
         {/* <Navbar /> */}
         <AuthProvider>{children}</AuthProvider>
       </body>
-      {/* </Suspense> */}
+      </Suspense>
     </html>
   );
 }

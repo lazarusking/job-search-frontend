@@ -31,7 +31,7 @@ const fetchToken = async (
   return res;
 };
 
-const fetchNewToken = async (): Promise<AxiosResponse<any>> => {
+const fetchNewToken = async (token:any): Promise<AxiosResponse<any>> => {
   // const url = makeUrl("/token/refresh/");
   // return fetch(url, {
   //   method: "POST",
@@ -40,7 +40,8 @@ const fetchNewToken = async (): Promise<AxiosResponse<any>> => {
   //   },
   //   credentials: "include",
   // });
-  const token = JSON.parse(localStorage.getItem("refresh_token"));
+  // console.log(token)
+  // const token = JSON.parse(localStorage.getItem("refresh_token"));
   const res = await authAxios.post("/auth/login/refresh/", { refresh: token });
   return res;
 };
@@ -90,7 +91,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [accessToken, setAccessToken] = useLocalStorage("access_token", "");
   const [refreshToken, setRefreshToken] = useLocalStorage("refresh_token", "");
   const [accessTokenExpiry, setAccessTokenExpiry] = useState<number>(0);
-  const [user, setUser] = useState<UserToken | null>(jwtDecode(accessToken));
+  const [user, setUser] = useState<UserToken | null>(() => {
+    try {
+      return jwtDecode(accessToken);
+    } catch (error) {
+      return null;
+    }
+  });
   const setNotAuthenticated = (): void => {
     setIsAuthenticated(false);
     setLoading(false);
@@ -101,25 +108,31 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     // localStorage.removeItem("access_token");
     // localStorage.removeItem("refresh_token");
   };
-  const handleNewToken = useCallback((data: TokenResponse): void => {
-    const user: UserToken = jwtDecode(data.access);
-    setAccessToken(data.access);
-    setRefreshToken(data.access);
-    const expiryInt = user.exp * 1000;
-    setAccessTokenExpiry(expiryInt);
-    setIsAuthenticated(true);
-    setLoading(false);
-    // localStorage.setItem("access_token", data.access);
-    // localStorage.setItem("refresh_token", data.refresh);
-    authAxios.defaults.headers["Authorization"] = "Bearer " + data.access;
-  },[setAccessToken, setRefreshToken]);
+  const handleNewToken = useCallback(
+    (data: TokenResponse): void => {
+      const user: UserToken = jwtDecode(data.access);
+      setAccessToken(data.access);
+      setRefreshToken(data.access);
+      const expiryInt = user.exp * 1000;
+      setAccessTokenExpiry(expiryInt);
+      setIsAuthenticated(true);
+      setLoading(false);
+      // localStorage.setItem("access_token", data.access);
+      // localStorage.setItem("refresh_token", data.refresh);
+      authAxios.defaults.headers["Authorization"] = "Bearer " + data.access;
+    },
+    [setAccessToken, setRefreshToken]
+  );
 
   const TokenRefresh = useCallback(async (): Promise<string> => {
     setLoading(true);
     try {
-      const resp = await fetchNewToken();
+      const resp = await fetchNewToken(refreshToken);
       const tokenData = await resp.data;
-      handleNewToken(tokenData);
+      console.log(tokenData);
+      
+      // handleNewToken(tokenData);
+      setAccessToken(tokenData.access)
       if (user === null) {
         console.log("No user loaded so loading from refreshed token");
         await initUser(tokenData.access);
@@ -129,7 +142,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       // setNotAuthenticated();
       return "";
     }
-  },[handleNewToken, user]);
+  }, [refreshToken, setAccessToken, user]);
 
   const accessTokenIsValid = useCallback(async (): Promise<boolean> => {
     const token = JSON.parse(localStorage.getItem("access_token"));
@@ -157,7 +170,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     } catch (error) {
       return false;
     }
-  },[accessToken, accessTokenExpiry]);
+  }, [accessToken, accessTokenExpiry]);
 
   const initAuth = useCallback(async (): Promise<void> => {
     setLoading(true);
@@ -186,7 +199,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     console.log(user);
     setUser(user);
   };
-
 
   const login = async (
     email: string,

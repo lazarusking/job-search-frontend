@@ -1,25 +1,22 @@
 "use client";
 
+import { useAuth } from "@/context/auth";
 import useToggle from "@/hooks/useToggle";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { NavLink } from "./Navlink";
-import { useAuth } from "@/context/auth";
 
 const Navbar = () => {
   const [show, toggle] = useToggle();
-  const { isAuthenticated, user,loading,accessToken } = useAuth();
-
+  const { isAuthenticated, user, loading, accessToken } = useAuth();
+  const [hasMounted, sethasMounted] = useState(false);
+  useEffect(() => {
+    sethasMounted(true);
+  }, []);
+  if (!hasMounted) return null;
   return (
     <header aria-label="Site Header" className="bg-white">
-      {/* <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            /> */}
       <div className="mx-auto container max-w-screen-xl px-4 py-4 sm:px-6 lg:px-8">
         <div className="flex flex-wrap items-center justify-between">
           <div className="flex flex-row items-center">
@@ -39,13 +36,13 @@ const Navbar = () => {
             </Link>
           </div>
           <div className="flex items-center gap-4 md:order-2">
-            {!user ? (
+            {!user?.username ? (
               <div className="sm:flex sm:gap-4">
                 <Link
-                  className="rounded-md bg-blue-600 px-5 py-2.5 text-sm font-medium text-white shadow"
+                  className="rounded-md -blue-600 px-5 py-2.5 text-sm font-medium"
                   href="/login"
                 >
-                  Login
+                  Log In
                 </Link>
                 <div className="hidden sm:flex">
                   <Link
@@ -65,7 +62,7 @@ const Navbar = () => {
                   className="rounded-md text-blue-600 px-2.5 py-2.5 text-sm font-medium"
                   href="/logout"
                 >
-                  Logout
+                  logout
                 </Link>
               </div>
             )}

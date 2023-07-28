@@ -13,7 +13,10 @@ export default function withAuth<T extends User>(
     const router = useRouter();
     const [verified, setVerified] = useState(false);
     const { accessToken, user, loading } = useAuth();
-
+    const [hasMounted, sethasMounted] = useState(false);
+    useEffect(() => {
+      sethasMounted(true);
+    }, []);
     useEffect(() => {
       async function verify() {
         // const accessToken = localStorage.getItem("access_token");
@@ -37,9 +40,13 @@ export default function withAuth<T extends User>(
       verify();
     }, [accessToken, router]);
 
-    // if (loading) {
-    //   return <LoadingAnimation />;
-    // }
+    if (loading) {
+      console.log("loading...");
+
+      return <LoadingAnimation />;
+    }
+    if (!hasMounted) return null;
+
     if (verified) {
       return <WrappedComponent {...props} user={user} />;
     }

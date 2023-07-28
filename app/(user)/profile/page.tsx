@@ -1,11 +1,11 @@
 "use client";
 import withAuth from "@/components/AuthWrapper";
+import ProfileInput from "@/components/inputs/Input";
 import NameInputs from "@/components/inputs/NameInputs";
 import SelectInput from "@/components/inputs/SelectInput";
 import UrlInput from "@/components/inputs/UrlInput";
-import ProfileInput from "@/components/inputs/Input";
 import { useAuth } from "@/context/auth";
-import { updateUser, updateUserInfo } from "@/lib/api";
+import { updateUser } from "@/lib/api";
 import { authAxios } from "@/lib/auth";
 import { Extra, User, UserProfile, UserToken } from "@/lib/interfaces";
 import Image from "next/image";
@@ -57,9 +57,6 @@ const init = {
 };
 export default withAuth(Profile);
 
-interface Country {
-  [code: string]: string;
-}
 export interface Gender {
   type: string;
   required: boolean;
@@ -81,7 +78,6 @@ function Profile() {
   const [isUpdating, setUpdating] = useState(false);
   const [profile, setProfile] = useState<UserProfile>({ ...init });
   const [extra, setExtra] = useState<Extra>();
-  const [countries, setCountries] = useState<Country>();
   // const { user, address } = form;
 
   // const router = useRouter();
@@ -105,49 +101,11 @@ function Profile() {
       console.error(error);
     }
   }, [usertoken]);
-  const getCountries = async () => {
-    try {
-      let res = await authAxios.options(`countries/`);
-      let data = res.data;
-      console.log(data);
-      if (res.status === 200) {
-        setCountries(data);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
   const getCountriesContent = (extra: Extra) => {
-    // let content = [];
-    // for (let idx in countries) {
-    //   const item = countries[idx];
-    //   content.push(
-    //     <option key={idx} value={idx}>
-    //       {item}
-    //     </option>
-    //   );
-    // }
-    // return content;
     let content = [];
     const choices = extra.actions.POST.country.choices;
     for (let idx in choices) {
       const item = choices[idx];
-      if (profile.country === item.value) {
-        console.log(profile.country, item.value);
-      }
-      // {
-      //   profile.country === item.value
-      //     ? content.push(
-      //         <option defaultValue={item.value} key={idx} value={item.value}>
-      //           {item.display_name}
-      //         </option>
-      //       )
-      //     : content.push(
-      //         <option key={idx} value={item.value}>
-      //           {item.display_name}
-      //         </option>
-      //       );
-      // }
       content.push(
         <option key={idx} value={item.value}>
           {item.display_name}
@@ -161,23 +119,6 @@ function Profile() {
     const choices = extra.actions.POST.looking_for.choices;
     for (let idx in choices) {
       const item = choices[idx];
-      // {
-      //   profile.looking_for === item.value
-      //     ? content.push(
-      //         <option
-      //           defaultValue={profile.looking_for}
-      //           key={idx}
-      //           value={item.value}
-      //         >
-      //           {item.display_name}
-      //         </option>
-      //       )
-      //     : content.push(
-      //         <option key={idx} value={item.value}>
-      //           {item.display_name}
-      //         </option>
-      //       );
-      // }
       content.push(
         <option key={idx} value={item.value}>
           {item.display_name}
@@ -226,19 +167,22 @@ function Profile() {
   const onFormSubmitted = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setUpdating(true);
-    const formData = new FormData(e.currentTarget);
+    // const formData = new FormData(e.currentTarget);
     // form["user"] = userDetail;
     const newData = { ...form, ...userDetail };
-    formData.append("avatar", newData.avatar);
-    Object.entries(userDetail).map((item, value) => {
-      formData.append(item[0], item[1]);
-      console.log(item[0], item[1], value);
-    });
-    console.log(formData.get("avatar"));
-    console.log(formData.get("resume"));
-    formData.append("user", JSON.stringify(userDetail));
+    // formData.append("avatar", newData.avatar);
+    // Object.entries(userDetail).map((item, value) => {
+    //   formData.append(item[0], item[1]);
+    //   console.log(item[0], item[1], value);
+    // });
+    // console.log(formData.get("avatar"));
+    // console.log(formData.get("resume"));
+    // formData.append("user", JSON.stringify(userDetail));
     // setForm((previousState) => ({...previousState,user:userDetail}));
-    const { data, error } = await updateUser(usertoken as UserToken, newData);
+    const { data, error } = await updateUser(
+      usertoken as UserToken,
+      newData as UserProfile
+    );
     // const { data: data1, error: error1 } = await updateUserInfo(
     //   usertoken as UserToken,
     //   userDetail

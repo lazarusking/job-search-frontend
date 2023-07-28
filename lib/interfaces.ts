@@ -87,6 +87,7 @@ export interface JobDetails {
 }
 
 export interface JobDetail {
+  id: number;
   title: string;
   user_count: number;
   new_users: number;

@@ -1,5 +1,7 @@
 import { authAxios } from "./auth";
-import { UserProfile, UserToken } from "./interfaces";
+import { Job, JobList, UserProfile, UserToken } from "./interfaces";
+
+// Update User Profile
 
 export const updateUser = async (user: UserToken, userData: UserProfile) => {
   try {
@@ -19,6 +21,7 @@ export const updateUser = async (user: UserToken, userData: UserProfile) => {
     return { error };
   }
 };
+// Update User details :optional
 export const updateUserInfo = async (
   user: UserToken,
   userData: UserProfile
@@ -35,47 +38,126 @@ export const updateUserInfo = async (
   }
 };
 
-export const appliedJobs = async (user: UserToken, data) => {
-  const response = await authAxios.get(
-    `/users/${user.user_id}/applicants/`,
-    data
-  );
-
-  return response.data;
-};
-export const applyJob = async (user: UserToken, data) => {
-  const response = await authAxios.post(
-    `/users/${user.user_id}/applicants/`,
-    data
-  );
-
-  return response.data;
+// The jobs a user has applied for
+export const appliedJobs = async () => {
+  try {
+    const response = await authAxios.get(`/users/applied/`);
+    return { data: response.data };
+  } catch (error) {
+    return { error };
+  }
 };
 
-// Get admissions for a particular patient
-export const getAdmissions = async (accessToken, patient_id) => {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  };
-
-  const response = await authAxios.get(
-    `admissions-info/?patient_id=${patient_id}`,
-    config
-  );
-
-  return response.data;
+// The jobs a user has been selected for
+export const selectedJobs = async () => {
+  try {
+    const response = await authAxios.get(`/users/selected/`);
+    return { data: response.data };
+  } catch (error) {
+    return { error };
+  }
 };
 
-export const updateAmission = async (accessToken, admissionUri, data) => {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  };
+// The jobs view
+export const getJobs = async (): Promise<JobList> => {
+  try {
+    const response = await authAxios.get(`/recruiters/jobs/`);
+    return response.data
+    return { data: response.data };
+  } catch (error) {
+    return { error };
+  }
+};
 
-  const response = await axios.patch(admissionUri, data, config);
+// Apply to a particular job
+export const applyForJob = async (job: Job) => {
+  try {
+    const response = await authAxios.post(`/users/apply/${job.id}/`);
 
-  return response.data;
+    return { data: response.data };
+  } catch (error) {
+    return { error };
+  }
+};
+
+// Delete your application to a particular job
+export const deleteApplication = async (job: Job) => {
+  try {
+    const response = await authAxios.delete(`/users/apply/${job.id}/`);
+
+    return { data: response.data };
+  } catch (error) {
+    return { error };
+  }
+};
+
+//Recruiter: Applicants selected for a job
+export const getJobDetails = async (job: Job) => {
+  try {
+    const response = await authAxios.get(`recruiters/jobs/${job.id}/`);
+
+    return { data: response.data };
+  } catch (error) {
+    return { error };
+  }
+};
+//Recruiter: Applicants selected for a job
+export const selectedApplicants = async (job: Job) => {
+  try {
+    const response = await authAxios.get(`recruiters/jobs/${job.id}/selected/`);
+
+    return { data: response.data };
+  } catch (error) {
+    return { error };
+  }
+};
+
+//Recruiter: Select applicant for the job
+export const selectApplicant = async (user: UserToken, job: Job) => {
+  try {
+    const response = await authAxios.put(
+      `recruiters/jobs/${job.id}/select/${user.user_id}`
+    );
+
+    return { data: response.data };
+  } catch (error) {
+    return { error };
+  }
+};
+
+//Recruiter: Delete selected applicant for the job
+export const deleteSelectedApplicant = async (user: UserToken, job: Job) => {
+  try {
+    const response = await authAxios.delete(
+      `recruiters/jobs/${job.id}/select/${user.user_id}`
+    );
+
+    return { data: response.data };
+  } catch (error) {
+    return { error };
+  }
+};
+
+// Recruiter view of Users that have applied for a job
+export const jobApplicants = async (job: Job) => {
+  try {
+    const response = await authAxios.get(
+      `recruiters/jobs/${job.id}/applicants/`
+    );
+
+    return { data: response.data };
+  } catch (error) {
+    return { error };
+  }
+};
+
+// Recruiter view of Job Details wiith info such as new applicants
+export const jobDetails = async () => {
+  try {
+    const response = await authAxios.get(`recruiters/jobs/details/`);
+
+    return response;
+  } catch (error) {
+    return { error };
+  }
 };
