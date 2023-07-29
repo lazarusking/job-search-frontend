@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import { authAxios } from "./auth";
 import { Job, JobList, UserProfile, UserToken } from "./interfaces";
 
@@ -59,13 +60,16 @@ export const selectedJobs = async () => {
 };
 
 // The jobs view
-export const getJobs = async (): Promise<JobList> => {
+export const getJobs = async (query?: string): Promise<JobList> => {
   try {
-    const response = await authAxios.get(`/recruiters/jobs/`);
-    return response.data
-    return { data: response.data };
-  } catch (error) {
-    return { error };
+    let url = `/recruiters/jobs/`;
+    const response: AxiosResponse<JobList> = await authAxios.get(
+      query ? `${url}?search=${query}` : url
+    );
+    return response.data;
+    // return { data: response.data };
+  } catch (error: any) {
+    return error;
   }
 };
 
@@ -91,7 +95,39 @@ export const deleteApplication = async (job: Job) => {
   }
 };
 
-//Recruiter: Applicants selected for a job
+// Save your favorite job to db
+export const getSavedJobs = async (job: Job) => {
+  try {
+    const response = await authAxios.get(`/users/saved/${job.id}/`);
+
+    return { data: response.data };
+  } catch (error) {
+    return { error };
+  }
+};
+// Save your favorite job to db
+export const saveJob = async (job: Job) => {
+  try {
+    const response = await authAxios.post(`/users/saved/${job.id}/`);
+
+    return { data: response.data };
+  } catch (error) {
+    return { error };
+  }
+};
+
+// Delete your application to a particular job
+export const deleteSavedJob = async (job: Job) => {
+  try {
+    const response = await authAxios.delete(`/users/saved/${job.id}/`);
+
+    return { data: response.data };
+  } catch (error) {
+    return { error };
+  }
+};
+
+//Recruiter: Get job details for a job
 export const getJobDetails = async (job: Job) => {
   try {
     const response = await authAxios.get(`recruiters/jobs/${job.id}/`);
@@ -115,7 +151,7 @@ export const selectedApplicants = async (job: Job) => {
 //Recruiter: Select applicant for the job
 export const selectApplicant = async (user: UserToken, job: Job) => {
   try {
-    const response = await authAxios.put(
+    const response = await authAxios.post(
       `recruiters/jobs/${job.id}/select/${user.user_id}`
     );
 
