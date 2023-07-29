@@ -1,21 +1,116 @@
 "use client";
 import { rgbDataURL } from "@/lib/image";
 import Image from "next/image";
-import { ChangeEvent, useState } from "react";
+import {
+  ChangeEvent,
+  FormEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import Signup from "@/public/signup.png";
 import Link from "next/link";
+import { useAuth } from "@/context/auth";
+import { useRouter } from "next/navigation";
+import ErrorMessage from "@/components/ErrorMessage";
+import { useDebounce } from "usehooks-ts";
+import { authAxios } from "@/lib/auth";
 
+async function checkUsername(username: string): Promise<any> {
+  try {
+    const response = await authAxios.postForm(`/users/check_username/`, {
+      username: username,
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
+type RegisterError = {
+  email: string;
+  username: string;
+  first_name: string;
+  last_name: string;
+  password1: string;
+  password2: string;
+  detail: string;
+};
+type UsernameCheckType = {
+  valid: boolean;
+  message: string;
+};
 export default function Register() {
-  const [userDetail, setuserDetail] = useState({
+  const [userDetail, setUserDetail] = useState({
     first_name: "",
     last_name: "",
     email: "",
-    password: "",
-    password_confirmation: "",
+    username: "",
+    password1: "",
+    password2: "",
   });
+
   function handleUserDetailUpdate(e: ChangeEvent<HTMLInputElement>) {
-    setuserDetail((user) => ({ ...user, [e.target.name]: [e.target.value] }));
+    setUserDetail((user) => ({ ...user, [e.target.name]: e.target.value }));
   }
+  const emailRef = useRef<HTMLInputElement | null>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const [error, setErrorMessage] = useState<Partial<RegisterError>>({});
+  const { loading, isAuthenticated, register } = useAuth();
+  const [usernameCheck, setUserNameCheck] = useState<
+    Partial<UsernameCheckType>
+  >({});
+  const debouncedUsername = useDebounce(userDetail.username, 500);
+
+  const router = useRouter();
+  useEffect(() => {
+    setUserDetail((userDetail) => ({
+      ...userDetail,
+      email: emailRef.current!.value,
+    }));
+  }, []);
+
+  const performSearch = useCallback(async () => {
+    if (debouncedUsername.length < 2) {
+      return;
+    }
+    const searchResults = await checkUsername(debouncedUsername);
+    setUserNameCheck(searchResults);
+    console.log(searchResults);
+    searchResults;
+    return searchResults;
+  }, [debouncedUsername]);
+
+  const handleSubmit = async (
+    event: FormEvent<HTMLFormElement>
+  ): Promise<void> => {
+    event.preventDefault();
+    setErrorMessage({});
+    // try {
+    console.log(userDetail);
+    const resp = await register({ ...userDetail });
+    console.log(await resp.response);
+
+    if (resp.response && resp.response.status === 400) {
+      console.log(resp.response.data);
+      setErrorMessage(resp.response.data);
+    }
+    if (resp.response && resp.response.status === 401) {
+      setErrorMessage({ detail: "Invalid login credentials" });
+    }
+    // } catch (ex: any) {
+    // }
+    if (!loading && isAuthenticated) router.push("/");
+  };
+  useEffect(() => {
+    setErrorMessage({});
+    performSearch();
+  }, [performSearch]);
+
+  useEffect(() => {
+    if (!loading && isAuthenticated) router.push("/");
+  }, [isAuthenticated, loading, router]);
   return (
     <section className="px-6 py-4 lg:px-8 overflow-hidden bg-white sm:py-6">
       <div className="grid md:grid-cols-12 gap-x-8 gap-y-16 sm:gap-y-20 max-w-7xl items-center my-auto m-auto bg-white sm:py-5 sm:px-6">
@@ -38,8 +133,9 @@ export default function Register() {
             </h1>
           </div>
           <form
-            action="#"
+            method="post"
             className="mt-8 grid grid-cols-6 gap-6 w-full sm:w-auto"
+            onSubmit={handleSubmit}
           >
             <div className="col-span-6 sm:col-span-3">
               <label
@@ -56,6 +152,9 @@ export default function Register() {
                 className="px-3 py-2.5 mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
                 onChange={handleUserDetailUpdate}
               />
+              <div className="relative pb-6">
+                {error.first_name && <ErrorMessage msg={error.first_name} />}
+              </div>
             </div>
 
             <div className="col-span-6 sm:col-span-3">
@@ -73,23 +172,57 @@ export default function Register() {
                 className="px-3 py-2.5 mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
                 onChange={handleUserDetailUpdate}
               />
+              <div className="relative pb-6">
+                {error.last_name && <ErrorMessage msg={error.last_name} />}
+              </div>
             </div>
-
             <div className="col-span-6">
               <label
                 htmlFor="Email"
                 className="block text-sm font-medium text-gray-700"
               >
-                Email
+                Email*
               </label>
-
               <input
+                ref={emailRef}
                 type="email"
                 id="Email"
                 name="email"
                 className="px-3 py-2.5 mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
                 onChange={handleUserDetailUpdate}
               />
+              <div className="relative pb-6">
+                {error.email && <ErrorMessage msg={error.email} />}
+              </div>
+            </div>
+            <div className="col-span-6">
+              <label
+                htmlFor="username"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Username*
+              </label>
+
+              <input
+                type="text"
+                id="username"
+                name="username"
+                autoComplete="username"
+                className="px-3 py-2.5 mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                onChange={handleUserDetailUpdate}
+              />
+              <div className="relative pb-6">
+                {error.username && <ErrorMessage msg={error.username} />}
+                {debouncedUsername.length > 2 && !error.username && (
+                  <p
+                    className={`absolute ${
+                      usernameCheck.valid ? "text-green-400" : "text-rose-400"
+                    } `}
+                  >
+                    {usernameCheck.message}
+                  </p>
+                )}
+              </div>
             </div>
 
             <div className="col-span-6 sm:col-span-3">
@@ -97,16 +230,17 @@ export default function Register() {
                 htmlFor="Password"
                 className="block text-sm font-medium text-gray-700"
               >
-                Password
+                Password*
               </label>
 
               <input
                 type="password"
                 id="Password"
-                name="password"
+                name="password1"
                 className="px-3 py-2.5 mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
                 onChange={handleUserDetailUpdate}
               />
+              {error.password1 && <ErrorMessage msg={error.password1} />}
             </div>
 
             <div className="col-span-6 sm:col-span-3">
@@ -114,16 +248,17 @@ export default function Register() {
                 htmlFor="PasswordConfirmation"
                 className="block text-sm font-medium text-gray-700"
               >
-                Password Confirmation
+                Password Confirmation *
               </label>
 
               <input
                 type="password"
                 id="PasswordConfirmation"
-                name="password_confirmation"
+                name="password2"
                 className="px-3 py-2.5 mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
                 onChange={handleUserDetailUpdate}
               />
+              {error.password2 && <ErrorMessage msg={error.password2} />}
             </div>
 
             <div className="col-span-6 grid justify-center sm:flex sm:items-center sm:gap-4">
@@ -131,13 +266,12 @@ export default function Register() {
                 Create an account
               </button>
 
-              <p className="mt-4 text-sm text-gray-500 sm:mt-0">
+              <div className="mt-4 text-sm text-gray-500 sm:mt-0">
                 Already have an account?
                 <Link href="/login" className="text-gray-700 underline">
                   Log in
                 </Link>
-                .
-              </p>
+              </div>
             </div>
           </form>
         </div>

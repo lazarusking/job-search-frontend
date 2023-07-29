@@ -6,7 +6,7 @@ import jwtDecode from "jwt-decode";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_HOST;
+// const API_BASE = process.env.NEXT_PUBLIC_API_HOST;
 
 interface TokenResponse {
   access: string;
@@ -14,9 +14,9 @@ interface TokenResponse {
   refresh: string;
 }
 
-const makeUrl = (endpoint: string): string => {
-  return API_BASE + endpoint;
-};
+// const makeUrl = (endpoint: string): string => {
+//   return API_BASE + endpoint;
+// };
 
 const fetchToken = async (
   email: string,
@@ -30,16 +30,40 @@ const fetchToken = async (
   );
   return res;
 };
+const createUser = async (
+  username: string,
+  email: string,
+  password1: string,
+  password2: string,
+  first_name: string,
+  last_name: string
+): Promise<AxiosResponse<any>> => {
+  console.log(
+    JSON.stringify({
+      username,
+      email,
+      password1,
+      password2,
+      first_name,
+      last_name,
+    })
+  );
 
-const fetchNewToken = async (token:any): Promise<AxiosResponse<any>> => {
-  // const url = makeUrl("/token/refresh/");
-  // return fetch(url, {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   credentials: "include",
-  // });
+  const res = await authAxios.post(
+    "/auth/register/",
+    JSON.stringify({
+      username,
+      email,
+      password1,
+      password2,
+      first_name,
+      last_name,
+    })
+  );
+  return res;
+};
+
+const fetchNewToken = async (token: any): Promise<AxiosResponse<any>> => {
   // console.log(token)
   // const token = JSON.parse(localStorage.getItem("refresh_token"));
   const res = await authAxios.post("/auth/login/refresh/", { refresh: token });
@@ -58,16 +82,28 @@ export const verifyToken = async (token: string) => {
     return false;
   }
 };
+export const logoutUser = async (token: string) => {
+  try {
+    const res = await authAxios.post("auth/logout/", { refresh: token });
+    if (res.status === 200) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    return false;
+  }
+};
 
-async function fetchUser(token: string): Promise<Response> {
-  const url = makeUrl("/me/");
-  return fetch(url, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-}
+// async function fetchUser(token: string): Promise<Response> {
+//   const url = makeUrl("/me/");
+//   return fetch(url, {
+//     method: "GET",
+//     headers: {
+//       Authorization: `Bearer ${token}`,
+//     },
+//   });
+// }
 
 type AuthContextProps = {
   accessToken: string;
@@ -75,6 +111,7 @@ type AuthContextProps = {
   loading: boolean;
   user: UserToken | null;
   // login: (email: string, password: string) => Promise<AxiosResponse<any>>;
+  // register: () => void;
   logout: () => void;
   getToken: () => Promise<string>;
 };
@@ -130,9 +167,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       const resp = await fetchNewToken(refreshToken);
       const tokenData = await resp.data;
       console.log(tokenData);
-      
+
       // handleNewToken(tokenData);
-      setAccessToken(tokenData.access)
+      setAccessToken(tokenData.access);
       if (user === null) {
         console.log("No user loaded so loading from refreshed token");
         await initUser(tokenData.access);
@@ -145,7 +182,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, [refreshToken, setAccessToken, user]);
 
   const accessTokenIsValid = useCallback(async (): Promise<boolean> => {
-    const token = JSON.parse(localStorage.getItem("access_token"));
+    const token = JSON.parse(localStorage.getItem("access_token")!);
     // console.log(token, accessToken);
     if (accessToken === "") {
       console.log(accessToken || token === "");
@@ -221,6 +258,33 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     // return resp;
   };
+  const register = async (userDetail: any): Promise<AxiosResponse<any>> => {
+    try {
+      const { username, email, password1, password2, first_name, last_name } =
+        userDetail;
+      const resp = await createUser(
+        username,
+        email,
+        password1,
+        password2,
+        first_name,
+        last_name
+      );
+      const tokenData = await resp.data;
+      console.log(resp);
+      handleNewToken(tokenData);
+      await initUser(tokenData.access);
+      return resp;
+    } catch (error: any) {
+      console.log(error);
+      setIsAuthenticated(false);
+      setLoading(true);
+      return error;
+      // Let the page handle the error
+    }
+
+    // return resp;
+  };
 
   const getToken = async (): Promise<string> => {
     // Returns an access token if there's one or refetches a new one
@@ -241,7 +305,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
-  const logout = (): void => {
+  const logout = async (): Promise<void> => {
+    await logoutUser(refreshToken);
     setAccessToken("");
     setRefreshToken("");
     setAccessTokenExpiry(0);
@@ -259,6 +324,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     user,
     loading,
     login,
+    register,
     logout,
     getToken,
     accessToken,
@@ -267,4 +333,4 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = (): any => useContext(AuthContext);

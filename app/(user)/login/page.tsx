@@ -1,4 +1,5 @@
 "use client";
+import ErrorMessage from "@/components/ErrorMessage";
 import { useAuth } from "@/context/auth";
 import { rgbDataURL } from "@/lib/image";
 import loginImage from "@/public/login.png";
@@ -56,9 +57,7 @@ export default function Login() {
   };
   useEffect(() => {
     if (!loading && isAuthenticated) router.push("/");
-
-  }, [isAuthenticated, loading, router])
-  
+  }, [isAuthenticated, loading, router]);
 
   return (
     <section className="px-6 py-4 lg:px-8 overflow-hidden bg-white sm:py-6">
@@ -117,8 +116,6 @@ export default function Login() {
             className="w-full sm:max-w-md"
             onSubmit={handleSubmit}
           >
-            {error.detail && <ErrorMessage msg={error.detail} />}
-
             <div className="mt-6">
               <label
                 htmlFor="email"
@@ -159,6 +156,7 @@ export default function Login() {
                 />
               </div>
               {error.password && <ErrorMessage msg={error.password} />}
+              {error.detail && <ErrorMessage msg={error.detail} />}
             </div>
             <div className="grid mt-6 text-center items-center">
               {/* <input
@@ -185,7 +183,4 @@ export default function Login() {
       </div>
     </section>
   );
-}
-function ErrorMessage({ msg }: { msg: string }) {
-  return <p className="text-rose-400">{msg}</p>;
 }

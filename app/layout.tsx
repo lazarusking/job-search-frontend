@@ -7,7 +7,7 @@ import { AuthProvider } from "@/context/auth";
 const { TWITTER_CREATOR, TWITTER_SITE, SITE_NAME } = process.env;
 
 const inter = Mulish({
-  subsets: ["latin"],
+  subsets: ["latin", "cyrillic"],
   weight: ["400", "500", "600", "700", "800", "900"],
 });
 
@@ -28,10 +28,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <Suspense fallback={<Loading />}>
-      <body className={inter.className}>
-        {/* <Navbar /> */}
-        <AuthProvider>{children}</AuthProvider>
-      </body>
+        <body className={inter.className}>
+          {/* <Navbar /> */}
+          <AuthProvider>{children}</AuthProvider>
+        </body>
       </Suspense>
     </html>
   );

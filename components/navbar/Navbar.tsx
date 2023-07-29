@@ -47,7 +47,7 @@ const Navbar = () => {
                 <div className="hidden sm:flex">
                   <Link
                     className="rounded-md bg-sky-600 px-5 py-2.5 text-sm font-medium text-white"
-                    href="/register"
+                    href="/get-started"
                   >
                     Post A Job
                   </Link>

@@ -40,11 +40,11 @@ export default function withAuth<T extends User>(
       verify();
     }, [accessToken, router]);
 
-    if (loading) {
-      console.log("loading...");
+    // if (loading) {
+    //   console.log("loading...");
 
-      return <LoadingAnimation />;
-    }
+    //   return <LoadingAnimation />;
+    // }
     if (!hasMounted) return null;
 
     if (verified) {

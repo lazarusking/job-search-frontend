@@ -105,7 +105,7 @@ export default function Home() {
       <section className="pt-12 pb-36 bg-gray-50 overflow-hidden">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto mb-16">
-            <h2 className="mb-5 font-heading font-bold text-center text-6xl sm:text-7xl text-gray-900">
+            <h2 className="mb-5 font-heading font-bold text-center text-3xl sm:text-4xl text-gray-900">
               Featured Jobs
             </h2>
             {/* <p className="text-gray-600 text-center text-lg">
@@ -113,10 +113,10 @@ export default function Home() {
               tellus vestibulum, commodo pulvina.
             </p> */}
           </div>
-          <div className="mx-auto max-w-6xl">
-            <div className="flex flex-wrap items-center justify-center mb-14 -mx-3">
+          <div className="mx-auto max-w-4xl">
+            <div className="flex flex-wrap items-center justify-center mb-14 mx-3">
               <div className="w-full md:w-1/3 px-3 mb-3 md:mb-0">
-                <div className="relative">
+                <div className="relative shadow-md rounded-lg">
                   <span className="inline-block mr-3 absolute top-1/2 left-4 transform -translate-y-1/2">
                     <MagnifyingGlassIcon
                       title="search icon"
@@ -124,7 +124,7 @@ export default function Home() {
                     />
                   </span>
                   <input
-                    className="w-full h-full py-3 pl-12 pr-4 text-gray-500 leading-tight placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 border border-gray-200 rounded-lg shadow-xsm"
+                    className="w-full h-full py-3 pl-12 pr-4 text-gray-500 leading-tight placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 border border-gray-200 rounded-lg"
                     type="text"
                     placeholder="Search"
                     value={query}
