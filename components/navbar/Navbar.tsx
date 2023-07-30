@@ -9,7 +9,7 @@ import { NavLink } from "./Navlink";
 
 const Navbar = () => {
   const [show, toggle] = useToggle();
-  const { isAuthenticated, user, loading, accessToken } = useAuth();
+  const { isAuthenticated, user, loading, accessToken, logout } = useAuth();
   const [hasMounted, sethasMounted] = useState(false);
   useEffect(() => {
     sethasMounted(true);
@@ -58,12 +58,12 @@ const Navbar = () => {
                 <Link className="text-blue-600" href="/profile">
                   <p>{user?.username}</p>
                 </Link>
-                <Link
+                <button
+                  onClick={logout}
                   className="rounded-md text-blue-600 px-2.5 py-2.5 text-sm font-medium"
-                  href="/logout"
                 >
                   logout
-                </Link>
+                </button>
               </div>
             )}
             <div className="block md:hidden" onClick={toggle}>

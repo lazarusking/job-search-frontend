@@ -36,7 +36,8 @@ const createUser = async (
   password1: string,
   password2: string,
   first_name: string,
-  last_name: string
+  last_name: string,
+  type: string | null
 ): Promise<AxiosResponse<any>> => {
   console.log(
     JSON.stringify({
@@ -48,9 +49,12 @@ const createUser = async (
       last_name,
     })
   );
-
+  let url = "/auth/register/";
+  if (type === "recruiter") {
+    url = "/auth/register/recruiter";
+  }
   const res = await authAxios.post(
-    "/auth/register/",
+    url,
     JSON.stringify({
       username,
       email,
@@ -72,7 +76,7 @@ const fetchNewToken = async (token: any): Promise<AxiosResponse<any>> => {
 
 export const verifyToken = async (token: string) => {
   try {
-    const res = await authAxios.post("auth/login/verify/", { token: token });
+    const res = await authAxios.post("/auth/login/verify/", { token: token });
     if (res.status === 200) {
       return true;
     } else {
@@ -84,7 +88,8 @@ export const verifyToken = async (token: string) => {
 };
 export const logoutUser = async (token: string) => {
   try {
-    const res = await authAxios.post("auth/logout/", { refresh: token });
+    console.log(token);
+    const res = await authAxios.post("/auth/logout/", { refresh: token });
     if (res.status === 200) {
       return true;
     } else {
@@ -258,7 +263,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     // return resp;
   };
-  const register = async (userDetail: any): Promise<AxiosResponse<any>> => {
+  const register = async (
+    userDetail: any,
+    type: string | null
+  ): Promise<AxiosResponse<any>> => {
     try {
       const { username, email, password1, password2, first_name, last_name } =
         userDetail;
@@ -268,7 +276,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         password1,
         password2,
         first_name,
-        last_name
+        last_name,
+        type
       );
       const tokenData = await resp.data;
       console.log(resp);

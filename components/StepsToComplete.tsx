@@ -1,40 +1,75 @@
+"use client";
+import useToggle from "@/hooks/useToggle";
 import Link from "next/link";
 import { ReactNode } from "react";
 
 type Props = {};
 
 export default function StepsToComplete({ children }: { children: ReactNode }) {
+  const [show, toggle] = useToggle();
   return (
     <section className="py-12 overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto">
-          <div className="flex flex-wrap justify-center md:justify-between -m-6 mb-20">
-            <div className="w-auto p-6">
-              <Link
-                className="font-heading font-semibold text-lg text-gray-900 hover:text-gray-800"
-                href="get-started/"
-              >
-                <p className="mb-2 px-7">Create Free Account</p>
-                <div className="h-0.5 bg-gradient-cyan" />
-              </Link>
+          <div
+            className={`flex flex-wrap justify- items-center md:justify-between md:-mx-6 lg:mb-20`}
+          >
+            <div className="ml-auto flex items-center gap-4 md:order-2 block md:hidden">
+              <div className="" onClick={toggle}>
+                <button
+                  className="rounded bg-gray-100 p-2 text-gray-600 transition hover:text-gray-600/75"
+                  aria-expanded="true"
+                  aria-label="toggle"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M4 6h16M4 12h16M4 18h16"
+                    />
+                  </svg>
+                </button>
+              </div>
             </div>
-            <div className="w-auto p-6">
-              <Link
-                className="font-heading font-semibold text-lg text-gray-900 hover:text-gray-800"
-                href="/get-started/second"
-              >
-                <p className="mb-2 px-7">Build A Team</p>
-                <div className="h-0.5 bg-gray-200 bg-gradient-green" />
-              </Link>
-            </div>
-            <div className="w-auto p-6">
-              <Link
-                className="font-heading font-semibold text-lg text-gray-900 hover:text-gray-800"
-                href={`/get-started/third/`}
-              >
-                <p className="mb-2 px-7">Start</p>
-                <div className="h-0.5 bg-gray-200 bg-gradient-radial" />
-              </Link>
+            <div
+              className={`${
+                show ? "" : "hidden"
+              } items-center justify-between w-full md:flex md:w-auto md:order:1`}
+            >
+              <div className="w-auto p-6">
+                <Link
+                  className="font-heading font-semibold text-lg text-gray-900 hover:text-gray-800"
+                  href="get-started/"
+                >
+                  <p className="mb-2 px-7">Create Free Account</p>
+                  <div className="h-0.5 bg-gradient-cyan" />
+                </Link>
+              </div>
+              <div className="w-auto p-6">
+                <Link
+                  className="font-heading font-semibold text-lg text-gray-900 hover:text-gray-800"
+                  href="/get-started/second"
+                >
+                  <p className="mb-2 px-7">Build A Profile</p>
+                  <div className="h-0.5 bg-gray-200 bg-gradient-green" />
+                </Link>
+              </div>
+              <div className="w-auto p-6">
+                <Link
+                  className="font-heading font-semibold text-lg text-gray-900 hover:text-gray-800"
+                  href={`/get-started/third/`}
+                >
+                  <p className="mb-2 px-7">Get Started</p>
+                  <div className="h-0.5 bg-gray-200 bg-gradient-radial" />
+                </Link>
+              </div>
             </div>
           </div>
           {/* <div className="relative flex flex-wrap -m-11">
@@ -75,6 +110,7 @@ export default function StepsToComplete({ children }: { children: ReactNode }) {
           {children}
         </div>
       </div>
+      <a href="https://storyset.com/user">User illustrations by Storyset</a>
     </section>
   );
 }

@@ -12,6 +12,7 @@ export interface UserToken {
   user_id: number;
   username: string;
   email: string;
+  is_recruiter: boolean;
 }
 
 export interface User {
@@ -95,6 +96,15 @@ export interface JobDetail {
   location: string;
 }
 
+export interface JobView {
+  id: number;
+  job: Job;
+  user: User;
+  date_posted: string;
+}
+export interface JobViewList extends Pagination {
+  results: JobView[];
+}
 export type ApplicantList = ApplicantDetail[];
 
 export interface ApplicantDetail {

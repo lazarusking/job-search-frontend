@@ -1,6 +1,12 @@
 import { AxiosResponse } from "axios";
 import { authAxios } from "./auth";
-import { Job, JobList, UserProfile, UserToken } from "./interfaces";
+import {
+  Job,
+  JobList,
+  JobViewList,
+  UserProfile,
+  UserToken,
+} from "./interfaces";
 
 // Update User Profile
 
@@ -96,13 +102,13 @@ export const deleteApplication = async (job: Job) => {
 };
 
 // Save your favorite job to db
-export const getSavedJobs = async (job: Job) => {
+export const getSavedJobs = async (): Promise<JobViewList> => {
   try {
-    const response = await authAxios.get(`/users/saved/${job.id}/`);
+    const response = await authAxios.get(`/users/saved/`);
 
-    return { data: response.data };
-  } catch (error) {
-    return { error };
+    return response.data;
+  } catch (error: any) {
+    return error;
   }
 };
 // Save your favorite job to db
@@ -110,20 +116,22 @@ export const saveJob = async (job: Job) => {
   try {
     const response = await authAxios.post(`/users/saved/${job.id}/`);
 
-    return { data: response.data };
-  } catch (error) {
-    return { error };
+    return response;
+  } catch (error: any) {
+    return error;
   }
 };
 
 // Delete your application to a particular job
-export const deleteSavedJob = async (job: Job) => {
+export const deleteSavedJob = async (
+  job_id: number
+): Promise<AxiosResponse> => {
   try {
-    const response = await authAxios.delete(`/users/saved/${job.id}/`);
+    const response = await authAxios.delete(`/users/saved/${job_id}/`);
 
-    return { data: response.data };
-  } catch (error) {
-    return { error };
+    return response;
+  } catch (error: any) {
+    return error;
   }
 };
 

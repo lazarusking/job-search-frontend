@@ -21,12 +21,12 @@ export default function Login() {
     setUserDetail((user) => ({ ...user, [e.target.name]: e.target.value }));
   }
   const [error, setErrorMessage] = useState<Partial<LoginError>>({});
-  const { loading, isAuthenticated, login } = useAuth();
+  const { loading, isAuthenticated, login, user } = useAuth();
   const router = useRouter();
   useEffect(() => {
     setUserDetail((userDetail) => ({
       ...userDetail,
-      email: emailRef.current.value,
+      email: emailRef.current!.value,
     }));
     setUserDetail((userDetail) => ({
       ...userDetail,
@@ -42,7 +42,23 @@ export default function Login() {
     // try {
     console.log(userDetail);
     const resp = await login(userDetail.email, userDetail.password);
-    console.log(await resp.response);
+    if (resp.status === 200) {
+      console.log("Logged In successfully");
+      console.log(resp.data.user.is_recruiter);
+      const {
+        data: {
+          user: { is_recruiter },
+        },
+      } = resp;
+      console.log(is_recruiter);
+
+      if (resp.data.user.is_recruiter) {
+        console.log("redirecting");
+        router.push("/dashboard");
+      } else {
+        router.push("/");
+      }
+    }
 
     if (resp.response && resp.response.status === 400) {
       console.log(resp.response.data);
@@ -56,8 +72,11 @@ export default function Login() {
     if (!loading && isAuthenticated) router.push("/");
   };
   useEffect(() => {
-    if (!loading && isAuthenticated) router.push("/");
-  }, [isAuthenticated, loading, router]);
+    if (!loading && isAuthenticated) {
+      if (user?.is_recruiter) router.push("/dashboard");
+      if (!user?.is_recruiter) router.push("/");
+    }
+  }, [isAuthenticated, loading, router, user?.is_recruiter]);
 
   return (
     <section className="px-6 py-4 lg:px-8 overflow-hidden bg-white sm:py-6">

@@ -12,7 +12,7 @@ import {
 import Signup from "@/public/signup.png";
 import Link from "next/link";
 import { useAuth } from "@/context/auth";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import ErrorMessage from "@/components/ErrorMessage";
 import { useDebounce } from "usehooks-ts";
 import { authAxios } from "@/lib/auth";
@@ -42,6 +42,9 @@ type UsernameCheckType = {
   message: string;
 };
 export default function Register() {
+  const type = useSearchParams().get("type");
+  console.log(type);
+
   const [userDetail, setUserDetail] = useState({
     first_name: "",
     last_name: "",
@@ -89,9 +92,16 @@ export default function Register() {
     setErrorMessage({});
     // try {
     console.log(userDetail);
-    const resp = await register({ ...userDetail });
-    console.log(await resp.response);
-
+    const resp = await register({ ...userDetail }, type);
+    console.log(await resp);
+    if (resp.status === 201) {
+      console.log("Registered successfully");
+      if (type === "recruiter") {
+        router.push("/dashboard");
+      } else {
+        router.push("/");
+      }
+    }
     if (resp.response && resp.response.status === 400) {
       console.log(resp.response.data);
       setErrorMessage(resp.response.data);
@@ -101,16 +111,15 @@ export default function Register() {
     }
     // } catch (ex: any) {
     // }
-    if (!loading && isAuthenticated) router.push("/");
   };
   useEffect(() => {
     setErrorMessage({});
     performSearch();
   }, [performSearch]);
 
-  useEffect(() => {
-    if (!loading && isAuthenticated) router.push("/");
-  }, [isAuthenticated, loading, router]);
+  // useEffect(() => {
+  //   if (!loading && isAuthenticated) router.push("/");
+  // }, [isAuthenticated, loading, router]);
   return (
     <section className="px-6 py-4 lg:px-8 overflow-hidden bg-white sm:py-6">
       <div className="grid md:grid-cols-12 gap-x-8 gap-y-16 sm:gap-y-20 max-w-7xl items-center my-auto m-auto bg-white sm:py-5 sm:px-6">
@@ -129,7 +138,7 @@ export default function Register() {
         <div className="flex flex-col md:col-span-7 w-full mx-auto justify-center items-center ">
           <div className="text-center flex justify-center items-start sm:mx-auto sm:w-full sm:max-w-sm">
             <h1 className="text-xl font-bold md:text-3xl text-blue-500">
-              Create New Account
+              {type === "recruiter" ? "Employer Sign Up" : "Create New Account"}
             </h1>
           </div>
           <form
@@ -142,7 +151,7 @@ export default function Register() {
                 htmlFor="FirstName"
                 className="block text-sm font-medium text-gray-700"
               >
-                First Name
+                First Name*
               </label>
 
               <input
@@ -162,7 +171,7 @@ export default function Register() {
                 htmlFor="LastName"
                 className="block text-sm font-medium text-gray-700"
               >
-                Last Name
+                Last Name*
               </label>
 
               <input
@@ -182,15 +191,15 @@ export default function Register() {
                 className="block text-sm font-medium text-gray-700"
               >
                 Email*
+                <input
+                  ref={emailRef}
+                  type="email"
+                  id="Email"
+                  name="email"
+                  className="px-3 py-2.5 mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                  onChange={handleUserDetailUpdate}
+                />
               </label>
-              <input
-                ref={emailRef}
-                type="email"
-                id="Email"
-                name="email"
-                className="px-3 py-2.5 mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
-                onChange={handleUserDetailUpdate}
-              />
               <div className="relative pb-6">
                 {error.email && <ErrorMessage msg={error.email} />}
               </div>
@@ -201,16 +210,16 @@ export default function Register() {
                 className="block text-sm font-medium text-gray-700"
               >
                 Username*
+                <input
+                  type="text"
+                  id="username"
+                  name="username"
+                  autoComplete="new-password"
+                  className="px-3 py-2.5 mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                  onChange={handleUserDetailUpdate}
+                />{" "}
               </label>
 
-              <input
-                type="text"
-                id="username"
-                name="username"
-                autoComplete="username"
-                className="px-3 py-2.5 mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
-                onChange={handleUserDetailUpdate}
-              />
               <div className="relative pb-6">
                 {error.username && <ErrorMessage msg={error.username} />}
                 {debouncedUsername.length > 2 && !error.username && (
@@ -266,7 +275,7 @@ export default function Register() {
                 Create an account
               </button>
 
-              <div className="mt-4 text-sm text-gray-500 sm:mt-0">
+              <div className="mt-4 text-sm text-gray-500 sm:mt-0 flex flex-col">
                 Already have an account?
                 <Link href="/login" className="text-gray-700 underline">
                   Log in

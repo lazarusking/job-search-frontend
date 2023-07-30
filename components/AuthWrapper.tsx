@@ -7,7 +7,7 @@ import { ComponentType, useEffect, useState } from "react";
 import LoadingAnimation from "./Loading";
 
 export default function withAuth<T extends User>(
-  WrappedComponent: ComponentType<T>
+  WrappedComponent: ComponentType<T> | any
 ) {
   const Component = (props: any) => {
     const router = useRouter();

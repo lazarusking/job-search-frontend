@@ -1,34 +1,45 @@
 "use client";
 import Link from "next/link";
-import {
-  usePathname,
-  useSelectedLayoutSegment,
-  useSelectedLayoutSegments,
-} from "next/navigation";
+import { useSelectedLayoutSegment } from "next/navigation";
 import { ReactNode } from "react";
 
 type DashLinkType = {
   name: string;
   href?: string | null;
   Icon: ReactNode;
+  onClickFunc?: any;
 };
 //text-neutral-500 hover:bg-indigo-50 text-white bg-indigo-500
-export default function DashLink({ name, href = null, Icon }: DashLinkType) {
+export default function DashLink({
+  name,
+  href = null,
+  Icon,
+  onClickFunc,
+}: DashLinkType) {
   const segment = useSelectedLayoutSegment();
-  const path = usePathname();
-  console.log(segment, path, href, useSelectedLayoutSegments());
 
   return (
-    <li>
-      <Link
-        className={`flex items-center pl-3 py-3 pr-4 ${
-          segment === href ? "bg-indigo-500" : ""
-        } hover:bg-indigo-50 hover:text-neutral-500 rounded`}
-        href={href ? `/dashboard/${href}` : "/dashboard"}
-      >
-        <span className="inline-block mr-3">{Icon}</span>
-        <span>{name}</span>
-        {/* <span className="inline-block ml-auto">
+    <>
+      {onClickFunc ? (
+        <button
+          className={`w-full flex items-center pl-3 py-3 pr-4 hover:bg-indigo-50 hover:text-neutral-500 rounded`}
+          onClick={onClickFunc}
+        >
+          <span className="inline-block mr-3">{Icon}</span>
+          <span>{name}</span>
+        </button>
+      ) : (
+        <li>
+          <Link
+            className={`flex items-center pl-3 py-3 pr-4 ${
+              segment === href ? "bg-indigo-500" : ""
+            } hover:bg-indigo-50 hover:text-neutral-500 rounded`}
+            href={href !== null ? `/dashboard/${href}` : "/"}
+            onClick={onClickFunc}
+          >
+            <span className="inline-block mr-3">{Icon}</span>
+            <span>{name}</span>
+            {/* <span className="inline-block ml-auto">
           <svg
             className="text-gray-600 w-3 h-3"
             viewBox="0 0 10 6"
@@ -41,7 +52,9 @@ export default function DashLink({ name, href = null, Icon }: DashLinkType) {
             />
           </svg>
         </span> */}
-      </Link>
-    </li>
+          </Link>
+        </li>
+      )}
+    </>
   );
 }

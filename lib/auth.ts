@@ -39,7 +39,17 @@ authAxios.interceptors.response.use(
       window.location.href = "/login/";
       return Promise.reject(error);
     }
-
+    if (
+      (error.response.data.code === "token_not_valid" ||
+        error.response.data.code === "user_not_found") &&
+      error.response.status === 401 &&
+      error.response.statusText === "Unauthorized"
+    ) {
+      console.log("removed tokens");
+      
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+    }
     // if (
     //   error.response.data.code === "token_not_valid" &&
     //   error.response.status === 401 &&

@@ -1,5 +1,5 @@
 import { JobDetail } from "@/lib/interfaces";
-import { MapPinIcon } from "@heroicons/react/24/solid";
+import { ArrowRightIcon, MapPinIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import React from "react";
 
@@ -25,20 +25,22 @@ export default function JobPosting({ id, job_type, location, title }: Props) {
               </h3>
               <p className="text-gray-500 text-base">
                 <span className="inline-block mr-3">
-                  <MapPinIcon className="text-gray-600 w-5 h-5"/>
+                  <MapPinIcon className="text-gray-600 w-5 h-5" />
                 </span>
                 {location}
               </p>
             </div>
+            <div></div>
             <div className="w-full sm:w-auto p-2">
               <div className="group relative">
                 <div className="absolute top-0 left-0 w-full h-full bg-gradient-green opacity-0 group-hover:opacity-50 rounded-full transition ease-out duration-300" />
-                <button className="p-1 w-full font-heading font-medium text-base text-gray-900 overflow-hidden rounded-full">
-                  <div className="relative py-2 px-5 bg-gradient-green overflow-hidden rounded-full">
-                    <div className="absolute top-0 left-0 transform -translate-y-full group-hover:-translate-y-0 h-full w-full bg-gray-900 transition ease-in-out duration-500" />
-                    <p className="relative z-10 group-hover:text-white">
+                <button className="p-1 w-full font-heading font-medium text-base text-white overflow-hidden">
+                  <div className="relative space-x-3 py-2 px-5 bg-blue-400 overflow-hidden rounded-md inline-flex items-center">
+                    {/* <div className="absolute top-0 left-0 transform -translate-y-full group-hover:-translate-y-0 h-full w-full bg-gray-900 transition ease-in-out duration-500" /> */}
+                    <p className="relative z-10 group-hover:text-white ">
                       Apply now
                     </p>
+                    <ArrowRightIcon className="w-5 h-5" />
                   </div>
                 </button>
               </div>

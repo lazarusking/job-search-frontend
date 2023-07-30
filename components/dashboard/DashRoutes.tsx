@@ -1,3 +1,4 @@
+import { useAuth } from "@/context/auth";
 import DashLink from "./DashLink";
 import {
   ArrowRightOnRectangleIcon,
@@ -6,6 +7,8 @@ import {
 } from "@heroicons/react/24/solid";
 
 export default function DashRoutes() {
+  const { isAuthenticated, logout } = useAuth();
+
   return (
     <div className="grid flex-1 px-4 py-6">
       <ul className="grid mb-8 text-sm font-medium">
@@ -95,6 +98,7 @@ export default function DashRoutes() {
           name="Log Out"
           href="logout"
           Icon={<ArrowRightOnRectangleIcon className="text-gray-600 w-5 h-5" />}
+          onClickFunc={logout}
         />
       </ul>
     </div>
