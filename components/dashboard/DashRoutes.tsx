@@ -46,8 +46,8 @@ export default function DashRoutes() {
           }
         />
         <DashLink
-          name="Documents"
-          href="documents"
+          name="Jobs"
+          href="jobs"
           Icon={
             <svg
               className="text-gray-600 w-5 h-5"

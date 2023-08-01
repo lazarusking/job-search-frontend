@@ -42,7 +42,7 @@ export default function Login() {
     // try {
     console.log(userDetail);
     const resp = await login(userDetail.email, userDetail.password);
-    if (resp.status === 200) {
+    if (resp && resp.status === 200) {
       console.log("Logged In successfully");
       console.log(resp.data.user.is_recruiter);
       const {
@@ -119,9 +119,9 @@ export default function Login() {
             className={"h-full w-full object-cover"}
             blurDataURL={rgbDataURL(255, 255, 255)}
             placeholder="blur"
-            // width={500}
-            // height={500}
-            // fill={true}
+          // width={500}
+          // height={500}
+          // fill={true}
           />
         </div>
         <div className="flex flex-col md:col-span-7 w-full mx-auto justify-center items-center ">

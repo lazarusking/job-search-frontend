@@ -6,12 +6,12 @@ import Loading from "../loading";
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <>
-      <Suspense fallback={<Loading />}>
-        {/* <AuthProvider> */}
-        <Navbar />
-        {children}
-        {/* </AuthProvider> */}
-      </Suspense>
+      {/* <Suspense fallback={<Loading />}> */}
+      {/* <AuthProvider> */}
+      <Navbar />
+      {children}
+      {/* </AuthProvider> */}
+      {/* </Suspense> */}
     </>
   );
 }

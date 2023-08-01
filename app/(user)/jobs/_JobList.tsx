@@ -1,11 +1,19 @@
 import { TrashIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
-export default function JobList({ id, title, location, job_type, deleteFunc }) {
+export default function JobList({
+  id,
+  title,
+  location,
+  job_type,
+  deadline,
+  deleteFunc,
+}: any) {
+  const isJobActive = new Date(deadline).getTime() > Date.now();
+
   return (
     <tr className="border-b border-blue-50">
       <td className="flex items-center py-4 px-6 font-medium">
-        <input className="mr-3" type="checkbox" name="" id="" />
         <div className="flex px-4 py-3">
           {/* <img
               className="w-8 h-8 mr-4 object-cover rounded-md"
@@ -13,7 +21,7 @@ export default function JobList({ id, title, location, job_type, deleteFunc }) {
               alt=""
             /> */}
           <div>
-            <Link href={`job/${id}`}>
+            <Link href={`/jobs/${id}`}>
               <p className="text-sm font-medium">{title}</p>
               <p className="text-xs text-gray-500">{location}</p>
             </Link>
@@ -21,15 +29,18 @@ export default function JobList({ id, title, location, job_type, deleteFunc }) {
         </div>
       </td>
       <td className="font-medium">
-        <p className="text-sm">Example of Project</p>
-        <p className="text-xs text-gray-500">New development</p>
+        <p className="text-sm">{job_type}</p>
+        <p className="text-xs text-gray-500">
+          {isJobActive ? "Active" : "Expired"}
+        </p>
       </td>
-
-      <td>
-        <button onClick={() => deleteFunc(id)}>
-          <TrashIcon className="w-5 h-5 text-red-700" />
-        </button>
-      </td>
+      {deleteFunc && (
+        <td>
+          <button onClick={() => deleteFunc(id)}>
+            <TrashIcon className="w-5 h-5 text-red-700" />
+          </button>
+        </td>
+      )}
     </tr>
   );
 }

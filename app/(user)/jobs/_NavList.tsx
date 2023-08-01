@@ -1,15 +1,17 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSelectedLayoutSegments } from "next/navigation";
 
 const paths = [
-  { name: "Saved", href: "/jobs" },
+  { name: "Saved", href: "/jobs/saved" },
   { name: "Applied", href: "/jobs/applied" },
   { name: "Selected", href: "/jobs/selected" },
 ];
 
 export function UserJobsPageNav() {
   const pathname = usePathname();
+  const segments = useSelectedLayoutSegments();
+  console.log(segments);
 
   return (
     <ul className="flex">

@@ -2,6 +2,7 @@
 
 import { useAuth } from "@/context/auth";
 import useToggle from "@/hooks/useToggle";
+import { ArrowRightOnRectangleIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -39,7 +40,7 @@ const Navbar = () => {
             {!user?.username ? (
               <div className="sm:flex sm:gap-4">
                 <Link
-                  className="rounded-md -blue-600 px-5 py-2.5 text-sm font-medium"
+                  className="rounded-md text-blue-600 px-5 py-2.5 text-sm font-medium"
                   href="/login"
                 >
                   Log In
@@ -55,14 +56,14 @@ const Navbar = () => {
               </div>
             ) : (
               <div className="flex items-center gap-4">
-                <Link className="text-blue-600" href="/profile">
+                <Link className="text-blue-600 capitalize" href="/profile">
                   <p>{user?.username}</p>
                 </Link>
                 <button
                   onClick={logout}
                   className="rounded-md text-blue-600 px-2.5 py-2.5 text-sm font-medium"
                 >
-                  logout
+                  Log out
                 </button>
               </div>
             )}
@@ -89,15 +90,103 @@ const Navbar = () => {
               </button>
             </div>
           </div>
-          <div
-            className={`${
-              show ? "" : "hidden"
-            } items-center justify-between w-full md:flex md:w-auto md:order-1`}
+          {/* <div
+            className={`${show ? "" : "hidden"
+              } items-center justify-between w-full md:flex md:w-auto md:order-1`}
           >
             <nav aria-label="site-nav">
               <NavLink />
             </nav>
+          </div> */}
+
+          <div className={`navbar-menu fixed top-0 left-0 bottom-0 w-5/6 max-w-sm z-50 ${show ? "" : "hidden"}`}>
+            <div onClick={toggle} className="navbar-backdrop fixed inset-0 bg-gray-800 opacity-25" />
+            <nav className="relative flex flex-col py-6 px-6 h-full w-full bg-white border-r overflow-y-auto">
+              <div className="flex items-center mb-8">
+                <Link className="mr-auto flex items-center text-sky-600" href="/">
+                  <span className="sr-only">Home</span>
+                  <Image
+                    src="/logo.svg"
+                    alt="ISearch Logo"
+                    className="w-10 h-10"
+                    width={14}
+                    height={24}
+                    priority
+                  />
+                  <span className="ml-2 text-sky-600 font-extrabold lg:text-2xl sm:text-xl">
+                    ISEARCH
+                  </span>
+                </Link>
+                <button onClick={toggle} className="navbar-close">
+                  <svg
+                    className="h-6 w-6 text-gray-400 cursor-pointer hover:text-gray-500"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              {/* <nav aria-label="site-nav"> */}
+              <NavLink />
+              {/* </nav> */}
+
+              <div className="text-left mt-auto">
+                {!user?.username ?
+
+                  (<div className="pt-6">
+                    <Link
+                      className="block px-4 py-3 mb-3 leading-loose text-xs text-center font-semibold bg-gray-50 hover:bg-gray-100 rounded-l-xl rounded-t-xl"
+                      href="/login"
+                    >
+                      Sign In
+                    </Link>
+                    <a
+                      className="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-purple-600 hover:bg-purple-700 rounded-l-xl rounded-t-xl"
+                      href="/get-started/third"
+                    >
+                      Sign Up
+                    </a>
+                  </div>) :
+                  <>
+                    <Link className="block capitalize px-4 py-3 mb-2 leading-loose text-base text-gray-600 font-semibold bg-gray-100 hover:bg-purple-700 hover:text-white" href="/profile">
+                      <p>{user?.username}</p>
+                    </Link>
+                    <button
+                      onClick={logout}
+                      className="space-x-4 text-gray-600 items-center w-full flex px-4 py-3 mb-2 leading-loose text-lg text-center font-semibold hover:bg-gray-500 hover:text-white"
+                    >
+                      <ArrowRightOnRectangleIcon className="w-5 h-5 hover:text-white" />
+                      <span>
+                        Log out
+                      </span>
+                    </button>
+                  </>
+                }
+                <p className="my-4 text-xs text-center text-gray-400">
+                  <span>© 2020 All rights reserved.</span>
+                </p>
+                <div className="text-center">
+                  <a className="inline-block px-1" href="#">
+                    <img src="https://shuffle.dev/atis-assets/social/facebook-purple.svg" alt="" />
+                  </a>
+                  <a className="inline-block px-1" href="#">
+                    <img src="https://shuffle.dev/atis-assets/social/twitter-purple.svg" alt="" />
+                  </a>
+                  <a className="inline-block px-1" href="#">
+                    <img src="https://shuffle.dev/atis-assets/social/instagram-purple.svg" alt="" />
+                  </a>
+                </div>
+              </div>
+            </nav>
           </div>
+
         </div>
       </div>
     </header>

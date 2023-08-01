@@ -29,7 +29,7 @@ authAxios.interceptors.response.use(
           "Looks like CORS might be the problem. " +
           "Sorry about this - we will get it fixed shortly."
       );
-      return Promise.reject(error);
+      // return Promise.reject(error);
     }
 
     if (

@@ -21,6 +21,7 @@ export interface User {
   first_name: string;
   last_name: string;
   email: string;
+  is_recruiter: boolean;
 }
 export interface UserList extends Pagination {
   results: User[];
@@ -77,7 +78,7 @@ export interface Job {
   slug: string;
   date_posted: string;
   deadline: string;
-  recruiter: number;
+  recruiter: Recruiter;
 }
 export interface JobList extends Pagination {
   results: Job[];

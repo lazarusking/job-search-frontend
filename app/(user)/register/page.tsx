@@ -43,7 +43,6 @@ type UsernameCheckType = {
 };
 export default function Register() {
   const type = useSearchParams().get("type");
-  console.log(type);
 
   const [userDetail, setUserDetail] = useState({
     first_name: "",
@@ -130,9 +129,9 @@ export default function Register() {
             className={"h-full w-full object-cover"}
             blurDataURL={rgbDataURL(255, 255, 255)}
             placeholder="blur"
-            // width={500}
-            // height={500}
-            // fill={true}
+          // width={500}
+          // height={500}
+          // fill={true}
           />
         </aside>
         <div className="flex flex-col md:col-span-7 w-full mx-auto justify-center items-center ">
@@ -224,9 +223,8 @@ export default function Register() {
                 {error.username && <ErrorMessage msg={error.username} />}
                 {debouncedUsername.length > 2 && !error.username && (
                   <p
-                    className={`absolute ${
-                      usernameCheck.valid ? "text-green-400" : "text-rose-400"
-                    } `}
+                    className={`absolute ${usernameCheck.valid ? "text-green-400" : "text-rose-400"
+                      } `}
                   >
                     {usernameCheck.message}
                   </p>

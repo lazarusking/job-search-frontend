@@ -16,23 +16,23 @@ export const metadata = {
   description: "",
   ...(TWITTER_CREATOR &&
     TWITTER_SITE && {
-      twitter: {
-        card: "summary_large_image",
-        creator: TWITTER_CREATOR,
-        site: TWITTER_SITE,
-      },
-    }),
+    twitter: {
+      card: "summary_large_image",
+      creator: TWITTER_CREATOR,
+      site: TWITTER_SITE,
+    },
+  }),
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <Suspense fallback={<Loading />}>
-        <body className={inter.className}>
+      <body className={inter.className}>
+        <Suspense fallback={<Loading />}>
           {/* <Navbar /> */}
           <AuthProvider>{children}</AuthProvider>
-        </body>
-      </Suspense>
+        </Suspense>
+      </body>
     </html>
   );
 }

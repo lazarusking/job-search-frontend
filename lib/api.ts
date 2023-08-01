@@ -46,17 +46,17 @@ export const updateUserInfo = async (
 };
 
 // The jobs a user has applied for
-export const appliedJobs = async () => {
+export const getAppliedJobs = async (): Promise<JobViewList> => {
   try {
     const response = await authAxios.get(`/users/applied/`);
-    return { data: response.data };
-  } catch (error) {
-    return { error };
+    return response.data;
+  } catch (error: any) {
+    return error;
   }
 };
 
 // The jobs a user has been selected for
-export const selectedJobs = async () => {
+export const getSelectedJobs = async () => {
   try {
     const response = await authAxios.get(`/users/selected/`);
     return { data: response.data };
@@ -65,6 +65,17 @@ export const selectedJobs = async () => {
   }
 };
 
+// Single job view
+export const getJob = async (job_id: number): Promise<Job> => {
+  try {
+    let url = `/recruiters/jobs/${job_id}/`;
+    const response: AxiosResponse<Job> = await authAxios.get(url);
+    return response.data;
+    // return { data: response.data };
+  } catch (error: any) {
+    return error;
+  }
+};
 // The jobs view
 export const getJobs = async (query?: string): Promise<JobList> => {
   try {
@@ -80,24 +91,41 @@ export const getJobs = async (query?: string): Promise<JobList> => {
 };
 
 // Apply to a particular job
-export const applyForJob = async (job: Job) => {
+export const getAppliedData = async (job_id: number) => {
   try {
-    const response = await authAxios.post(`/users/apply/${job.id}/`);
-
-    return { data: response.data };
-  } catch (error) {
-    return { error };
+    const response = await authAxios.get(`/users/apply/${job_id}/`);
+    return response.data;
+  } catch (error: any) {
+    return error;
+  }
+};
+export const applyForJob = async (job_id: number) => {
+  try {
+    const response = await authAxios.post(`/users/apply/${job_id}/`);
+    return response;
+  } catch (error: any) {
+    return error;
   }
 };
 
 // Delete your application to a particular job
-export const deleteApplication = async (job: Job) => {
+export const deleteApplication = async (job_id: number) => {
   try {
-    const response = await authAxios.delete(`/users/apply/${job.id}/`);
+    const response = await authAxios.delete(`/users/apply/${job_id}/`);
+    return response;
+  } catch (error: any) {
+    return error;
+  }
+};
 
-    return { data: response.data };
-  } catch (error) {
-    return { error };
+// Save your favorite job to db
+export const getSavedData = async (job_id: number) => {
+  try {
+    const response = await authAxios.get(`/users/saved/${job_id}`);
+
+    return response;
+  } catch (error: any) {
+    return error;
   }
 };
 
@@ -112,9 +140,9 @@ export const getSavedJobs = async (): Promise<JobViewList> => {
   }
 };
 // Save your favorite job to db
-export const saveJob = async (job: Job) => {
+export const saveJob = async (job_id: number) => {
   try {
-    const response = await authAxios.post(`/users/saved/${job.id}/`);
+    const response = await authAxios.post(`/users/saved/${job_id}/`);
 
     return response;
   } catch (error: any) {
@@ -128,7 +156,6 @@ export const deleteSavedJob = async (
 ): Promise<AxiosResponse> => {
   try {
     const response = await authAxios.delete(`/users/saved/${job_id}/`);
-
     return response;
   } catch (error: any) {
     return error;
@@ -149,10 +176,9 @@ export const getJobDetails = async (job: Job) => {
 export const selectedApplicants = async (job: Job) => {
   try {
     const response = await authAxios.get(`recruiters/jobs/${job.id}/selected/`);
-
-    return { data: response.data };
-  } catch (error) {
-    return { error };
+    return response;
+  } catch (error: any) {
+    return error;
   }
 };
 
@@ -163,9 +189,9 @@ export const selectApplicant = async (user: UserToken, job: Job) => {
       `recruiters/jobs/${job.id}/select/${user.user_id}`
     );
 
-    return { data: response.data };
-  } catch (error) {
-    return { error };
+    return response;
+  } catch (error: any) {
+    return error;
   }
 };
 
@@ -176,7 +202,7 @@ export const deleteSelectedApplicant = async (user: UserToken, job: Job) => {
       `recruiters/jobs/${job.id}/select/${user.user_id}`
     );
 
-    return { data: response.data };
+    return response;
   } catch (error) {
     return { error };
   }

@@ -1,6 +1,6 @@
 import { ReactNode, Suspense } from "react";
-import Loading from "../../loading";
 import StepsToComplete from "@/components/StepsToComplete";
+import Loading from "@/app/loading";
 
 export default function StartedLayout({ children }: { children: ReactNode }) {
   return (

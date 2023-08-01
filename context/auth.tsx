@@ -140,7 +140,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       return null;
     }
   });
-  const setNotAuthenticated = (): void => {
+  const setNotAuthenticated = useCallback((): void => {
     setIsAuthenticated(false);
     setLoading(false);
     setUser(null);
@@ -149,7 +149,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setAccessTokenExpiry(0);
     // localStorage.removeItem("access_token");
     // localStorage.removeItem("refresh_token");
-  };
+  }, [setAccessToken, setRefreshToken]);
   const handleNewToken = useCallback(
     (data: TokenResponse): void => {
       const user: UserToken = jwtDecode(data.access);
@@ -169,22 +169,25 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const TokenRefresh = useCallback(async (): Promise<string> => {
     setLoading(true);
     try {
-      const resp = await fetchNewToken(refreshToken);
-      const tokenData = await resp.data;
-      console.log(tokenData);
+      if (refreshToken) {
+        const resp = await fetchNewToken(refreshToken);
+        const tokenData = await resp.data;
+        console.log(tokenData);
 
-      // handleNewToken(tokenData);
-      setAccessToken(tokenData.access);
-      if (user === null) {
-        console.log("No user loaded so loading from refreshed token");
-        await initUser(tokenData.access);
+        // handleNewToken(tokenData);
+        setAccessToken(tokenData.access);
+        if (user === null) {
+          console.log("No user loaded so loading from refreshed token");
+          await initUser(tokenData.access);
+        }
+        return tokenData.access;
       }
-      return tokenData.access;
+      return ""
     } catch (error) {
-      // setNotAuthenticated();
+      setNotAuthenticated();
       return "";
     }
-  }, [refreshToken, setAccessToken, user]);
+  }, [refreshToken, setAccessToken, setNotAuthenticated, user]);
 
   const accessTokenIsValid = useCallback(async (): Promise<boolean> => {
     const token = JSON.parse(localStorage.getItem("access_token")!);
