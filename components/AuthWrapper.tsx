@@ -12,7 +12,7 @@ export default function withAuth<T extends User>(
   const Component = (props: any) => {
     const router = useRouter();
     const [verified, setVerified] = useState(false);
-    const { accessToken, user, loading } = useAuth();
+    const { accessToken, user, loading, isAuthenticated } = useAuth();
     const [hasMounted, sethasMounted] = useState(false);
     useEffect(() => {
       sethasMounted(true);

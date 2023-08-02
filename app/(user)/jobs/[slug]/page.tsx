@@ -17,6 +17,9 @@ export async function generateStaticParams() {
   // const posts = await fetch('https://.../posts').then((res) => res.json())
   const jobs = await getJobs();
   // console.log(jobs.results);
+  jobs.results.map((item) => {
+    console.log(item.id, typeof item.id);
+  });
 
   return jobs.results.map((job) => ({
     slug: job.id,
@@ -28,7 +31,6 @@ async function getJobData(slug: number) {
 
   return res;
 }
-
 
 export default async function Page({
   params: { slug },
@@ -185,16 +187,16 @@ function UserApplySaveComponent({ slug }: { slug: number }) {
   async function apply(id: number) {
     const res = await applyForJob(id);
     if (res.status === 201) {
-      setApplied(true)
+      setApplied(true);
     }
     if (res.response && res.response.status === 201) {
       console.log(res.response);
-      setIsSaved(true)
+      setIsSaved(true);
     }
     if (res.response && res.response.status === 400) {
       const res = await deleteApplication(id);
       if (res.status === 200) {
-        setApplied(false)
+        setApplied(false);
       }
     }
   }
@@ -205,14 +207,14 @@ function UserApplySaveComponent({ slug }: { slug: number }) {
       console.log(res);
 
       if (res.status === 201) {
-        setIsSaved(true)
+        setIsSaved(true);
       }
       if (res.response && res.response.status >= 400) {
         const res = await deleteSavedJob(id);
         console.log(res);
 
         if (res.status === 200) {
-          setIsSaved(false)
+          setIsSaved(false);
         }
       }
     } catch (error) {
@@ -226,30 +228,37 @@ function UserApplySaveComponent({ slug }: { slug: number }) {
       const res = await getSavedData(slug);
       const res2 = await getAppliedData(slug);
       // console.log(res);
-      if (res.response && res.data.count) {
-        setIsSaved(true)
+      if (res.response && res.data?.count) {
+        setIsSaved(true);
       }
-      if (res.response && res2.data.count) {
-        setApplied(true)
+      if (res.response && res2.data?.count) {
+        setApplied(true);
       }
 
       // await saveOrUndo(slug);
     };
-    fetchSearchResults()
-  }, [slug])
-  return <div className="space-x-3">
-    <button onClick={() => apply(slug)} className="group relative inline-block focus:outline-none focus:ring">
-      <span className="relative inline-block border-2 border-blue-500 p-1.5 text-sm bg-blue-500 font-bold tracking-widest text-white group-active:text-opacity-75">
-        {applied ? "Applied" : "Apply"}
-      </span>
-    </button>
-    <button onClick={() => saveOrUndo(slug)} className="group relative inline-block focus:outline-none">
-      {/* <span className="absolute inset-0 translate-x-0 translate-y-0 transition-transform group-hover:translate-y-1.5 group-hover:translate-x-1.5" /> */}
-      <span className=" rounded-full inline-block border border-current hover:border-2 p-1.5 text-sm font-bold tracking-widest text-blue-400 group-active:text-opacity-75">
-        {isSaved ? "Saved" : "Save"}
-        {/* Saved */}
-      </span>
-    </button>
-  </div>;
+    fetchSearchResults();
+  }, [slug]);
+  return (
+    <div className="space-x-3">
+      <button
+        onClick={() => apply(slug)}
+        className="group relative inline-block focus:outline-none focus:ring"
+      >
+        <span className="relative inline-block border-2 border-blue-500 p-1.5 text-sm bg-blue-500 font-bold tracking-widest text-white group-active:text-opacity-75">
+          {applied ? "Applied" : "Apply"}
+        </span>
+      </button>
+      <button
+        onClick={() => saveOrUndo(slug)}
+        className="group relative inline-block focus:outline-none"
+      >
+        {/* <span className="absolute inset-0 translate-x-0 translate-y-0 transition-transform group-hover:translate-y-1.5 group-hover:translate-x-1.5" /> */}
+        <span className=" rounded-full inline-block border border-current hover:border-2 p-1.5 text-sm font-bold tracking-widest text-blue-400 group-active:text-opacity-75">
+          {isSaved ? "Saved" : "Save"}
+          {/* Saved */}
+        </span>
+      </button>
+    </div>
+  );
 }
-

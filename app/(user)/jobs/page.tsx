@@ -1,8 +1,10 @@
 "use client";
 
+import Loading from "@/app/loading";
 import JobPosting from "@/components/JobPosting";
-import { getJobs, jobDetails } from "@/lib/api";
-import { Job, JobDetail } from "@/lib/interfaces";
+import { getJobs } from "@/lib/api";
+import { Job } from "@/lib/interfaces";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import {
   ChangeEvent,
   JSX,
@@ -12,15 +14,7 @@ import {
   useState,
 } from "react";
 import { useDebounce } from "usehooks-ts";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import Loading from "@/app/loading";
 
-interface JobType extends JobDetail {
-  id: any;
-  job_type: any;
-  title: any;
-  location: any;
-}
 async function search(query: string): Promise<Job[]> {
   try {
     const response = await getJobs(query);
@@ -98,7 +92,7 @@ export default function Home() {
   useEffect(() => {
     // getJobs();
     console.log("searching");
-    performSearch();
+    // performSearch();
     // if (loading) {
 
     // }
@@ -107,7 +101,7 @@ export default function Home() {
       setJobs(results);
     };
     fetchSearchResults();
-    return () => { };
+    return () => {};
   }, [performSearch]);
 
   return (

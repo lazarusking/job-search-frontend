@@ -154,13 +154,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     (data: TokenResponse): void => {
       const user: UserToken = jwtDecode(data.access);
       setAccessToken(data.access);
-      setRefreshToken(data.access);
+      setRefreshToken(data.refresh);
       const expiryInt = user.exp * 1000;
       setAccessTokenExpiry(expiryInt);
       setIsAuthenticated(true);
       setLoading(false);
       // localStorage.setItem("access_token", data.access);
       // localStorage.setItem("refresh_token", data.refresh);
+      console.log("adding header token", data.access);
+
       authAxios.defaults.headers["Authorization"] = "Bearer " + data.access;
     },
     [setAccessToken, setRefreshToken]
@@ -182,7 +184,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         }
         return tokenData.access;
       }
-      return ""
+      return "";
     } catch (error) {
       setNotAuthenticated();
       return "";

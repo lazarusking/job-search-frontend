@@ -84,8 +84,8 @@ export interface JobList extends Pagination {
   results: Job[];
 }
 
-export interface JobDetails {
-  jobs: JobDetail[];
+export interface JobDetailList extends Pagination {
+  results: JobDetail[];
 }
 
 export interface JobDetail {
@@ -95,6 +95,7 @@ export interface JobDetail {
   new_users: number;
   job_type: string;
   location: string;
+  company: string;
 }
 
 export interface JobView {
@@ -106,7 +107,9 @@ export interface JobView {
 export interface JobViewList extends Pagination {
   results: JobView[];
 }
-export type ApplicantList = ApplicantDetail[];
+export interface ApplicantList extends Pagination {
+  results: ApplicantDetail[];
+}
 
 export interface ApplicantDetail {
   id: number;
@@ -155,8 +158,26 @@ export interface Post {
   facebook: Facebook;
   github: Github;
   website: Website;
+  id: Id;
+  recruiter: Recruiter;
+  skills_required: SkillsRequired;
+  job_type: JobType;
 }
 
+export interface SkillsRequired {
+  type: string;
+  required: boolean;
+  read_only: boolean;
+  label: string;
+  max_length: number;
+}
+export interface JobType {
+  type: string;
+  required: boolean;
+  read_only: boolean;
+  label: string;
+  choices: Choice[];
+}
 export interface Url {
   type: string;
   required: boolean;

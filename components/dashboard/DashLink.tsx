@@ -34,7 +34,7 @@ export default function DashLink({
             className={`flex items-center pl-3 py-3 pr-4 ${
               segment === href ? "bg-indigo-500" : ""
             } hover:bg-indigo-50 hover:text-neutral-500 rounded`}
-            href={href !== null ? `/dashboard/${href}` : "/"}
+            href={href !== null ? `/dashboard/${href}` : "/dashboard/"}
             onClick={onClickFunc}
           >
             <span className="inline-block mr-3">{Icon}</span>

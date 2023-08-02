@@ -61,14 +61,14 @@ export default function DashNavbar({ children }: { children: ReactNode }) {
           onClick={toggle}
           className="navbar-backdrop fixed lg:hidden inset-0 bg-gray-800 opacity-10"
         />
-        <nav className="fixed top-0 left-0 bottom-0 flex flex-col w-3/4 lg:w-80 sm:max-w-xs bg-slate-900 text-white border-r overflow-y-auto">
+        <nav className="fixed top-0 left-0 bottom-0 flex flex-col w-3/4 sm:w-60 sm:max-w-xs bg-slate-900 text-white border-r overflow-y-auto">
           <div className="w-full items-center px-6 py-4 lg:border-b border-gray-700">
             <DashImage />
           </div>
           <DashRoutes />
         </nav>
       </div>
-      <div className="mx-auto lg:ml-80">{children}</div>
+      <div className="mx-auto lg:ml-64">{children}</div>
     </div>
   );
 }

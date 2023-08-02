@@ -1,7 +1,10 @@
 import { AxiosResponse } from "axios";
 import { authAxios } from "./auth";
 import {
+  ApplicantList,
   Job,
+  JobDetail,
+  JobDetailList,
   JobList,
   JobViewList,
   UserProfile,
@@ -28,6 +31,17 @@ export const updateUser = async (user: UserToken, userData: UserProfile) => {
     return { error };
   }
 };
+// Save your favorite job to db
+export const createJob = async (data: Job) => {
+  try {
+    const response = await authAxios.post(`/recruiters/jobs/`, data);
+
+    return { data: response.data };
+  } catch (error) {
+    return { error };
+  }
+};
+
 // Update User details :optional
 export const updateUserInfo = async (
   user: UserToken,
@@ -163,19 +177,21 @@ export const deleteSavedJob = async (
 };
 
 //Recruiter: Get job details for a job
-export const getJobDetails = async (job: Job) => {
+export const getJobDetails = async (): Promise<JobDetailList> => {
   try {
-    const response = await authAxios.get(`recruiters/jobs/${job.id}/`);
+    const response: AxiosResponse<JobDetailList> = await authAxios.get(
+      `/recruiters/jobs/details/`
+    );
 
-    return { data: response.data };
-  } catch (error) {
-    return { error };
+    return response.data;
+  } catch (error: any) {
+    return error;
   }
 };
 //Recruiter: Applicants selected for a job
 export const selectedApplicants = async (job: Job) => {
   try {
-    const response = await authAxios.get(`recruiters/jobs/${job.id}/selected/`);
+    const response = await authAxios.get(`/recruiters/jobs/${job.id}/selected/`);
     return response;
   } catch (error: any) {
     return error;
@@ -186,7 +202,7 @@ export const selectedApplicants = async (job: Job) => {
 export const selectApplicant = async (user: UserToken, job: Job) => {
   try {
     const response = await authAxios.post(
-      `recruiters/jobs/${job.id}/select/${user.user_id}`
+      `/recruiters/jobs/${job.id}/select/${user.user_id}`
     );
 
     return response;
@@ -209,15 +225,16 @@ export const deleteSelectedApplicant = async (user: UserToken, job: Job) => {
 };
 
 // Recruiter view of Users that have applied for a job
-export const jobApplicants = async (job: Job) => {
+export const getJobApplicants = async (
+  job_id: number
+): Promise<ApplicantList> => {
   try {
-    const response = await authAxios.get(
-      `recruiters/jobs/${job.id}/applicants/`
+    const response: AxiosResponse<ApplicantList> = await authAxios.get(
+      `/recruiters/jobs/${job_id}/applicants/`
     );
-
-    return { data: response.data };
-  } catch (error) {
-    return { error };
+    return response.data;
+  } catch (error: any) {
+    return error;
   }
 };
 
