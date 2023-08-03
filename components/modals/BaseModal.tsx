@@ -5,10 +5,12 @@ export default function BaseModal({
   title,
   setModal,
   children,
+  css,
 }: {
   title: string;
   children: ReactNode;
   setModal: any;
+  css?: string;
 }) {
   const dialogRef = useRef<any>();
   const modalRef = useRef(null);
@@ -61,7 +63,9 @@ export default function BaseModal({
           className="flex min-h-full justify-center p-4 text-center items-center sm:p-0"
         >
           {" "}
-          <article className="bg-[var(--background)] transform overflow-hidden rounded-lg shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-md">
+          <article
+            className={`${css} transform overflow-hidden rounded-lg shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-md`}
+          >
             <header className="flex text-center text-lg px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
               <h2 className="flex-1">{title}</h2>
               <div className="ml-auto">

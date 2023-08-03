@@ -8,7 +8,7 @@ import { FormEvent } from "react";
 import { useRouter } from "next/navigation";
 type Props = {};
 
-export default function Page({ }: Props) {
+export default function Page({}: Props) {
   const router = useRouter();
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -32,7 +32,8 @@ export default function Page({ }: Props) {
           Sign up as a Job Recruiter or Finder
         </h2>
         <p className="mb-9 text-gray-900 text-base">
-          Recruiters, find top talent. Job seekers, discover endless opportunities. Sign up today and let ISearch lead you to success!
+          Recruiters, find top talent. Job seekers, discover endless
+          opportunities. Sign up today and let ISearch lead you to success!
         </p>
         <div className="flex flex-wrap justify-center -m-2">
           <div className="w-1/2 lg:w-auto p-2">
@@ -48,12 +49,12 @@ export default function Page({ }: Props) {
               href={{ pathname: "/register", query: { type: "recruiter" } }}
             >
               <button className="px-9 py-3.5 font-heading font-medium w-full lg:w-auto text-base text-gray-900 bg-white hover:bg-gray-50 hover:text-indigo-400 border border-gray-300 rounded-md">
-                Employer
+                Recruiter
               </button>
             </Link>
           </div>
         </div>
       </div>
-    </div >
+    </div>
   );
 }

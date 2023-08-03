@@ -25,7 +25,10 @@ export default function Page() {
           How ISearch works
         </h2>
         <p className="mb-9 text-gray-900 text-base">
-          Our seamless and user-friendly interface empowers you to explore a wide array of job opportunities in just a few clicks. Simply create your personalized profile, and our AI-driven system will analyze your preferences and career goals.
+          Our seamless and user-friendly interface empowers you to explore a
+          wide array of job opportunities in just a few clicks. Simply create
+          your personalized profile, and our AI-driven system will analyze your
+          preferences and career goals.
         </p>
         <div className="flex flex-wrap -m-2">
           <div className="w-full lg:w-auto p-2">
@@ -37,7 +40,7 @@ export default function Page() {
           </div>
           <div className="w-full lg:w-auto p-2">
             <Link href={"/get-started/third/"}>
-              <button className="inline-flex justify-center px-9 py-3.5 font-heading font-medium w-full lg:w-auto text-base text-white bg-blue-600 hover:text-blue-400 hover:bg-white border hover:border-blue-400 rounded-md">
+              <button className="inline-flex items-center justify-center px-9 py-3.5 font-heading font-medium w-full lg:w-auto text-base text-white bg-blue-600 hover:text-blue-400 hover:bg-white border hover:border-blue-400 rounded-md">
                 Next <ArrowRightIcon className="ml-3 w-5 h-5" />
               </button>
             </Link>

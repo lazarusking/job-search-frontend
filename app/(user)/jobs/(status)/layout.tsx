@@ -2,7 +2,11 @@ import { ReactNode, Suspense } from "react";
 import Loading from "../../../loading";
 import { UserJobsPageNav } from "../_NavList";
 import UserJobsPageDetail from "../_UserJobsPageDetail";
-
+const paths = [
+  { name: "Saved", href: "/jobs/saved" },
+  { name: "Applied", href: "/jobs/applied" },
+  { name: "Selected", href: "/jobs/selected" },
+];
 export default function JobsLayout({ children }: { children: ReactNode }) {
   return (
     <>
@@ -36,7 +40,7 @@ export default function JobsLayout({ children }: { children: ReactNode }) {
                   </a> */}
               </div>
 
-              <UserJobsPageNav />
+              <UserJobsPageNav paths={paths} />
             </div>
             <div className="overflow-x-auto">
               <table className="table-auto w-full">

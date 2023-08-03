@@ -25,23 +25,23 @@ export default function Started() {
           Welcome to ISearch.
         </h2>
         <p className="mb-9 text-gray-900 text-base">
-          Discover an innovative platform designed to revolutionize your job search. We connect job seekers and recruiters using advanced AI technology, ensuring that you find the perfect job match that aligns with your skills and aspirations. Let us help you kickstart your journey towards a fulfilling career!
+          Discover an innovative platform designed to revolutionize your job
+          search. We connect job seekers and recruiters using advanced AI
+          technology, ensuring that you find the perfect job match that aligns
+          with your skills and aspirations. Let us help you kickstart your
+          journey towards a fulfilling career!
         </p>
         <div className="flex flex-wrap -m-2">
           <div className="w-full lg:w-auto p-2">
-            <Link
-              href={"/about"}
-            >
+            <Link href={"/about"}>
               <span className="inline-flex justify-center px-9 py-3.5 font-heading font-medium w-full lg:w-auto text-base text-gray-900 bg-white hover:bg-gray-50 border border-gray-300 rounded-md">
                 Learn More
               </span>
             </Link>
           </div>
           <div className="w-full lg:w-auto p-2">
-            <Link
-              href={"/get-started/second/"}
-            >
-              <span className="inline-flex justify-center px-9 py-3.5 font-heading font-medium w-full lg:w-auto text-base text-white bg-blue-600 hover:text-blue-400 hover:bg-white border hover:border-blue-400 rounded-md">
+            <Link href={"/get-started/second/"}>
+              <span className="inline-flex items-center justify-center px-9 py-3.5 font-heading font-medium w-full lg:w-auto text-base text-white bg-blue-600 hover:text-blue-400 hover:bg-white border hover:border-blue-400 rounded-md">
                 Next <ArrowRightIcon className="ml-3 w-5 h-5" />
               </span>
             </Link>

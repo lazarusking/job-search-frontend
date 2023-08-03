@@ -14,8 +14,8 @@ async function getJobs(): Promise<JobView[]> {
     return [];
   }
 }
-export default withAuth(Jobs);
-function Jobs() {
+export default withAuth(Saved);
+function Saved() {
   const [jobs, setJobs] = useState<JobView[]>([]);
   async function removeJob(id: number) {
     try {

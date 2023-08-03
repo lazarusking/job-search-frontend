@@ -56,6 +56,7 @@ export default function StepsToComplete({ children }: { children: ReactNode }) {
                 <Link
                   className="font-heading font-semibold text-lg text-gray-900 hover:text-gray-800"
                   href="/get-started/second"
+                  prefetch
                 >
                   <p className="mb-2 px-7">Build A Profile</p>
                   <div className="h-0.5 bg-gray-200 bg-gradient-green" />
@@ -65,6 +66,7 @@ export default function StepsToComplete({ children }: { children: ReactNode }) {
                 <Link
                   className="font-heading font-semibold text-lg text-gray-900 hover:text-gray-800"
                   href={`/get-started/third/`}
+                  prefetch
                 >
                   <p className="mb-2 px-7">Get Started</p>
                   <div className="h-0.5 bg-gray-200 bg-gradient-radial" />
@@ -110,7 +112,7 @@ export default function StepsToComplete({ children }: { children: ReactNode }) {
           {children}
         </div>
       </div>
-      <a href="https://storyset.com/user">User illustrations by Storyset</a>
+      {/* <a href="https://storyset.com/user">User illustrations by Storyset</a> */}
     </section>
   );
 }

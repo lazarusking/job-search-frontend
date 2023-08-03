@@ -189,10 +189,14 @@ export const getJobDetails = async (): Promise<JobDetailList> => {
   }
 };
 //Recruiter: Applicants selected for a job
-export const selectedApplicants = async (job: Job) => {
+export const getSelectedApplicants = async (
+  job_id: number
+): Promise<ApplicantList> => {
   try {
-    const response = await authAxios.get(`/recruiters/jobs/${job.id}/selected/`);
-    return response;
+    const response: AxiosResponse<ApplicantList> = await authAxios.get(
+      `/recruiters/jobs/${job_id}/selected/`
+    );
+    return response.data;
   } catch (error: any) {
     return error;
   }
@@ -212,10 +216,13 @@ export const selectApplicant = async (user: UserToken, job: Job) => {
 };
 
 //Recruiter: Delete selected applicant for the job
-export const deleteSelectedApplicant = async (user: UserToken, job: Job) => {
+export const deleteSelectedApplicant = async (
+  job_id: number,
+  applicant_id: number
+) => {
   try {
     const response = await authAxios.delete(
-      `recruiters/jobs/${job.id}/select/${user.user_id}`
+      `recruiters/jobs/${job_id}/select/${applicant_id}`
     );
 
     return response;
@@ -233,6 +240,18 @@ export const getJobApplicants = async (
       `/recruiters/jobs/${job_id}/applicants/`
     );
     return response.data;
+  } catch (error: any) {
+    return error;
+  }
+};
+
+//Recruiter: Delete applied applicant for the job
+export const deleteApplicant = async (job_id: number, applicant_id: number) => {
+  try {
+    const response = await authAxios.delete(
+      `recruiters/jobs/${job_id}/apply/${applicant_id}`
+    );
+    return response;
   } catch (error: any) {
     return error;
   }
