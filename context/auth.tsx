@@ -168,7 +168,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     [setAccessToken, setRefreshToken]
   );
 
-  const TokenRefresh = useCallback(async (): Promise<string> => {
+  const TokenRefresh = useCallback(async () => {
     setLoading(true);
     try {
       if (refreshToken) {
@@ -178,23 +178,25 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
         // handleNewToken(tokenData);
         setAccessToken(tokenData.access);
-        if (user === null) {
+        console.log(user, " logging user");
+
+        if (!user) {
           console.log("No user loaded so loading from refreshed token");
           await initUser(tokenData.access);
         }
-        return tokenData.access;
+        // return tokenData.access;
       }
-      return "";
+      // return "";
     } catch (error) {
       setNotAuthenticated();
-      return "";
+      // return "";
     }
   }, [refreshToken, setAccessToken, setNotAuthenticated, user]);
 
   const accessTokenIsValid = useCallback(async (): Promise<boolean> => {
     const token = JSON.parse(localStorage.getItem("access_token")!);
     // console.log(token, accessToken);
-    if (accessToken === "") {
+    if (!accessToken) {
       console.log(accessToken || token === "");
       return false;
     }
@@ -207,7 +209,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         initUser(accessToken);
         const expiry = new Date(user.exp * 1000);
         console.log("Checking token expiry:", expiry, accessTokenExpiry);
-        console.log(expiry.getTime() > Date.now());
+        // console.log(expiry.getTime() > Date.now());
 
         return expiry.getTime() > Date.now();
         // return true;
@@ -275,6 +277,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     try {
       const { username, email, password1, password2, first_name, last_name } =
         userDetail;
+      console.log(type);
+
       const resp = await createUser(
         username,
         email,
@@ -284,10 +288,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         last_name,
         type
       );
-      const tokenData = await resp.data;
+      // const tokenData = await resp.data;
       console.log(resp);
-      handleNewToken(tokenData);
-      await initUser(tokenData.access);
+      // handleNewToken(tokenData);
+      // await initUser(tokenData.access);
       return resp;
     } catch (error: any) {
       console.log(error);

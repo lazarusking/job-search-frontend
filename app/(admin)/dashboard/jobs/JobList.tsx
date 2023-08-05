@@ -1,9 +1,19 @@
+import PDFView from "@/components/PDFView";
+import BaseModal from "@/components/modals/BaseModal";
 import ConfirmModal from "@/components/modals/ConfirmModal";
+import { rgbDataURL } from "@/lib/image";
 import { ApplicantDetail } from "@/lib/interfaces";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
+import { Document, Page, pdfjs } from "react-pdf";
+import { useToggle } from "usehooks-ts";
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.min.js",
+  import.meta.url
+).toString();
 
 interface List extends ApplicantDetail {
   status: string;
@@ -18,22 +28,54 @@ export default function JobList({
   deleteFunc,
   status,
 }: List) {
+  const [numPages, setNumPages] = useState<number>();
+  const [pageNumber, setPageNumber] = useState<number>(1);
+  function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
+    setNumPages(numPages);
+    setPageNumber(1);
+  }
+  function changePage(offset) {
+    setPageNumber((prevPageNumber) => prevPageNumber + offset);
+  }
+
+  function previousPage() {
+    changePage(-1);
+  }
+
+  function nextPage() {
+    changePage(1);
+  }
+
   const [showDelete, setDeleteModal] = useState(false);
+  const [showResume, setShowResume] = useToggle();
   return (
     <tr className="text-xs">
       <td className="py-5 px-6 font-medium">{id}</td>
       <td className="relative flex px-4 py-3">
-        <Image
-          className="w-8 h-8 mr-4 object-cover rounded-md"
-          src="https://images.unsplash.com/photo-1559893088-c0787ebfc084?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80"
-          alt=""
-          width={50}
-          height={50}
-        />
+        {applicant.avatar ? (
+          <Image
+            className="w-8 h-8 mr-4 object-cover rounded-md"
+            // src="https://images.unsplash.com/photo-1559893088-c0787ebfc084?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80"
+            src={`${applicant.avatar}`}
+            alt=""
+            width={50}
+            height={50}
+            blurDataURL={rgbDataURL(255, 255, 255)}
+            placeholder="blur"
+          />
+        ) : (
+          <Image
+            className="w-8 h-8 mr-4 object-cover rounded-md"
+            src="https://images.unsplash.com/photo-1559893088-c0787ebfc084?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80"
+            alt=""
+            width={50}
+            height={50}
+          />
+        )}
         <div>
-          <Link href={`/dashboards/jobs/${job.id}/${applicant.id}`}>
-            <p className="font-medium">{applicant.username}</p>
-            <p className="text-gray-500">{applicant.email}</p>
+          <Link href={`/dashboards/jobs/${job.id}/${applicant.user.id}`}>
+            <p className="font-medium">{applicant.user.username}</p>
+            <p className="text-gray-500">{applicant.user.email}</p>
           </Link>
         </div>
       </td>
@@ -45,7 +87,7 @@ export default function JobList({
       </td>
 
       <td>
-        <a className="inline-block mr-2" href="#">
+        <button onClick={setShowResume} className="inline-block mr-2">
           <svg
             width={18}
             height={18}
@@ -58,7 +100,7 @@ export default function JobList({
               fill="#382CDD"
             />
           </svg>
-        </a>
+        </button>
         <a className="inline-block mr-2" href="#">
           <svg
             width={18}
@@ -81,7 +123,14 @@ export default function JobList({
             setModal={setDeleteModal}
             title="Confirm Delete"
             css={"bg-white"}
-            onConfirm={() => deleteFunc(job.id, applicant.id)}
+            onConfirm={() => deleteFunc(job.id, applicant.user.id)}
+          />
+        )}
+        {showResume && (
+          <PDFView
+            name={applicant.user.first_name}
+            resume={applicant.resume}
+            showDocument={setShowResume}
           />
         )}
       </td>

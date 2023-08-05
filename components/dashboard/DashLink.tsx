@@ -21,13 +21,15 @@ export default function DashLink({
   return (
     <>
       {onClickFunc ? (
-        <button
+        <li
           className={`w-full flex items-center pl-3 py-3 pr-4 hover:bg-indigo-50 hover:text-neutral-500 rounded`}
           onClick={onClickFunc}
         >
-          <span className="inline-block mr-3">{Icon}</span>
-          <span>{name}</span>
-        </button>
+          <button aria-label="logout button" className="flex items-center">
+            <span className="inline-block mr-3">{Icon}</span>
+            <span>{name}</span>
+          </button>
+        </li>
       ) : (
         <li>
           <Link

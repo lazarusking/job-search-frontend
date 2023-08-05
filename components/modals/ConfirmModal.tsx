@@ -1,8 +1,6 @@
 import React, { useCallback } from "react";
 import BaseModal from "./BaseModal";
 
-type Props = {};
-
 export default function ConfirmModal({
   title,
   setModal,

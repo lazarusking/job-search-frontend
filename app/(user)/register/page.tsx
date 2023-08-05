@@ -95,11 +95,12 @@ export default function Register() {
     console.log(await resp);
     if (resp.status === 201) {
       console.log("Registered successfully");
-      if (type === "recruiter") {
-        router.push("/dashboard");
-      } else {
-        router.push("/");
-      }
+      // if (type === "recruiter") {
+      //   router.push("/dashboard");
+      // } else {
+      //   router.push("/");
+      // }
+      router.push("/login");
     }
     if (resp.response && resp.response.status === 400) {
       console.log(resp.response.data);
@@ -129,9 +130,9 @@ export default function Register() {
             className={"h-full w-full object-cover"}
             blurDataURL={rgbDataURL(255, 255, 255)}
             placeholder="blur"
-          // width={500}
-          // height={500}
-          // fill={true}
+            // width={500}
+            // height={500}
+            // fill={true}
           />
         </aside>
         <div className="flex flex-col md:col-span-7 w-full mx-auto justify-center items-center ">
@@ -223,8 +224,9 @@ export default function Register() {
                 {error.username && <ErrorMessage msg={error.username} />}
                 {debouncedUsername.length > 2 && !error.username && (
                   <p
-                    className={`absolute ${usernameCheck.valid ? "text-green-400" : "text-rose-400"
-                      } `}
+                    className={`absolute ${
+                      usernameCheck.valid ? "text-green-400" : "text-rose-400"
+                    } `}
                   >
                     {usernameCheck.message}
                   </p>

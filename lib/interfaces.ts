@@ -118,12 +118,12 @@ export interface ApplicantDetail {
   date_posted: string;
 }
 
-export interface Applicant {
-  id: number;
-  username: string;
-  first_name: string;
-  last_name: string;
-  email: string;
+export interface Applicant extends UserProfile {
+  // id: number;
+  // username: string;
+  // first_name: string;
+  // last_name: string;
+  // email: string;
 }
 
 //

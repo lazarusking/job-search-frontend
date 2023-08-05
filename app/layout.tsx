@@ -1,13 +1,15 @@
 import Navbar from "@/components/navbar/Navbar";
 import { Inter, Mulish, Montserrat, Poppins } from "next/font/google";
 import "./globals.css";
+import "react-toastify/dist/ReactToastify.css";
 import { ReactNode, Suspense } from "react";
 import Loading from "./loading";
 import { AuthProvider } from "@/context/auth";
 const { TWITTER_CREATOR, TWITTER_SITE, SITE_NAME } = process.env;
+import { ToastContainer } from "react-toastify";
 
 const inter = Mulish({
-  subsets: ["latin", "cyrillic"],
+  subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800", "900"],
 });
 
@@ -16,12 +18,12 @@ export const metadata = {
   description: "",
   ...(TWITTER_CREATOR &&
     TWITTER_SITE && {
-    twitter: {
-      card: "summary_large_image",
-      creator: TWITTER_CREATOR,
-      site: TWITTER_SITE,
-    },
-  }),
+      twitter: {
+        card: "summary_large_image",
+        creator: TWITTER_CREATOR,
+        site: TWITTER_SITE,
+      },
+    }),
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -30,7 +32,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className={inter.className}>
         <Suspense fallback={<Loading />}>
           {/* <Navbar /> */}
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            {children}
+            <div className="toast-container">
+              <ToastContainer limit={2} />
+            </div>
+          </AuthProvider>
         </Suspense>
       </body>
     </html>

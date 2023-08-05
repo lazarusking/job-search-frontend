@@ -3,10 +3,10 @@ import { authAxios } from "./auth";
 import {
   ApplicantList,
   Job,
-  JobDetail,
   JobDetailList,
   JobList,
   JobViewList,
+  Recruiter,
   UserProfile,
   UserToken,
 } from "./interfaces";
@@ -27,7 +27,25 @@ export const updateUser = async (user: UserToken, userData: UserProfile) => {
     );
     console.log(response);
     return { data: response.data };
-  } catch (error) {
+  } catch (error:any) {
+    return { error };
+  }
+};
+export const updateRecruiter = async (user: UserToken, userData: Recruiter) => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    const response = await authAxios.patchForm(
+      `/recruiters/${user.user_id}/`,
+      userData,
+      config
+    );
+    console.log(response);
+    return { data: response.data };
+  } catch (error:any) {
     return { error };
   }
 };
@@ -86,6 +104,15 @@ export const getJob = async (job_id: number): Promise<Job> => {
     const response: AxiosResponse<Job> = await authAxios.get(url);
     return response.data;
     // return { data: response.data };
+  } catch (error: any) {
+    return error;
+  }
+};
+export const deleteJob = async (job_id: number) => {
+  try {
+    let url = `/recruiters/jobs/${job_id}/`;
+    const response: AxiosResponse<Job> = await authAxios.delete(url);
+    return response;
   } catch (error: any) {
     return error;
   }
@@ -177,13 +204,14 @@ export const deleteSavedJob = async (
 };
 
 //Recruiter: Get job details for a job
-export const getJobDetails = async (): Promise<JobDetailList> => {
+export const getJobDetails = async (query?: string): Promise<JobDetailList> => {
   try {
+    let url = `/recruiters/jobs/details/`;
     const response: AxiosResponse<JobDetailList> = await authAxios.get(
-      `/recruiters/jobs/details/`
+      query ? `${url}?search=${query}` : url
     );
-
     return response.data;
+    // return { data: response.data };
   } catch (error: any) {
     return error;
   }
@@ -254,16 +282,5 @@ export const deleteApplicant = async (job_id: number, applicant_id: number) => {
     return response;
   } catch (error: any) {
     return error;
-  }
-};
-
-// Recruiter view of Job Details wiith info such as new applicants
-export const jobDetails = async () => {
-  try {
-    const response = await authAxios.get(`recruiters/jobs/details/`);
-
-    return response;
-  } catch (error) {
-    return { error };
   }
 };

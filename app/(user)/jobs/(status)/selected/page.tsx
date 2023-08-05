@@ -1,6 +1,5 @@
 "use client";
-import withAuth from "@/components/AuthWrapper";
-import { deleteApplication, getAppliedJobs } from "@/lib/api";
+import { getAppliedJobs } from "@/lib/api";
 import { JobView } from "@/lib/interfaces";
 import { useEffect, useState } from "react";
 import JobList from "../../_JobList";
@@ -14,17 +13,16 @@ async function getJobs(): Promise<JobView[]> {
     return [];
   }
 }
-export default withAuth(Selected);
-function Selected() {
+export default function Selected() {
   const [jobs, setJobs] = useState<JobView[]>([]);
-  async function removeJob(id: number) {
-    try {
-      const response = await deleteApplication(id);
-      return response.data;
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  // async function removeJob(id: number) {
+  //   try {
+  //     const response = await deleteApplication(id);
+  //     return response.data;
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
   useEffect(() => {
     const fetchAppliedJobs = async () => {
       const results = await getJobs();
@@ -50,7 +48,13 @@ function Selected() {
           />
         ))
       ) : (
-        <p>Nothing to see here</p>
+        <tr className="border-b border-blue-50">
+          <td className="flex items-center py-4 px-6 font-medium">
+            <div className="flex px-4 py-3">
+              <td>Nothing to see here</td>
+            </div>
+          </td>
+        </tr>
       )}
     </tbody>
   );

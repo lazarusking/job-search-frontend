@@ -1,7 +1,5 @@
 import Navbar from "@/components/navbar/Navbar";
-import { AuthProvider } from "@/context/auth";
-import { ReactNode, Suspense } from "react";
-import Loading from "../loading";
+import { ReactNode } from "react";
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (

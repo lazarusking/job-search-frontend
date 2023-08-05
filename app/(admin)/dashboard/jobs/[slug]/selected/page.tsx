@@ -49,7 +49,7 @@ export default async function Page({
       const response = await deleteApplicant(job_id, applicant_id);
       if (response.status === 200) {
         setSelected((applicant) =>
-          applicant.filter((item) => applicant_id !== item.applicant.id)
+          applicant.filter((item) => applicant_id !== item.applicant.user.id)
         );
         console.log(response);
       }
@@ -64,8 +64,8 @@ export default async function Page({
         {selected ? (
           selected.map((item) => (
             <JobList
-              id={item.applicant.id}
-              key={item.applicant.id}
+              id={item.applicant.user.id}
+              key={item.applicant.user.id}
               applicant={item?.applicant}
               date_posted={item?.date_posted}
               job={item?.job}
@@ -74,8 +74,12 @@ export default async function Page({
             />
           ))
         ) : (
-          <tr>
-            <td>Nothing to see here</td>
+          <tr className="border-b border-blue-50">
+            <td className="flex items-center py-4 px-6 font-medium">
+              <div className="flex px-4 py-3">
+                <td>Nothing to see here</td>
+              </div>
+            </td>
           </tr>
         )}
       </tbody>

@@ -1,5 +1,4 @@
 "use client";
-import withAuth from "@/components/AuthWrapper";
 import { deleteSavedJob, getSavedJobs } from "@/lib/api";
 import { JobView } from "@/lib/interfaces";
 import { useEffect, useState } from "react";
@@ -14,8 +13,7 @@ async function getJobs(): Promise<JobView[]> {
     return [];
   }
 }
-export default withAuth(Saved);
-function Saved() {
+export default function Saved() {
   const [jobs, setJobs] = useState<JobView[]>([]);
   async function removeJob(id: number) {
     try {
@@ -52,7 +50,7 @@ function Saved() {
           />
         ))
       ) : (
-        <p>Nothing to see here</p>
+        <td>Nothing to see here</td>
       )}
     </tbody>
   );

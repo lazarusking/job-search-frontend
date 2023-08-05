@@ -4,10 +4,15 @@ import { useAuth, verifyToken } from "@/context/auth";
 import { User } from "@/lib/interfaces";
 import { useRouter } from "next/navigation";
 import { ComponentType, useEffect, useState } from "react";
-import LoadingAnimation from "./Loading";
 
+const HOME_ROUTE = "/";
+const RECRUITER_HOME_ROUTE = "/dashboard";
+const ROUTE_ROLES = ["recruiter", "job_seeker"] as const;
+
+type RouteRole = (typeof ROUTE_ROLES)[number];
 export default function withAuth<T extends User>(
-  WrappedComponent: ComponentType<T> | any
+  WrappedComponent: ComponentType<T> | any,
+  routeRole: RouteRole
 ) {
   const Component = (props: any) => {
     const router = useRouter();
@@ -39,7 +44,20 @@ export default function withAuth<T extends User>(
       }
       verify();
     }, [accessToken, router]);
-
+    useEffect(() => {
+      if (!loading) {
+        if (isAuthenticated) {
+          if (routeRole === "recruiter" && !user?.is_recruiter) {
+            console.log(routeRole);
+            router.replace(RECRUITER_HOME_ROUTE);
+          }
+          if (routeRole === "job_seeker" && user?.is_recruiter) {
+            router.replace(HOME_ROUTE);
+          }
+        }
+      }
+      return () => {};
+    }, [isAuthenticated, loading, router, user?.is_recruiter]);
     // if (loading) {
     //   console.log("loading...");
 

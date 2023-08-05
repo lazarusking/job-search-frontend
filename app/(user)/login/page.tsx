@@ -7,7 +7,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
-
 type LoginError = {
   email: string;
   password: string;
@@ -119,9 +118,9 @@ export default function Login() {
             className={"h-full w-full object-cover"}
             blurDataURL={rgbDataURL(255, 255, 255)}
             placeholder="blur"
-          // width={500}
-          // height={500}
-          // fill={true}
+            // width={500}
+            // height={500}
+            // fill={true}
           />
         </div>
         <div className="flex flex-col md:col-span-7 w-full mx-auto justify-center items-center ">

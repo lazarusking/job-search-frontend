@@ -79,8 +79,8 @@ export default function DashRoutes() {
 
       <ul className="mt-auto pt-8">
         <DashLink
-          name="Settings"
-          href="settings"
+          name="Profile"
+          href="profile"
           Icon={<Cog8ToothIcon className="text-gray-400 w-5 h-5" />}
         />
         <DashLink

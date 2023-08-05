@@ -28,7 +28,7 @@ export default function Home() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [query, setQuery] = useState("");
   // const [results, setResults] = useState<Job[]>([]);
-  const [isSearching, setIsSearching] = useState(false);
+  // const [isSearching, setIsSearching] = useState(false);
 
   const debouncedSearchTerm = useDebounce(query, 300);
   const handleQuery = (e: ChangeEvent<HTMLInputElement>) => {

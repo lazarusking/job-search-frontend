@@ -1,10 +1,11 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const baseURL = process.env.NEXT_PUBLIC_API_HOST;
 const REFRESH_PATH = "/auth/login/refresh/";
 let access_token = null;
 if (typeof window !== "undefined") {
-  access_token = JSON.parse(localStorage.getItem("access_token"));
+  access_token = JSON.parse(localStorage.getItem("access_token")!);
 }
 export const authAxios = axios.create({
   baseURL: baseURL,
@@ -30,6 +31,9 @@ authAxios.interceptors.response.use(
           "Sorry about this - we will get it fixed shortly."
       );
       // return Promise.reject(error);
+      toast.error("Connection Error", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
     }
 
     if (
@@ -39,17 +43,17 @@ authAxios.interceptors.response.use(
       window.location.href = "/login/";
       return Promise.reject(error);
     }
-    if (
-      (error.response.data.code === "token_not_valid" ||
-        error.response.data.code === "user_not_found") &&
-      error.response.status === 401 &&
-      error.response.statusText === "Unauthorized"
-    ) {
-      console.log("removed tokens");
-      
-      localStorage.removeItem("access_token");
-      localStorage.removeItem("refresh_token");
-    }
+    // if (
+    //   (error.response.data.code === "token_not_valid" ||
+    //     error.response.data.code === "user_not_found") &&
+    //   error.response.status === 401 &&
+    //   error.response.statusText === "Unauthorized"
+    // ) {
+    //   console.log("removed tokens");
+
+    //   localStorage.removeItem("access_token");
+    //   localStorage.removeItem("refresh_token");
+    // }
     // if (
     //   error.response.data.code === "token_not_valid" &&
     //   error.response.status === 401 &&
