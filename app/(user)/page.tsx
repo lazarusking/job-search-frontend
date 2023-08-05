@@ -14,9 +14,6 @@ export default function Home() {
             <div className="flex flex-wrap lg:items-center -m-8">
               <div className="w-full md:w-1/2 p-8">
                 <div className="md:max-w-lg mx-auto">
-                  <span className="inline-block mb-3 text-sm text-blue-500 font-bold uppercase tracking-widest">
-                    Best caption here
-                  </span>
                   <h2 className="mb-3 text-4xl lg:text-5xl font-extrabold font-heading">
                     <span className="">
                       Unlock Your Career Potential with AI-Driven Job

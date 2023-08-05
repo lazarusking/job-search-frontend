@@ -49,6 +49,8 @@ export default function CreateJobForm() {
   const onInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
+    console.log(e);
+
     setForm((previousState) => ({
       ...previousState,
       [e.target.name]: e.target.value,
