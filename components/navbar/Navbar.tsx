@@ -5,19 +5,23 @@ import useToggle from "@/hooks/useToggle";
 import { ArrowRightOnRectangleIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NavLink } from "./Navlink";
+import DropdownProfile from "./DropdownProfile";
 
 const Navbar = () => {
   const [show, toggle] = useToggle();
+  const [showDropdown, toggleDropdown] = useToggle(false);
   const { isAuthenticated, user, loading, accessToken, logout } = useAuth();
   const [hasMounted, sethasMounted] = useState(false);
+  const dialogRef = useRef<any>();
+
   useEffect(() => {
     sethasMounted(true);
   }, []);
   if (!hasMounted) return null;
   return (
-    <header aria-label="Site Header" className="bg-white">
+    <header aria-label="Site Header" className="bg-white" ref={dialogRef}>
       <div className="mx-auto container max-w-screen-xl px-4 py-4 sm:px-6 lg:px-8">
         <div className="flex flex-wrap items-center justify-between">
           <div className="flex flex-row items-center">
@@ -36,6 +40,7 @@ const Navbar = () => {
               </span>
             </Link>
           </div>
+          {/* Show username if authed or log in button horizontal nav */}
           <div className="flex items-center gap-4 md:order-2">
             {!user?.username ? (
               <div className="sm:flex sm:gap-4">
@@ -56,17 +61,24 @@ const Navbar = () => {
               </div>
             ) : (
               <div className="flex items-center gap-4">
-                <Link className="text-blue-600 capitalize" href="/profile">
+                {/* <Link className="text-blue-600 capitalize" href="/profile">
                   <p>{user?.username}</p>
-                </Link>
-                <button
+                </Link> */}
+                <DropdownProfile
+                  username={user?.username}
+                  toggle={toggleDropdown}
+                  show={showDropdown}
+                  logout={logout}
+                />
+                {/* <button
                   onClick={logout}
                   className="rounded-md text-blue-600 px-2.5 py-2.5 text-sm font-medium"
                 >
                   Log out
-                </button>
+                </button> */}
               </div>
             )}
+            {/* Menu button toggle */}
             <div className="block md:hidden" onClick={toggle}>
               <button
                 className="rounded bg-gray-100 p-2 text-gray-600 transition hover:text-gray-600/75"
@@ -90,15 +102,17 @@ const Navbar = () => {
               </button>
             </div>
           </div>
-          {/* <div
-            className={`${show ? "" : "hidden"
-              } items-center justify-between w-full md:flex md:w-auto md:order-1`}
+          {/* Nav links in middle horizontal header */}
+          <div
+            className={`${
+              show ? "" : "hidden"
+            } items-center justify-between w-full md:flex md:w-auto md:order-1`}
           >
             <nav aria-label="site-nav">
               <NavLink />
             </nav>
-          </div> */}
-
+          </div>
+          {/* Sidebar navlinks for mobile view vertical */}
           <div
             className={`navbar-menu fixed top-0 left-0 bottom-0 w-5/6 max-w-sm z-50 ${
               show ? "" : "hidden"

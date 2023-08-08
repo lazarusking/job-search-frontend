@@ -80,7 +80,7 @@ export default function CreateJobForm() {
     console.info("Job created successfully");
   };
   return (
-    <section className="bg-white ">
+    <div className="bg-white ">
       <div className="py-8 px-4 mx-auto max-w-2xl lg:py-16">
         <h2 className="mb-4 text-xl font-bold text-gray-900 ">Job Details</h2>
         <form onSubmit={onFormSubmitted}>
@@ -195,6 +195,6 @@ export default function CreateJobForm() {
           </button>
         </form>
       </div>
-    </section>
+    </div>
   );
 }

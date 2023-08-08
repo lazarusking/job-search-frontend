@@ -38,7 +38,7 @@ export default function PDFView({ resume, name, showDocument }) {
       <BaseModal
         setModal={showDocument}
         title={`${name} Resume`}
-        css={"bg-white"}
+        css={"bg-white sm:max-w-none"}
       >
         <Document
           file={resume}

@@ -55,7 +55,7 @@ export default function Login() {
         console.log("redirecting");
         router.push("/dashboard");
       } else {
-        router.push("/");
+        router.push("/jobs");
       }
     }
 

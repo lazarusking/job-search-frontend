@@ -24,7 +24,11 @@ export function NavLink() {
           return (
             <li key={link.name} className="mb-1">
               <Link
-                className={`${isActive ? `bg-blue-700 text-white rounded md:bg-transparent md:text-blue-700` : ""} block p-4 text-sm font-semibold text-gray-400 hover:bg-purple-50 hover:text-purple-600 rounded`}
+                className={`${
+                  isActive
+                    ? `bg-blue-700 text-white rounded md:bg-transparent md:text-blue-700`
+                    : ""
+                } block p-4 text-sm font-semibold text-gray-600 hover:bg-purple-50 hover:text-purple-600 rounded`}
                 href={link.href}
               >
                 {link.name}

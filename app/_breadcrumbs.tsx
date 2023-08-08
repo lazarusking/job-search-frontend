@@ -84,7 +84,7 @@ export default function Breadcrumbs() {
               <Fragment key={segment.title}>
                 <li key={index}>
                   <Link
-                    className="text-neutral-400 hover:text-neutral-600 text-xs text--200 block transition hover:text-gray-700"
+                    className="text-neutral-500 hover:text-neutral-600 text-xs text--200 block transition"
                     href={`${segment.href}/`}
                   >
                     <span>{segment.title}</span>

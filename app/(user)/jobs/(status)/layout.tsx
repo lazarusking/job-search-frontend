@@ -2,14 +2,16 @@ import { ReactNode, Suspense } from "react";
 import Loading from "../../../loading";
 import { UserJobsPageNav } from "../_NavList";
 import UserJobsPageDetail from "../_UserJobsPageDetail";
-import withAuth from "@/components/AuthWrapper";
 const paths = [
   { name: "Saved", href: "/jobs/saved" },
   { name: "Applied", href: "/jobs/applied" },
   { name: "Selected", href: "/jobs/selected" },
 ];
-export default withAuth(JobsLayout, "job_seeker");
-function JobsLayout({ children }: { children: ReactNode }) {
+export default function JobsStatusLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
   return (
     <>
       <section className="py-8">
