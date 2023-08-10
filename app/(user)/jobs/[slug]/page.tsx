@@ -7,9 +7,9 @@ export async function generateStaticParams() {
   // const posts = await fetch('https://.../posts').then((res) => res.json())
   const jobs = await getJobs();
   // console.log(jobs.results);
-  jobs.results.map((item) => {
-    console.log(item.id, typeof item.id);
-  });
+  // jobs.results.map((item) => {
+  //   console.log(item.id, typeof item.id);
+  // });
 
   return jobs.results.map((job) => ({
     slug: job.id.toString(),

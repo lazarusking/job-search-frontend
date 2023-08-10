@@ -11,7 +11,7 @@ import DropdownProfile from "./DropdownProfile";
 
 const Navbar = () => {
   const [show, toggle] = useToggle();
-  const [showDropdown, toggleDropdown] = useToggle(false);
+  const [showDropdown, toggleDropdown] = useState(false);
   const { isAuthenticated, user, loading, accessToken, logout } = useAuth();
   const [hasMounted, sethasMounted] = useState(false);
   const dialogRef = useRef<any>();

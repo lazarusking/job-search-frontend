@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useCallback, useRef } from "react";
 import { useOnClickOutside } from "usehooks-ts";
 
 interface DropdownType {
@@ -14,20 +14,21 @@ export default function DropdownProfile({
   toggle,
   logout,
 }: DropdownType) {
-  const dropdownRef = useRef(null);
+  const modalRef = useRef(null);
+  const handleShow = useCallback(() => {
+    toggle((show: any) => !show);
+  }, [toggle]);
 
-  useOnClickOutside(dropdownRef, toggle);
+  useOnClickOutside(modalRef, () => toggle(false));
 
   return (
-    <div className="relative inline-block text-left">
+    <div className="relative inline-block text-left" ref={modalRef}>
       <button
         id="dropdownAvatarNameButton"
         data-dropdown-toggle="dropdownAvatarName"
         className="flex items-center text-sm font-medium text-gray-900 rounded-full hover:text-blue-600 dark:hover:text-blue-500 md:mr-0 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-white"
         type="button"
-        onClick={toggle}
-        // onBlur={toggle}
-        ref={dropdownRef}
+        onClick={handleShow}
       >
         <span className="sr-only">Open user menu</span>
         <img
@@ -68,7 +69,7 @@ export default function DropdownProfile({
               tabIndex={-1}
               id="menu-item-0"
             >
-              Profile
+              Account profile
             </a>
             <a
               href="/jobs"
