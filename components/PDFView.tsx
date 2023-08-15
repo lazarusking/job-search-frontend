@@ -44,6 +44,7 @@ export default function PDFView({ resume, name, showDocument }) {
           file={resume}
           onLoadSuccess={onDocumentLoadSuccess}
           options={options}
+          className={"mx-auto"}
         >
           <Page pageNumber={pageNumber} />
         </Document>

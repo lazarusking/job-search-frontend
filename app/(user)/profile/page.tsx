@@ -1,5 +1,4 @@
 "use client";
-import ProfileInput from "@/components/inputs/Input";
 import NameInputs from "@/components/inputs/NameInputs";
 import SelectInput from "@/components/inputs/SelectInput";
 import UrlInput from "@/components/inputs/UrlInput";
@@ -17,6 +16,7 @@ import {
   useState,
 } from "react";
 import ErrorMessage from "@/components/ErrorMessage";
+import ProfileInput from "@/components/inputs/ProfileInput";
 
 const init = {
   user: {
@@ -159,14 +159,15 @@ export default function Profile() {
     setErrorMessage({});
     setUpdating(true);
     // const formData = new FormData(e.currentTarget);
-    // form["user"] = userDetail;
+    // // form["user"] = userDetail;
     const newData = { ...form, ...userDetail };
     // formData.append("avatar", newData.avatar);
+    // formData.append("resume", newData.resume);
     // Object.entries(userDetail).map((item, value) => {
     //   formData.append(item[0], item[1]);
     //   console.log(item[0], item[1], value);
     // });
-    // console.log(formData.get("avatar"));
+    // // console.log(formData.get("avatar"));
     // console.log(formData.get("resume"));
     // formData.append("user", JSON.stringify(userDetail));
     // setForm((previousState) => ({...previousState,user:userDetail}));
@@ -196,6 +197,7 @@ export default function Profile() {
     // updateState(data);
 
     setUpdating(false);
+    setProfile(data);
     toast.info("Changes made successfully");
   };
 
@@ -314,7 +316,7 @@ export default function Profile() {
                     Your profile picture
                   </p>
                 </div>
-                <div className="w-full md:w-auto p-3 relative">
+                <div className="w-full md:w-auto h-auto p-3 relative">
                   <Image
                     src={
                       profile.avatar
@@ -324,7 +326,7 @@ export default function Profile() {
                     alt="Avatar"
                     className="rounded-full"
                     width={100}
-                    height={104}
+                    height={120}
                   />
                 </div>
                 <div className="w-full md:flex-1 p-3">
@@ -360,7 +362,7 @@ export default function Profile() {
                       onChange={(e) => {
                         setForm((prev) => ({
                           ...prev,
-                          [e.target.name]: e.target.files,
+                          [e.target.name]: e.target.files![0],
                         }));
                         setFileName({
                           avatar: e.target.files![0].name,

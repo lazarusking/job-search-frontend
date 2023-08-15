@@ -51,7 +51,7 @@ export default function DashRoutes() {
           href="jobs"
           Icon={<BriefcaseIcon className="text-gray-400 w-5 h-5" />}
         />
-        <DashLink
+        {/* <DashLink
           name="Applications"
           href="applications"
           Icon={
@@ -67,7 +67,7 @@ export default function DashRoutes() {
               />
             </svg>
           }
-        />
+        /> */}
         <DashLink
           name="Chatbot"
           href="chatbot"

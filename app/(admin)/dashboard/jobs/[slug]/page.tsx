@@ -1,9 +1,10 @@
 "use client";
-import { deleteApplicant, getJobApplicants, getJobs } from "@/lib/api";
+import { deleteApplicant, getJobApplicants, selectApplicant } from "@/lib/api";
 import { ApplicantDetail } from "@/lib/interfaces";
-import { useEffect, useState } from "react";
-import JobList from "../JobList";
 import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import JobList from "../JobList";
 
 // export async function generateStaticParams() {
 //   // const posts = await fetch('https://.../posts').then((res) => res.json())
@@ -35,7 +36,7 @@ export default function Page() {
   const [applicants, setApplicants] = useState<ApplicantDetail[]>([]);
   useEffect(() => {
     const fetchAppliedJobs = async () => {
-      const results = await getJobData(slug);
+      const results = await getJobData(slug as string);
       setApplicants(results);
     };
     fetchAppliedJobs();
@@ -58,6 +59,20 @@ export default function Page() {
       console.log(error);
     }
   }
+  async function select(job_id: number, applicant_id: any) {
+    try {
+      const response = await selectApplicant(job_id, applicant_id);
+      if (response.status === 201) {
+        toast.success("Selected", {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        console.log(response);
+      }
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <>
@@ -72,6 +87,7 @@ export default function Page() {
               job={item?.job}
               status={"Applied"}
               deleteFunc={removeApplicant}
+              select={select}
             />
           ))
         ) : (

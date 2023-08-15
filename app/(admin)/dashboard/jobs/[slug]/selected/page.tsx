@@ -1,5 +1,9 @@
 "use client";
-import { deleteApplicant, getSelectedApplicants } from "@/lib/api";
+import {
+  deleteApplicant,
+  deleteSelectedApplicant,
+  getSelectedApplicants,
+} from "@/lib/api";
 import { ApplicantDetail } from "@/lib/interfaces";
 import { useEffect, useState } from "react";
 import JobList from "../../JobList";
@@ -26,7 +30,7 @@ async function getJobData(slug: number) {
   }
 }
 
-export default async function Page({
+export default function Page({
   params: { slug },
 }: {
   params: { slug: number };
@@ -46,7 +50,7 @@ export default async function Page({
   //   console.log(data);
   async function removeApplicant(job_id: number, applicant_id: any) {
     try {
-      const response = await deleteApplicant(job_id, applicant_id);
+      const response = await deleteSelectedApplicant(job_id, applicant_id);
       if (response.status === 200) {
         setSelected((applicant) =>
           applicant.filter((item) => applicant_id !== item.applicant.user.id)

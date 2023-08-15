@@ -20,14 +20,14 @@ export const updateUser = async (user: UserToken, userData: UserProfile) => {
         "Content-Type": "multipart/form-data",
       },
     };
-    const response = await authAxios.patch(
+    const response = await authAxios.patchForm(
       `/users/${user.user_id}/`,
       userData,
       config
     );
     console.log(response);
     return { data: response.data };
-  } catch (error:any) {
+  } catch (error: any) {
     return { error };
   }
 };
@@ -45,7 +45,7 @@ export const updateRecruiter = async (user: UserToken, userData: Recruiter) => {
     );
     console.log(response);
     return { data: response.data };
-  } catch (error:any) {
+  } catch (error: any) {
     return { error };
   }
 };
@@ -231,12 +231,11 @@ export const getSelectedApplicants = async (
 };
 
 //Recruiter: Select applicant for the job
-export const selectApplicant = async (user: UserToken, job: Job) => {
+export const selectApplicant = async (job_id: number, applicant_id: number) => {
   try {
     const response = await authAxios.post(
-      `/recruiters/jobs/${job.id}/select/${user.user_id}`
+      `recruiters/jobs/${job_id}/select/${applicant_id}/`
     );
-
     return response;
   } catch (error: any) {
     return error;
@@ -252,16 +251,15 @@ export const deleteSelectedApplicant = async (
     const response = await authAxios.delete(
       `recruiters/jobs/${job_id}/select/${applicant_id}`
     );
-
     return response;
-  } catch (error) {
-    return { error };
+  } catch (error: any) {
+    return error;
   }
 };
 
 // Recruiter view of Users that have applied for a job
 export const getJobApplicants = async (
-  job_id: number
+  job_id: number | string
 ): Promise<ApplicantList> => {
   try {
     const response: AxiosResponse<ApplicantList> = await authAxios.get(

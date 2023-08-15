@@ -33,7 +33,7 @@ export default function DropdownProfile({
         <span className="sr-only">Open user menu</span>
         <img
           className="w-8 h-8 mr-2 rounded-full"
-          src="https://www.flowbite.com/docs/images/people/profile-picture-3.jpg"
+          src={`https://www.flowbite.com/docs/images/people/profile-picture-3.jpg`}
           alt="user photo"
         />
         {username}

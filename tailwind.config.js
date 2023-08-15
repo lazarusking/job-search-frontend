@@ -12,7 +12,8 @@ module.exports = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
         "gradient-green": "linear-gradient(98.24deg,#cee9c1 0,#83c8de 100%)",
-        "gradient-cyan":"linear-gradient(90deg,#6cd5f6 0,#f89d5c 50%,#5b6af0 100%)"
+        "gradient-cyan":
+          "linear-gradient(90deg,#6cd5f6 0,#f89d5c 50%,#5b6af0 100%)",
       },
     },
   },

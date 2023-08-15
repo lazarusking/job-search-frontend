@@ -1,6 +1,5 @@
 "use client";
 import ErrorMessage from "@/components/ErrorMessage";
-import ProfileInput from "@/components/inputs/Input";
 import NameInputs from "@/components/inputs/NameInputs";
 import SelectInput from "@/components/inputs/SelectInput";
 import UrlInput from "@/components/inputs/UrlInput";
@@ -18,6 +17,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import ProfileInput from "@/components/inputs/ProfileInput";
 
 const init: Recruiter = {
   id: 0,
@@ -120,8 +120,6 @@ export default function EditProfile() {
     setUpdating(true);
     setErrorMessage({});
 
-    // const formData = new FormData(e.currentTarget);
-    // form["user"] = userDetail;
     const newData = { ...form, ...userDetail };
 
     const { data, error } = await updateRecruiter(
@@ -143,6 +141,7 @@ export default function EditProfile() {
       return;
     }
     setUpdating(false);
+    setProfile(data);
     toast.info("Changes made successfully");
   };
 
@@ -276,7 +275,7 @@ export default function EditProfile() {
                       onChange={(e) => {
                         setForm((prev) => ({
                           ...prev,
-                          [e.target.name]: e.target.files,
+                          [e.target.name]: e.target.files![0],
                         }));
                         setFileName({
                           avatar: e.target.files![0].name,
