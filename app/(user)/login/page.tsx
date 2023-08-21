@@ -170,6 +170,7 @@ export default function Login() {
                   className="px-3 py-3 bg-white border shadow-sm border-slate-300 placeholder-slate-400  
                   focus:outline-none block w-full rounded-md sm:text-sm focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:leading-6"
                   placeholder="password"
+                  autoComplete="current-password"
                   onChange={handleUserDetailUpdate}
                 />
               </div>

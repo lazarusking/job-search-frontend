@@ -8,7 +8,7 @@ export default function DashNavbar({ children }: { children: ReactNode }) {
   const [show, toggle] = useToggle();
 
   return (
-    <div>
+    <main>
       <MobileDashHeader toggle={toggle} />
       <div
         className={`${show ? "" : "hidden"} lg:block navbar-menu relative z-50`}
@@ -24,7 +24,7 @@ export default function DashNavbar({ children }: { children: ReactNode }) {
           <DashRoutes />
         </nav>
       </div>
-      <div className="mx-auto lg:ml-64">{children}</div>
-    </div>
+      <section className="mx-auto lg:ml-64">{children}</section>
+    </main>
   );
 }

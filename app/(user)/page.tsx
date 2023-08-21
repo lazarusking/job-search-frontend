@@ -1,7 +1,7 @@
 "use client";
 
 import { rgbDataURL } from "@/lib/image";
-import loginImage from "@/public/login.png";
+import homeImage from "@/public/Resume-amico (1).svg";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -48,10 +48,11 @@ export default function Home() {
                 {/* <div className="relative "> */}
                 <Image
                   className="h-full w-full object-cover"
-                  src={
-                    "https://shuffle.dev/atis-assets/illustrations/men-on-chair-light.png"
-                  }
-                  alt=""
+                  // src={
+                  //   "https://shuffle.dev/atis-assets/illustrations/men-on-chair-light.png"
+                  // }
+                  src={homeImage}
+                  alt="landing page image"
                   // fill={true}
                   width={500}
                   height={500}

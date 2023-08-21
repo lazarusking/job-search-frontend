@@ -3,7 +3,6 @@ import {
   Avatar,
   ChatContainer,
   ConversationHeader,
-  InfoButton,
   MainContainer,
   Message,
   MessageInput,
@@ -13,9 +12,9 @@ import {
 } from "@chatscope/chat-ui-kit-react";
 import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import { ChatBubbleLeftRightIcon } from "@heroicons/react/24/outline";
-import { ArrowRightIcon } from "@heroicons/react/24/solid";
+import { ArrowRightIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
-import chatCompletion from "./prompt";
+import chatCompletion, { postQuestionToResumes } from "./prompt";
 const exampleMessages = [
   {
     heading: "Ask about an applicant",
@@ -30,9 +29,9 @@ const exampleMessages = [
     message: `Who amongst the applicants is a team-player and has good communication skills \n`,
   },
 ];
-export default function Chatbot() {
+export default function Chatbot({ job_slug }: { job_slug: number }) {
   const [typing, setTyping] = useState(false);
-  const [showBot, setShowBot] = useState(true);
+  const [showBot, setShowBot] = useState(false);
   const [query, setQuery] = useState("");
   const [messages, setMessages] = useState<MessageModel[]>([
     {
@@ -52,12 +51,31 @@ export default function Chatbot() {
       message: message,
       direction: "outgoing",
       sender: "user",
-      position: "last",
+      position: "normal",
     };
     const newMessages = [...messages, newMessage];
     setMessages(newMessages);
     setTyping(true);
-    await processMessageToGpt(newMessages);
+    try {
+      const response = await postQuestionToResumes(job_slug, message);
+      console.log(response);
+      if (response.status === 200) {
+        setMessages([
+          ...newMessages,
+          {
+            message: response.data,
+            sender: "GPT",
+            direction: "incoming",
+            position: "last",
+          },
+        ]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    setTyping(false);
+    setQuery("");
+    // await processMessageToGpt(newMessages);
   };
   async function processMessageToGpt(chatMessages: MessageModel[]) {
     let apiMessages = chatMessages.map((messageObj) => {
@@ -69,11 +87,11 @@ export default function Chatbot() {
       }
       return { role: role, content: messageObj.message };
     });
-    const systemMessage = {
-      role: "system",
-      content:
-        "You are a chatbot that is supposed to guide users through their queries that is related to a project called ISearch that is a job recruitment site that uses AI. You will answer questions which will usually be about how to write a better cv/resume or a general.",
-    };
+    // const systemMessage = {
+    //   role: "system",
+    //   content:
+    //     "You are a chatbot that is supposed to guide users through their queries that is related to a project called ISearch that is a job recruitment site that uses AI. You will answer questions which will usually be about how to write a better cv/resume or a general.",
+    // };
     console.log(apiMessages);
     const response = await chatCompletion(apiMessages);
     setMessages([
@@ -92,15 +110,15 @@ export default function Chatbot() {
   return (
     <>
       <div
-        className="absolute top-3/4 right-16 cursor-pointer"
+        className="absolute bottom-0 right-16 cursor-pointer"
         onClick={handleShowBot}
       >
         <ChatBubbleLeftRightIcon className="w-10 h-10 text-blue-700 hover:fill-blue-700" />
       </div>
 
       {showBot && (
-        <div
-          className="relative w-96 h-[500px] transition-transform"
+        <aside
+          className="absolute right-0 bottom-9 md:w-96 md:h-[500px] transition-transform"
           // style={{ position: "relative", height: "500px" }}
         >
           <MainContainer>
@@ -110,11 +128,14 @@ export default function Chatbot() {
                   src={
                     "https://chatscope.io/storybook/react/static/media/lilly.62d4acff.svg"
                   }
-                  name="Zoe"
+                  name="Resume Bot"
                 />
                 <ConversationHeader.Content userName="Zoe" info="Active" />
                 <ConversationHeader.Actions>
-                  <InfoButton />
+                  <XMarkIcon
+                    className="w-7 h-7 text-blue-700"
+                    onClick={() => setShowBot(false)}
+                  />
                 </ConversationHeader.Actions>
               </ConversationHeader>
               <MessageList
@@ -137,7 +158,7 @@ export default function Chatbot() {
                         {exampleMessages.map((message, index) => (
                           <button
                             key={index}
-                            className="h-auto p-0 inline-flex items-center justify-center rounded-md text-sm font-bold ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 underline-offset-4 hover:underline"
+                            className="h-auto p-0 inline-flex items-center text-left justify-center rounded-md text-sm font-bold ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 underline-offset-4 hover:underline"
                             onClick={() => setQuery(message.message)}
                           >
                             <ArrowRightIcon className="mr-2 w-4 h-4" />
@@ -159,10 +180,14 @@ export default function Chatbot() {
                 onChange={(e) => setQuery(e)}
                 placeholder="Type message here"
                 onSend={handleSend}
+                onPaste={(evt) => {
+                  evt.preventDefault();
+                  setQuery(evt.clipboardData.getData("text"));
+                }}
               />
             </ChatContainer>
           </MainContainer>
-        </div>
+        </aside>
       )}
     </>
   );

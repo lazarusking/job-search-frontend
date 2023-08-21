@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-let activeClass =
-  "bg-blue-700 text-white rounded md:bg-transparent md:text-blue-700 md:p-0";
-let baseClass =
-  "block py-2 pl-3 pr-4 border-b border-gray-100 text-gray-700 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 ";
+// let activeClass =
+//   "bg-blue-700 text-white rounded md:bg-transparent md:text-blue-700 md:p-0";
+// let baseClass =
+//   "block py-2 pl-3 pr-4 border-b border-gray-100 text-gray-700 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 ";
 
 const paths = [
   { name: "Home", href: "/" },

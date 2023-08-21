@@ -5,10 +5,12 @@ export default function ConfirmModal({
   title,
   setModal,
   onConfirm,
+  details,
   ...props
 }: {
   title: string;
   setModal: any;
+  details?: string;
   css?: string;
   onConfirm: any;
 }) {
@@ -29,7 +31,7 @@ export default function ConfirmModal({
           className="mb-6 font-medium text-sm text-gray-500"
           data-config-id="auto-txt-2-1"
         >
-          Are you sure?
+          {details ? details : "Are you sure?"}
         </p>
         <div className="flex flex-wrap justify-end -m-2">
           <div className="w-full md:w-1/2 p-2">

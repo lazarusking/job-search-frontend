@@ -3,40 +3,39 @@ import useToggle from "@/hooks/useToggle";
 import Link from "next/link";
 import { ReactNode } from "react";
 
-type Props = {};
-
 export default function StepsToComplete({ children }: { children: ReactNode }) {
   const [show, toggle] = useToggle();
   return (
-    <section className="py-12 overflow-hidden">
+    <section className="py-4 overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto">
           <div
             className={`flex flex-wrap justify- items-center md:justify-between md:-mx-6 lg:mb-20`}
           >
-            <div className="ml-auto flex items-center gap-4 md:order-2 block md:hidden">
-              <div className="" onClick={toggle}>
-                <button
-                  className="rounded bg-gray-100 p-2 text-gray-600 transition hover:text-gray-600/75"
-                  aria-expanded="true"
-                  aria-label="toggle"
+            <div
+              className="ml-auto items-center gap-4 md:order-2 block md:hidden"
+              onClick={toggle}
+            >
+              <button
+                className="rounded bg-gray-100 p-2 text-gray-600 transition hover:text-gray-600/75"
+                aria-expanded="true"
+                aria-label="toggle"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M4 6h16M4 12h16M4 18h16"
-                    />
-                  </svg>
-                </button>
-              </div>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                </svg>
+              </button>
             </div>
             <div
               className={`${
@@ -46,7 +45,7 @@ export default function StepsToComplete({ children }: { children: ReactNode }) {
               <div className="w-auto p-6">
                 <Link
                   className="font-heading font-semibold text-lg text-gray-900 hover:text-gray-800"
-                  href="get-started/"
+                  href="/get-started/"
                 >
                   <p className="mb-2 px-7">Create Free Account</p>
                   <div className="h-0.5 bg-gradient-cyan" />

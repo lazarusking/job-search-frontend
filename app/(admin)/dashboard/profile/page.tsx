@@ -86,8 +86,7 @@ export default function Profile() {
               Full name
             </dt>
             <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-              {profile.user.first_name}
-              {profile.user.last_name}
+              {profile.user.first_name} {profile.user.last_name}
             </dd>
           </div>
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">

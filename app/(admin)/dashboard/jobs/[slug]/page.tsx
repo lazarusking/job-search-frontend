@@ -28,7 +28,7 @@ async function getJobData(slug: number | string) {
   }
 }
 
-export default function Page() {
+export default function Job() {
   // const applicants = await getJobData(slug);
   const { slug } = useParams();
   // console.log(slug);

@@ -1,6 +1,7 @@
 import { getJob, getJobs } from "@/lib/api";
 import { ReactNode } from "react";
 import DashboardJobViewDetail from "../DashboardJobViewDetail";
+import Chatbot from "@/components/chatbot/ChatInterface";
 
 export async function generateStaticParams() {
   // const posts = await fetch('https://.../posts').then((res) => res.json())
@@ -37,15 +38,17 @@ export default async function JobsLayout({
         <div className="container mx-auto">
           <div className="pt-4 bg-white shadow-sm rounded">
             <DashboardJobViewDetail
-              title={data.title}
-              location={data.location}
-              type={data.job_type}
-              slug={slug}
+              // title={data.title}
+              // location={data.location}
+              // type={data.job_type}
+              // slug={slug}
+              job={data}
             >
               {children}
             </DashboardJobViewDetail>{" "}
           </div>
         </div>
+        <Chatbot job_slug={slug} />
       </section>
     </>
   );

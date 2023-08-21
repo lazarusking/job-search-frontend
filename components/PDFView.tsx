@@ -22,7 +22,7 @@ export default function PDFView({ resume, name, showDocument }) {
     setNumPages(numPages);
     setPageNumber(1);
   }
-  function changePage(offset) {
+  function changePage(offset: number) {
     setPageNumber((prevPageNumber) => prevPageNumber + offset);
   }
 

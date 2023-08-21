@@ -7,6 +7,32 @@ interface DropdownType {
   toggle: any;
   logout: any;
 }
+const paths = [
+  { name: "Profile", href: "/profile" },
+  { name: "Jobs", href: "/jobs/" },
+  // { name: "Services", href: "/services" },
+  { name: "Saved Jobs", href: "/jobs/saved" },
+];
+
+type Links = {
+  title: string;
+  href: string;
+  id: number;
+};
+
+const DropdownLinks = ({ title, href, id }: Links) => {
+  return (
+    <a
+      href={href}
+      className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+      role="menuitem"
+      tabIndex={-1}
+      id={`menu-item-${id}`}
+    >
+      {title}
+    </a>
+  );
+};
 
 export default function DropdownProfile({
   username,
@@ -62,40 +88,22 @@ export default function DropdownProfile({
           tabIndex={-1}
         >
           <div className="py-1" role="none">
-            <a
-              href="/profile"
-              className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
-              role="menuitem"
-              tabIndex={-1}
-              id="menu-item-0"
-            >
-              Account profile
-            </a>
-            <a
-              href="/jobs"
-              className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
-              role="menuitem"
-              //   tabIndex={-1}
-              id="menu-item-1"
-            >
-              Jobs
-            </a>
-            <a
-              href="/jobs/saved"
-              className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
-              role="menuitem"
-              tabIndex={-1}
-              id="menu-item-1"
-            >
-              Saved Jobs
-            </a>
+            {paths.map((item, index) => (
+              <DropdownLinks
+                key={index}
+                href={item.href}
+                title={item.name}
+                id={index}
+              />
+            ))}
+
             <div>
               <button
                 type="submit"
                 className="text-gray-700 block w-full px-4 py-2 border-t text-left text-sm hover:bg-gray-100"
                 role="menuitem"
                 tabIndex={-1}
-                id="menu-item-3"
+                id="last-menu-item"
                 onClick={logout}
               >
                 Sign out

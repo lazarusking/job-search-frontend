@@ -40,7 +40,7 @@ export default function Breadcrumbs() {
   //   return [{ href: "/", text: "Home" }, ...crumblist];
   // }, []);
   return (
-    <section className="py-4 overflow-hidden">
+    <nav className="py-4 overflow-hidden">
       <div className="container px-4 mx-auto">
         <ul className="inline-flex flex-wrap items-center -m-0.5">
           <li className="p-0.5">
@@ -152,7 +152,7 @@ export default function Breadcrumbs() {
           </li> */}
         </ul>
       </div>
-    </section>
+    </nav>
 
     // <nav aria-label="Breadcrumb">
     //   <ol className="flex justify-center items-center gap-1 text-sm text-gray-600">

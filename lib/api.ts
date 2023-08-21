@@ -49,10 +49,20 @@ export const updateRecruiter = async (user: UserToken, userData: Recruiter) => {
     return { error };
   }
 };
-// Save your favorite job to db
+// create a job
 export const createJob = async (data: Job) => {
   try {
     const response = await authAxios.post(`/recruiters/jobs/`, data);
+
+    return { data: response.data };
+  } catch (error) {
+    return { error };
+  }
+};
+// Update a created job
+export const updateJob = async (job_id: number, data: Job) => {
+  try {
+    const response = await authAxios.patch(`/recruiters/jobs/${job_id}/`, data);
 
     return { data: response.data };
   } catch (error) {
