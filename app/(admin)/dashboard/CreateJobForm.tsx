@@ -157,6 +157,7 @@ export default function CreateJobForm({
               </label>
               <select
                 id="job_type"
+                name="job_type"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                 onChange={onInputChange}
                 defaultValue={currentJobData?.job_type}
@@ -178,10 +179,11 @@ export default function CreateJobForm({
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 "
                 placeholder={""}
                 required
-                defaultValue={format(
-                  new Date(currentJobData?.deadline!),
-                  "yyyy-MM-dd"
-                )}
+                defaultValue={
+                  currentJobData
+                    ? format(new Date(currentJobData?.deadline!), "yyyy-MM-dd")
+                    : ""
+                }
                 onChange={onInputChange}
               />
             </div>

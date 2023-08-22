@@ -471,7 +471,9 @@ export default function Profile() {
             onChangeFunc={onInputChange}
             getList={getJobType}
             value={extra}
-            selected={profile.looking_for}
+            selected={
+              form?.looking_for ? form.looking_for : profile.looking_for
+            }
           />
           {error.looking_for && <ErrorMessage msg={error.looking_for} />}
 
@@ -481,7 +483,7 @@ export default function Profile() {
             onChangeFunc={onInputChange}
             getList={getCountriesContent}
             value={extra}
-            selected={profile.country}
+            selected={form?.country ? form.country : profile.country}
           />
 
           <UrlInput

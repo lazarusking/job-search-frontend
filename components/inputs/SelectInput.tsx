@@ -28,8 +28,9 @@ export default function SelectInput({
         <select
           onChange={onChangeFunc}
           name={name}
-          value={selected}
+          // defaultValue={selected}
           aria-label={title}
+          value={selected}
           className="appearance-none w-full py-2.5 px-4 text-gray-900 text-base font-normal bg-white border outline-none border-gray-200 focus:border-green-500 rounded-lg shadow-input"
         >
           {value && getList(value)}

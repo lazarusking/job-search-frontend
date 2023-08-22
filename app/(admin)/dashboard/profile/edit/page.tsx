@@ -294,7 +294,7 @@ export default function EditProfile() {
             onChangeFunc={onInputChange}
             getList={getCountriesContent}
             value={extra}
-            selected={profile.country}
+            selected={form?.country ? form.country : profile.country}
           />
 
           <UrlInput

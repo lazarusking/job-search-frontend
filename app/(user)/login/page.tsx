@@ -14,6 +14,8 @@ type LoginError = {
 };
 export default function Login() {
   const [userDetail, setUserDetail] = useState({ email: "", password: "" });
+  const [isUpdating, setIsUpdating] = useState(false);
+
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   function handleUserDetailUpdate(e: ChangeEvent<HTMLInputElement>) {
@@ -39,6 +41,7 @@ export default function Login() {
     event.preventDefault();
     setErrorMessage({});
     // try {
+    setIsUpdating(true);
     console.log(userDetail);
     const resp = await login(userDetail.email, userDetail.password);
     if (resp && resp.status === 200) {
@@ -50,7 +53,6 @@ export default function Login() {
         },
       } = resp;
       console.log(is_recruiter);
-
       if (resp.data.user.is_recruiter) {
         console.log("redirecting");
         router.push("/dashboard");
@@ -66,6 +68,8 @@ export default function Login() {
     if (resp.response && resp.response.status === 401) {
       setErrorMessage({ detail: "Invalid login credentials" });
     }
+    setIsUpdating(false);
+
     // } catch (ex: any) {
     // }
     if (!loading && isAuthenticated) router.push("/");
@@ -183,11 +187,36 @@ export default function Login() {
                 value="Login"
                 className="w-3/4 cursor-pointer bg-sky-500 bg-gradient-to-r from-blue-500 to-rose-500 hover:bg-sky-700 px-5 py-2.5 text-sm leading-5 font-semibold hover:bg-none focus:outline-none focus:ring focus:bg-opacity-70 text-white"
               /> */}
-              <input
+
+              <button
                 type="submit"
                 value="Sign In"
                 className="flex w-auto cursor-pointer justify-center rounded-md bg-indigo-600 px-6 py-2 mb-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              />
+              >
+                <svg
+                  className={`${
+                    isUpdating ? "animate-spin" : "hidden"
+                  } -ml-1 mr-3 h-5 w-5 text-white`}
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx={12}
+                    cy={12}
+                    r={10}
+                    stroke="currentColor"
+                    strokeWidth={4}
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  />
+                </svg>
+                Sign In
+              </button>
               <div className="w-full text-sm">
                 <p className="text-gray-500">
                   {`Don't have an account?`}{" "}

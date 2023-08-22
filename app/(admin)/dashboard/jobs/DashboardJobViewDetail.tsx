@@ -90,7 +90,7 @@ export default function DashboardJobViewDetail({
               title="Confirm Delete"
               details="Are you sure you want to delete this job?"
               css={"bg-white w-screen"}
-              onConfirm={() => removeJob(Number(currentJob.slug))}
+              onConfirm={() => removeJob(job.id)}
             />
           )}
           {edit && (
@@ -108,7 +108,7 @@ export default function DashboardJobViewDetail({
           )}
         </div>
 
-        <UserJobsPageNav paths={paths(Number(currentJob.slug))} />
+        <UserJobsPageNav paths={paths(job.id)} />
       </div>
       <Suspense fallback={<Loading />}>
         <table className="table-auto w-full">
