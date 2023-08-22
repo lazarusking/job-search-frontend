@@ -1,7 +1,7 @@
 "use client";
-import useToggle from "@/hooks/useToggle";
 import Link from "next/link";
 import { ReactNode } from "react";
+import { useToggle } from "usehooks-ts";
 
 export default function StepsToComplete({ children }: { children: ReactNode }) {
   const [show, toggle] = useToggle();

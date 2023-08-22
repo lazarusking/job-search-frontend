@@ -60,12 +60,13 @@ export function UserApplySaveComponent({
   useEffect(() => {
     const fetchSearchResults = async () => {
       // fetchSearchResults();
-      // const res = await getSavedData(slug);
+      const res = await getSavedData(slug);
       const res2 = await getAppliedData(slug);
-      // if (res.response && res.data?.count) {
-      //   setIsSaved(true);
-      // }
-      if (res2.response && res2.data?.count) {
+      if (res && res.data?.count) {
+        setIsSaved(true);
+      }
+
+      if (res2 && res2.data?.count) {
         console.log(res2);
         setApplied(true);
       }

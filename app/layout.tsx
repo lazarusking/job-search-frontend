@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ReactNode, Suspense } from "react";
 import Loading from "./loading";
 import { AuthProvider } from "@/context/auth";
-const { TWITTER_CREATOR, TWITTER_SITE, SITE_NAME } = process.env;
+const { TWITTER_CREATOR, TWITTER_SITE, SITE_NAME, SITE_NAME_URL } = process.env;
 import { ToastContainer } from "react-toastify";
 import { Metadata } from "next";
 import Logo from "@/public/logo.svg";
@@ -17,6 +17,7 @@ const inter = Mulish({
 
 export const metadata: Metadata = {
   title: SITE_NAME,
+  metadataBase: new URL(SITE_NAME_URL!),
   description: "",
   ...(TWITTER_CREATOR &&
     TWITTER_SITE && {

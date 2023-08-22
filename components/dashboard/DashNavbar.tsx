@@ -2,8 +2,8 @@
 import DashImage from "@/components/dashboard/DashImage";
 import DashRoutes from "@/components/dashboard/DashRoutes";
 import MobileDashHeader from "@/components/dashboard/MobileDashHeader";
-import useToggle from "@/hooks/useToggle";
 import { ReactNode } from "react";
+import { useToggle } from "usehooks-ts";
 export default function DashNavbar({ children }: { children: ReactNode }) {
   const [show, toggle] = useToggle();
 

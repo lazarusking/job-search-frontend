@@ -68,27 +68,6 @@ export default async function JobSlug({
   ).toDateString();
   const deadline = new Date(job.deadline).toDateString();
 
-  // async function saveOrUnsave(id: number) {
-  //   try {
-  //     if (!isSaved) {
-  //       await saveJob(id);
-  //       setIsSaved(true);
-  //     } else {
-  //       await deleteSavedJob(id);
-  //       setIsSaved(false);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
-  // useEffect(() => {
-  //   const fetchSearchResults = async () => {
-  //     fetchSearchResults();
-  //     await saveOrUnsave(slug);
-  //   };
-  //   fetchSearchResults()
-  // }, [])
-
   return (
     <section className="py-10">
       <div className="container px-4 mx-auto">

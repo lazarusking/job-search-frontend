@@ -1,13 +1,13 @@
 "use client";
 
 import { useAuth } from "@/context/auth";
-import useToggle from "@/hooks/useToggle";
 import { ArrowRightOnRectangleIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import DropdownProfile from "./DropdownProfile";
 import { NavLink } from "./Navlink";
+import { useToggle } from "usehooks-ts";
 
 const Navbar = () => {
   const [show, toggle] = useToggle();
