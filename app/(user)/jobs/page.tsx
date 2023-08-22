@@ -39,21 +39,6 @@ export default function Home() {
     // setResults(searchResults);
     return searchResults;
   }, [debouncedSearchTerm]);
-  // useEffect(() => {
-  //   const searchHN = async () => {
-  //     let results = [];
-  //     setIsSearching(true);
-  //     if (debouncedSearchTerm) {
-  //       const data = await debouncedSearchTerm;
-  //       results = data?.hits || [];
-  //     }
-
-  //     setIsSearching(false);
-  //     setResults(results);
-  //   };
-
-  //   searchHN();
-  // }, [debouncedSearchTerm]);
   const getJobsContent = (job: Job[]) => {
     let content: JSX.Element[] = [];
     job.map((item) => {
@@ -64,6 +49,7 @@ export default function Home() {
           job_type={item.job_type}
           title={item.title}
           location={item.location}
+          saved={item.user_has_saved}
         />
       );
     });
@@ -136,30 +122,6 @@ export default function Home() {
                   />
                 </div>
               </div>
-              {/* <div className="w-full md:w-1/3 px-3 mb-3 md:mb-0">
-                <div className="relative bg-white border border-gray-200 rounded-lg shadow-md">
-                  <select
-                    className="px-4 py-3 w-full appearance-none outline-none border-0 bg-transparent hover:cursor-pointer leading-6 text-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 rounded-lg"
-                    name=""
-                  >
-                    <option value={1}>Location</option>
-                    <option value={2}>Country</option>
-                    <option value={3}>City</option>
-                  </select>
-                </div>
-              </div> */}
-              {/* <div className="w-full md:w-1/3 px-3">
-                <div className="relative bg-white border border-gray-200 rounded-lg shadow-md">
-                  <select
-                    className="px-4 py-3 w-full appearance-none outline-none border-0 bg-transparent hover:cursor-pointer leading-6 text-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 rounded-lg"
-                    name=""
-                  >
-                    <option value={1}>Type</option>
-                    <option value={2}>Country</option>
-                    <option value={3}>City</option>
-                  </select>
-                </div>
-              </div> */}
             </div>
           </div>
           <Suspense fallback={<Loading />}>

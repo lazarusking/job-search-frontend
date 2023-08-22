@@ -7,14 +7,15 @@ import Loading from "./loading";
 import { AuthProvider } from "@/context/auth";
 const { TWITTER_CREATOR, TWITTER_SITE, SITE_NAME } = process.env;
 import { ToastContainer } from "react-toastify";
-
+import { Metadata } from "next";
+import Logo from "@/public/logo.svg";
 const inter = Mulish({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800", "900"],
   display: "swap",
 });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: SITE_NAME,
   description: "",
   ...(TWITTER_CREATOR &&
@@ -23,6 +24,7 @@ export const metadata = {
         card: "summary_large_image",
         creator: TWITTER_CREATOR,
         site: TWITTER_SITE,
+        images: Logo,
       },
     }),
 };

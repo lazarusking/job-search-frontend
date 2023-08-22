@@ -2,7 +2,42 @@
 import { UserApplySaveComponent } from "@/components/UserApplySaveComponent";
 import { getJob, getJobs } from "@/lib/api";
 import { BriefcaseIcon, ClockIcon } from "@heroicons/react/24/solid";
+import { Metadata } from "next";
+type Props = {
+  params: { slug: number };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  // read route params
+  const id = params.slug;
 
+  // fetch data
+  const job = await getJobData(id);
+
+  return {
+    title: job.title,
+    description: job.description,
+    publisher: job.recruiter.company,
+    keywords: job.skills_required,
+    authors: [{ name: job.recruiter.user.username }],
+    openGraph: {
+      type: "article",
+      title: job.title,
+      description: job.description,
+      siteName: job.title,
+      publishedTime: job.date_posted,
+    },
+    twitter: {
+      card: "summary_large_image",
+      creator: `@${job.recruiter.company}`,
+      creatorId: `@${job.recruiter.id}`,
+      siteId: `@${job.id}`,
+      title: job.title,
+      description: job.description,
+      site: "@ISearch",
+    },
+  };
+}
 export async function generateStaticParams() {
   // const posts = await fetch('https://.../posts').then((res) => res.json())
   const jobs = await getJobs();
@@ -22,21 +57,16 @@ async function getJobData(slug: number) {
   return res;
 }
 
-export default async function Page({
+export default async function JobSlug({
   params: { slug },
 }: {
   params: { slug: number };
 }) {
   const job = await getJobData(slug);
-  // const [isSaved, setIsSaved] = useState(false);
   const date_posted = new Date(
     Date.now() - new Date(job.date_posted).getUTCMilliseconds()
   ).toDateString();
   const deadline = new Date(job.deadline).toDateString();
-  console.log(
-    Date.now() - new Date(job.date_posted).getUTCMilliseconds(),
-    new Date(job.date_posted).getUTCMilliseconds()
-  );
 
   // async function saveOrUnsave(id: number) {
   //   try {
@@ -75,7 +105,8 @@ export default async function Page({
               <p className="text-base text-gray-500">{date_posted}</p>
             </div>
           </div>
-          <UserApplySaveComponent slug={slug} />
+          {job.user_has_saved ? "True" : "False"}
+          <UserApplySaveComponent saved={job.user_has_saved} slug={slug} />
           <div className="my-4">
             <div className="text-left text-gray-500 flex items-center">
               <span className="inline-block mr-3">

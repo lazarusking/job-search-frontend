@@ -1,10 +1,44 @@
+import Chatbot from "@/components/chatbot/ChatInterface";
 import { getJob, getJobs } from "@/lib/api";
+import { Metadata } from "next";
 import { ReactNode } from "react";
 import DashboardJobViewDetail from "../DashboardJobViewDetail";
-import Chatbot from "@/components/chatbot/ChatInterface";
+type Props = {
+  params: { slug: number };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  // read route params
+  const id = params.slug;
 
+  // fetch data
+  const job = await getJobData(id);
+
+  return {
+    title: job.title,
+    description: job.description,
+    publisher: job.recruiter.company,
+    keywords: job.skills_required,
+    authors: [{ name: job.recruiter.user.username }],
+    openGraph: {
+      type: "article",
+      title: job.title,
+      description: job.description,
+      siteName: job.title,
+      publishedTime: job.date_posted,
+    },
+    twitter: {
+      card: "summary_large_image",
+      creator: `@${job.recruiter.company}`,
+      creatorId: `@${job.recruiter.id}`,
+      siteId: `@${job.id}`,
+      title: job.title,
+      description: job.description,
+      site: "@ISearch",
+    },
+  };
+}
 export async function generateStaticParams() {
-  // const posts = await fetch('https://.../posts').then((res) => res.json())
   const jobs = await getJobs();
 
   //   jobs.results.map((item) => {

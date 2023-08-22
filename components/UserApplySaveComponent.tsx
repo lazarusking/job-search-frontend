@@ -9,8 +9,14 @@ import {
 } from "@/lib/api";
 import { useEffect, useState } from "react";
 
-export function UserApplySaveComponent({ slug }: { slug: number }) {
-  const [isSaved, setIsSaved] = useState(false);
+export function UserApplySaveComponent({
+  slug,
+  saved,
+}: {
+  slug: number;
+  saved: boolean;
+}) {
+  const [isSaved, setIsSaved] = useState(saved);
   const [applied, setApplied] = useState(false);
 
   async function apply(id: number) {
@@ -20,7 +26,7 @@ export function UserApplySaveComponent({ slug }: { slug: number }) {
     }
     if (res.response && res.response.status === 201) {
       console.log(res.response);
-      setIsSaved(true);
+      setApplied(true);
     }
     if (res.response && res.response.status === 400) {
       const res = await deleteApplication(id);
@@ -54,13 +60,13 @@ export function UserApplySaveComponent({ slug }: { slug: number }) {
   useEffect(() => {
     const fetchSearchResults = async () => {
       // fetchSearchResults();
-      const res = await getSavedData(slug);
+      // const res = await getSavedData(slug);
       const res2 = await getAppliedData(slug);
-      // console.log(res);
-      if (res.response && res.data?.count) {
-        setIsSaved(true);
-      }
-      if (res.response && res2.data?.count) {
+      // if (res.response && res.data?.count) {
+      //   setIsSaved(true);
+      // }
+      if (res2.response && res2.data?.count) {
+        console.log(res2);
         setApplied(true);
       }
 

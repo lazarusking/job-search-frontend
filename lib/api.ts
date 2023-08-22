@@ -145,7 +145,7 @@ export const getJobs = async (query?: string): Promise<JobList> => {
 export const getAppliedData = async (job_id: number) => {
   try {
     const response = await authAxios.get(`/users/apply/${job_id}/`);
-    return response.data;
+    return response;
   } catch (error: any) {
     return error;
   }

@@ -79,6 +79,7 @@ export interface Job {
   date_posted: string;
   deadline: string;
   recruiter: Recruiter;
+  user_has_saved: boolean;
 }
 export interface JobList extends Pagination {
   results: Job[];

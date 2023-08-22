@@ -9,6 +9,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { toast } from "react-toastify";
 
 export default function CreateJobForm({
   currentJobData,
@@ -86,6 +87,7 @@ export default function CreateJobForm({
     console.info("Job created successfully");
     setJobs(data);
     setUpdating(false);
+    toast.info("Changes made successfully");
   };
   return (
     <div className="bg-white ">

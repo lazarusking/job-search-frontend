@@ -1,5 +1,5 @@
 "use client";
-import { ChevronRightIcon } from "@heroicons/react/24/solid";
+import { ChevronRightIcon, HomeIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Fragment } from "react";
@@ -48,7 +48,7 @@ export default function Breadcrumbs() {
               className="group flex items-center text-xs text-neutral-400 hover:text-neutral-600"
               href="/"
             >
-              <svg
+              {/* <svg
                 className="mr-1"
                 width={16}
                 height={16}
@@ -60,7 +60,8 @@ export default function Breadcrumbs() {
                   d="M7.33333 3.33331L7.68689 2.97976C7.59312 2.88599 7.46594 2.83331 7.33333 2.83331V3.33331ZM8.66667 4.66665L8.31311 5.0202C8.40688 5.11397 8.53406 5.16665 8.66667 5.16665V4.66665ZM2.5 11.3333V4.66665H1.5V11.3333H2.5ZM3.33333 3.83331H7.33333V2.83331H3.33333V3.83331ZM6.97978 3.68687L8.31311 5.0202L9.02022 4.31309L7.68689 2.97976L6.97978 3.68687ZM8.66667 5.16665H12.6667V4.16665H8.66667V5.16665ZM13.5 5.99998V11.3333H14.5V5.99998H13.5ZM12.6667 12.1666H3.33333V13.1666H12.6667V12.1666ZM12.6667 5.16665C13.1269 5.16665 13.5 5.53974 13.5 5.99998H14.5C14.5 4.98746 13.6792 4.16665 12.6667 4.16665V5.16665ZM2.5 4.66665C2.5 4.20641 2.8731 3.83331 3.33333 3.83331V2.83331C2.32081 2.83331 1.5 3.65412 1.5 4.66665H2.5ZM13.5 11.3333C13.5 11.7936 13.1269 12.1666 12.6667 12.1666V13.1666C13.6792 13.1666 14.5 12.3458 14.5 11.3333H13.5ZM1.5 11.3333C1.5 12.3458 2.32081 13.1666 3.33333 13.1666V12.1666C2.8731 12.1666 2.5 11.7936 2.5 11.3333H1.5Z"
                   fill="currentColor"
                 />
-              </svg>
+              </svg> */}
+              <HomeIcon className="w-4 h-5" title="Home" />
               <svg
                 className="text-neutral-300 group-hover:text-neutral-400"
                 width={12}

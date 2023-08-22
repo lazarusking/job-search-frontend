@@ -6,13 +6,13 @@ import { ArrowRightOnRectangleIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { NavLink } from "./Navlink";
 import DropdownProfile from "./DropdownProfile";
+import { NavLink } from "./Navlink";
 
 const Navbar = () => {
   const [show, toggle] = useToggle();
   const [showDropdown, toggleDropdown] = useState(false);
-  const { isAuthenticated, user, loading, accessToken, logout } = useAuth();
+  const { user, logout } = useAuth();
   const [hasMounted, sethasMounted] = useState(false);
   const dialogRef = useRef<any>();
 
@@ -203,7 +203,9 @@ const Navbar = () => {
                   </>
                 )}
                 <p className="my-4 text-xs text-center text-gray-400">
-                  <span>© 2020 All rights reserved.</span>
+                  <span>
+                    © {new Date(Date.now()).getFullYear()} All rights reserved.
+                  </span>
                 </p>
                 <div className="text-center">
                   <a className="inline-block px-1" href="#">
