@@ -84,8 +84,7 @@ export default async function JobSlug({
               <p className="text-base text-gray-500">{date_posted}</p>
             </div>
           </div>
-          {job.user_has_saved ? "True" : "False"}
-          <UserApplySaveComponent saved={job.user_has_saved} slug={slug} />
+          <UserApplySaveComponent slug={slug} />
           <div className="my-4">
             <div className="text-left text-gray-500 flex items-center">
               <span className="inline-block mr-3">

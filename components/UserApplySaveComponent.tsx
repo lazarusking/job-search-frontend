@@ -9,14 +9,8 @@ import {
 } from "@/lib/api";
 import { useEffect, useState } from "react";
 
-export function UserApplySaveComponent({
-  slug,
-  saved,
-}: {
-  slug: number;
-  saved: boolean;
-}) {
-  const [isSaved, setIsSaved] = useState(saved);
+export function UserApplySaveComponent({ slug }: { slug: number }) {
+  const [isSaved, setIsSaved] = useState(false);
   const [applied, setApplied] = useState(false);
 
   async function apply(id: number) {
