@@ -1,7 +1,5 @@
 import React, { ReactNode, useCallback, useEffect, useRef } from "react";
 
-type Props = {};
-
 export default function OverlayModal({
   title,
   setModal,

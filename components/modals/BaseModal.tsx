@@ -64,7 +64,7 @@ export default function BaseModal({
         >
           {" "}
           <article
-            className={`${css} transform overflow-hidden rounded-lg shadow-xl transition-all sm:my-2 sm:w-full sm:max-w-md`}
+            className={`${css} transform overflow-hidden rounded-lg shadow-xl transition-all sm:my-2 sm:w-full`}
           >
             <header className="flex text-center text-lg px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
               <h2 className="flex-1">{title}</h2>

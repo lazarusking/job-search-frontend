@@ -1,10 +1,7 @@
 import { authAxios } from "@/lib/auth";
 import { AxiosResponse } from "axios";
 import { Configuration, OpenAIApi } from "openai";
-interface chatModel {
-  role: string;
-  content: string;
-}
+
 const systemMessage = {
   role: "system",
   content:

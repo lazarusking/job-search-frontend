@@ -162,6 +162,7 @@ export default function UserChatbot() {
                     evt.preventDefault();
                     setQuery(evt.clipboardData.getData("text"));
                   }}
+                  sendOnReturnDisabled={false}
                 />
               </ChatContainer>
             </MainContainer>

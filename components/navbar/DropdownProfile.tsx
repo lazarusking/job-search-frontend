@@ -1,6 +1,7 @@
+import Image from "next/image";
 import { useCallback, useRef } from "react";
 import { useOnClickOutside } from "usehooks-ts";
-
+import profilePic from "@/public/profile-picture-3.jpg";
 interface DropdownType {
   username: string;
   show: boolean;
@@ -57,9 +58,9 @@ export default function DropdownProfile({
         onClick={handleShow}
       >
         <span className="sr-only">Open user menu</span>
-        <img
+        <Image
           className="w-8 h-8 mr-2 rounded-full"
-          src={`https://www.flowbite.com/docs/images/people/profile-picture-3.jpg`}
+          src={profilePic}
           alt="user photo"
         />
         {username}

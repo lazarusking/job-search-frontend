@@ -133,7 +133,7 @@ export const getJobs = async (query?: string): Promise<JobList> => {
   try {
     let url = `/recruiters/jobs/`;
     const response: AxiosResponse<JobList> = await authAxios.get(
-      query ? `${url}?search=${query}` : url
+      query ? `${url}?search=${encodeURIComponent(query)}` : url
     );
     return response.data;
     // return { data: response.data };
