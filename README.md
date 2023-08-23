@@ -1,34 +1,85 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Job Search Frontend
 
-## Getting Started
+Welcome to the frontend of our project built using Next.js! This README will guide you through the steps to set up, run, and use the frontend part of the application.
 
-First, run the development server:
+## Table of Contents
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+- [Installation](#installation)
+- [Usage](#usage)
+- [Configuration](#configuration)
+- [Screenshots](#screenshots)
+- [Contributing](#contributing)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
+- [Contact](#contact)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+To get started with the frontend of the project, follow these installation steps:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+1. **Clone the Repository:** Clone this repository to your local machine using the following command:
 
-## Learn More
+   ```bash
+   git clone <repository_url>
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+2. **Navigate to the Project Directory:** Change your working directory to the project's frontend folder:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```bash
+   cd project-frontend
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+3. **Install Dependencies:** Install the required dependencies using `npm`:
+   ```bash
+   npm install
+   ```
 
-## Deploy on Vercel
+## Usage
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Once you've successfully installed the project's dependencies, you can run the frontend application locally:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+1. **Start the Development Server:** Run the following command to start the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+2. **Access the Application:** Open your web browser and navigate to `http://localhost:3000` to access the frontend of the project.
+
+## Configuration
+
+To configure the frontend, create an `.env` file following the format of `.env.example`.
+
+## Screenshots
+
+<details>
+  <summary markdown="span">Screenshots of the project</summary>
+
+![Homepage](/public/homepage.png)
+![Jobd Page](/public/job%20page.png)
+![Job Page](/public/job%20desc%20page.png)
+![Applicants Page](/public/applicants%20with%20chatbot.png)
+![Chatbot View](/public/admin%20jobs%20page.png)
+
+</details>
+
+## Contributing
+
+Contributions are welcome! If you'd like to contribute, follow these steps:
+
+1. Fork the repository.
+2. Create a new branch for your feature/bug fix.
+3. Make your changes and commit.
+4. Push to your fork and submit a pull request.
+
+## License
+
+This project is licensed under the [MIT License](https://mit-license.org/).
+
+## Acknowledgments
+
+This project was built with the help of my project partner [Daniel](https://github.com/DanielAnsong).
+
+## Contact
+
+For questions or feedback, please contact [Me](mailto:laz.accel@gmail.com).
