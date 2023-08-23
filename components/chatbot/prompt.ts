@@ -14,7 +14,7 @@ export default async function chatCompletion(messages: any) {
   const configuration = new Configuration({
     apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
   });
-  //   delete configuration.baseOptions.headers['User-Agent'];
+  delete configuration.baseOptions.headers["User-Agent"];
 
   const openai = new OpenAIApi(configuration);
 
@@ -25,13 +25,12 @@ export default async function chatCompletion(messages: any) {
       systemMessage,
       ...messages,
     ],
-    stream: true,
   });
   console.log(completion.data.choices[0].message);
   const response = completion.data.choices[0].message;
-  for await (const chunk of completion) {
-    console.log(chunk.choices[0].delta.content);
-  }
+  // for await (const chunk of completion) {
+  //   console.log(chunk.choices[0].delta.content);
+  // }
   return response;
 }
 

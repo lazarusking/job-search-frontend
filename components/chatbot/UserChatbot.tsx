@@ -14,22 +14,18 @@ import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import { ChatBubbleLeftRightIcon } from "@heroicons/react/24/outline";
 import { ArrowRightIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
-import { postQuestionToResumes } from "./prompt";
+import chatCompletion from "./prompt";
 const exampleMessages = [
   {
-    heading: "Ask about an applicant",
-    message: `Who is [applicant]?`,
+    heading: "Ask job interview questions",
+    message: `How should I prepare for a job interview?`,
   },
   {
-    heading: "Explain technical concepts",
-    message: "Does [applicant] know how to use Java? \n",
-  },
-  {
-    heading: "Compare applicants",
-    message: `Who amongst the applicants is a team-player and has good communication skills \n`,
+    heading: "Ask about resume tips",
+    message: "Should I have more than one page on my resume? \n",
   },
 ];
-export default function Chatbot({ job_slug }: { job_slug: number }) {
+export default function UserChatbot() {
   const [typing, setTyping] = useState(false);
   const [showBot, setShowBot] = useState(false);
   const [query, setQuery] = useState("");
@@ -51,40 +47,49 @@ export default function Chatbot({ job_slug }: { job_slug: number }) {
       message: message,
       direction: "outgoing",
       sender: "user",
-      position: "normal",
+      position: "last",
     };
     const newMessages = [...messages, newMessage];
     setMessages(newMessages);
     setTyping(true);
-    try {
-      const response = await postQuestionToResumes(job_slug, message);
-      console.log(response);
-      if (response.status === 200) {
-        setMessages([
-          ...newMessages,
-          {
-            message: response.data,
-            sender: "GPT",
-            direction: "incoming",
-            position: "last",
-          },
-        ]);
+    await processMessageToGpt(newMessages);
+  };
+  async function processMessageToGpt(chatMessages: MessageModel[]) {
+    let apiMessages = chatMessages.map((messageObj) => {
+      let role;
+      if (messageObj.sender === "GPT") {
+        role = "assistant";
       } else {
-        setMessages(newMessages.splice(-1, 1));
+        role = "user";
       }
+      return { role: role, content: messageObj.message };
+    });
+
+    console.log(apiMessages);
+
+    try {
+      const response = await chatCompletion(apiMessages);
+      setMessages([
+        ...chatMessages,
+        {
+          message: response?.content,
+          sender: "GPT",
+          direction: "incoming",
+          position: "last",
+        },
+      ]);
+      setTyping(false);
+      console.log(response);
     } catch (error) {
-      console.log(error);
-      console.log("Hello");
-      setMessages(newMessages.splice(-1, 1));
+      setMessages(chatMessages.splice(-1, 1));
     }
     setTyping(false);
     setQuery("");
-    // await processMessageToGpt(newMessages);
-  };
+  }
 
   return (
     <>
-      <div className="fixed bottom-5 right-2 sm:right-16">
+      <div className="fixed z-50 bottom-5 right-2 sm:right-16">
         <ChatBubbleLeftRightIcon
           onClick={handleShowBot}
           className="w-10 h-10 text-blue-700 cursor-pointer hover:fill-blue-700"
@@ -107,7 +112,7 @@ export default function Chatbot({ job_slug }: { job_slug: number }) {
                   <ConversationHeader.Actions>
                     <XMarkIcon
                       onClick={() => setShowBot(false)}
-                      className="w-7 h-7 text-blue-700"
+                      className="w-7 h-7 text-blue-700 cursor-pointer"
                     />
                   </ConversationHeader.Actions>
                 </ConversationHeader>

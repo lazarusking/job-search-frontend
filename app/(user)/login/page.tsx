@@ -72,12 +72,12 @@ export default function Login() {
 
     // } catch (ex: any) {
     // }
-    if (!loading && isAuthenticated) router.push("/");
+    if (!loading && isAuthenticated) router.push("/jobs");
   };
   useEffect(() => {
     if (!loading && isAuthenticated) {
       if (user?.is_recruiter) router.push("/dashboard");
-      if (!user?.is_recruiter) router.push("/");
+      if (!user?.is_recruiter) router.push("/jobs");
     }
   }, [isAuthenticated, loading, router, user?.is_recruiter]);
 
