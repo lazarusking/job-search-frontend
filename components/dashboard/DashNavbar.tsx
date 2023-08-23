@@ -24,7 +24,7 @@ export default function DashNavbar({ children }: { children: ReactNode }) {
           <DashRoutes />
         </nav>
       </div>
-      <section className="mx-auto lg:ml-64">{children}</section>
+      <section className="mx-2 lg:ml-64">{children}</section>
     </main>
   );
 }

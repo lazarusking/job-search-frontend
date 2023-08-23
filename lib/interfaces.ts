@@ -98,6 +98,12 @@ export interface JobDetail {
   location: string;
   company: string;
 }
+export interface JobDashboard {
+  active_jobs: number;
+  expired_jobs: number;
+  job_count: number;
+  saved_jobs: number;
+}
 
 export interface JobView {
   id: number;

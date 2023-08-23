@@ -1,7 +1,6 @@
 import BaseModal from "@/components/modals/BaseModal";
 import { useToggle } from "usehooks-ts";
 import CreateJobForm from "../CreateJobForm";
-import OverlayModal from "@/components/modals/OverlayModal";
 
 export default function AddJobNavBar({
   query,
@@ -89,7 +88,7 @@ export default function AddJobNavBar({
           </span>
           <span>Add Job</span>
         </button>
-        <button className="ml-auto lg:ml-0 p-3 bg-indigo-50 hover:bg-indigo-100 rounded">
+        {/* <button className="ml-auto lg:ml-0 p-3 bg-indigo-50 hover:bg-indigo-100 rounded">
           <svg
             className="h-4 w-4 text-indigo-500"
             viewBox="0 0 16 16"
@@ -109,7 +108,7 @@ export default function AddJobNavBar({
               fill="currentColor"
             />
           </svg>
-        </button>
+        </button> */}
       </div>
       {show && (
         <BaseModal

@@ -12,7 +12,7 @@ export default function DashRoutes() {
 
   return (
     <div className="grid flex-1 px-4 py-6">
-      <ul className="grid mb-8 text-sm font-medium">
+      <ul className="flex flex-col gap-8 mb-8 text-sm font-medium">
         <DashLink
           name="Dashboard"
           Icon={
@@ -68,13 +68,13 @@ export default function DashRoutes() {
             </svg>
           }
         /> */}
-        <DashLink
+        {/* <DashLink
           name="Chatbot"
           href="chatbot"
           Icon={
             <ChatBubbleBottomCenterTextIcon className="text-gray-400 w-5 h-5" />
           }
-        />
+        /> */}
       </ul>
 
       <ul className="mt-auto pt-8">

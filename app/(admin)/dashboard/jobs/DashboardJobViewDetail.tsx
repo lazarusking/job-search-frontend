@@ -114,11 +114,13 @@ export default function DashboardJobViewDetail({
         <table className="table-auto w-full">
           <thead className="bg-gray-50">
             <tr className="text-xs text-gray-500 text-left">
-              <th className="pl-2 sm:pl-6 sm:py-4 font-medium">Applicant ID</th>
-              <th className="sm:py-4 font-medium">User</th>
-              <th className="sm:py-4 font-medium">Joined</th>
-              <th className="sm:py-4 font-medium">Status</th>
-              <th className="sm:py-4 font-medium">Action</th>
+              <th className="hidden sm:table-cell p-2 sm:pl-6 sm:py-4 font-medium">
+                Applicant ID
+              </th>
+              <th className="p-2 sm:py-4 font-medium">User</th>
+              <th className=" p-2 sm:py-4 font-medium">Joined</th>
+              <th className="p-2 sm:py-4 font-medium">Status</th>
+              <th className="p-2 sm:py-4 font-medium">Action</th>
             </tr>
           </thead>
           {children}

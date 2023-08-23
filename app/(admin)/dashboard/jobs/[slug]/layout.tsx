@@ -13,30 +13,35 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   // fetch data
   const job = await getJobData(id);
+  try {
+    // console.log(job);
 
-  return {
-    title: job.title,
-    description: job.description,
-    publisher: job.recruiter.company,
-    keywords: job.skills_required,
-    authors: [{ name: job.recruiter.user.username }],
-    openGraph: {
-      type: "article",
+    return {
       title: job.title,
       description: job.description,
-      siteName: job.title,
-      publishedTime: job.date_posted,
-    },
-    twitter: {
-      card: "summary_large_image",
-      creator: `@${job.recruiter.company}`,
-      creatorId: `@${job.recruiter.id}`,
-      siteId: `@${job.id}`,
-      title: job.title,
-      description: job.description,
-      site: "@ISearch",
-    },
-  };
+      publisher: job.recruiter.company,
+      keywords: job.skills_required,
+      authors: [{ name: job.recruiter.user.username }],
+      openGraph: {
+        type: "article",
+        title: job.title,
+        description: job.description,
+        siteName: job.title,
+        publishedTime: job.date_posted,
+      },
+      twitter: {
+        card: "summary_large_image",
+        creator: `@${job.recruiter.company}`,
+        creatorId: `@${job.recruiter.id}`,
+        siteId: `@${job.id}`,
+        title: job.title,
+        description: job.description,
+        site: "@ISearch",
+      },
+    };
+  } catch (error) {
+    return {};
+  }
 }
 export async function generateStaticParams() {
   const jobs = await getJobs();

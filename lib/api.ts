@@ -3,6 +3,7 @@ import { authAxios } from "./auth";
 import {
   ApplicantList,
   Job,
+  JobDashboard,
   JobDetailList,
   JobList,
   JobViewList,
@@ -213,6 +214,17 @@ export const deleteSavedJob = async (
   }
 };
 
+//Recruiter: Get job details for a job
+export const getDashboardDetails = async (): Promise<JobDashboard> => {
+  try {
+    let url = `/recruiters/jobs/dashboard/`;
+    const response: AxiosResponse<JobDashboard> = await authAxios.get(url);
+    return response.data;
+    // return { data: response.data };
+  } catch (error: any) {
+    return error;
+  }
+};
 //Recruiter: Get job details for a job
 export const getJobDetails = async (query?: string): Promise<JobDetailList> => {
   try {

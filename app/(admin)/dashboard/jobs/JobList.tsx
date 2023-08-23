@@ -4,6 +4,7 @@ import { rgbDataURL } from "@/lib/image";
 import { ApplicantDetail } from "@/lib/interfaces";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { EyeIcon } from "@heroicons/react/24/solid";
+import { format } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -34,8 +35,10 @@ export default function JobList({
   const [showResume, setShowResume] = useToggle();
   return (
     <tr className="text-xs">
-      <td className="p-2 sm:py-5 sm:px-6 font-medium">{id}</td>
-      <td className="relative flex px-4 py-3">
+      <td className="hidden sm:table-cell p-2 sm:py-5 sm:px-6 font-medium">
+        {id}
+      </td>
+      <td className="relative inline-flex px-4 py-3">
         {applicant.avatar ? (
           <Image
             className="w-8 h-8 mr-4 object-cover rounded-md"
@@ -64,7 +67,7 @@ export default function JobList({
         </div>
       </td>
       <td className="truncate font-medium">
-        {new Date(date_posted).toDateString()}
+        {format(new Date(date_posted), "dd-MM-yyyy")}
       </td>
       <td>
         <span className="inline-block py-1 px-2 text-white bg-green-500 rounded-full">

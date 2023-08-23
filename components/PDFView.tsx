@@ -8,6 +8,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 
 import React, { useState } from "react";
 import BaseModal from "./modals/BaseModal";
+import OverlayModal from "./modals/OverlayModal";
 
 type Props = {};
 
@@ -35,7 +36,7 @@ export default function PDFView({ resume, name, showDocument }) {
   }
   return (
     <>
-      <BaseModal
+      <OverlayModal
         setModal={showDocument}
         title={`${name} Resume`}
         css={"bg-white sm:max-w-none"}
@@ -67,7 +68,7 @@ export default function PDFView({ resume, name, showDocument }) {
             Next
           </button>
         </div>
-      </BaseModal>
+      </OverlayModal>
     </>
   );
 }

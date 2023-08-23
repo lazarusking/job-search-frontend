@@ -42,20 +42,42 @@ export const postQuestionToResumes = async (
   try {
     const response = await authAxios.post(
       `recruiters/jobs/${job_id}/resume_analysis/`,
-      { query }
-      // {
-      //   responseType: "stream",
-      // }
+      { query },
+      {
+        timeout: 30000,
+        responseType: "stream",
+        onDownloadProgress: (progressEvent) => {
+          // Handle streamed data here
+          console.log("Received chunk of data", progressEvent.loaded, "bytes");
+        },
+      }
     );
-    // const stream = response.data;
-    // stream.on("data", (data) => {
-    //   console.log(data.toString());
-    // });
-    console.log(response);
-    // console.log(stream);
 
+    console.log(response);
     return response;
   } catch (error: any) {
     return error;
   }
 };
+
+export function testresume(job_id: number, query: string) {
+  fetch(
+    `http://127.0.0.1:8000/api/recruiters/jobs/${job_id}/resume_analysis/`,
+    {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkyODgwNDAzLCJpYXQiOjE2OTI3MDc2MDMsImp0aSI6IjIwN2FkMGMwYjYxZDQzYjFhZGQyZGU5ZjViZmQzYTIwIiwidXNlcl9pZCI6MywidXNlcm5hbWUiOiJuZXdyZWNydWl0ZXIiLCJlbWFpbCI6Im5ld3JlY3J1aXRlckBnbWFpbC5jb20iLCJpc19yZWNydWl0ZXIiOnRydWV9.Oqi0-4_owpnMnx7VYdCyQUg2N7tWDaDetFiXmgm6UYI",
+      },
+      body: JSON.stringify({ query: query }),
+    }
+  )
+    .then((response) => response.text())
+    .then((data) => {
+      // `data` is the response body as a string
+      console.log(data);
+      return data;
+    });
+}

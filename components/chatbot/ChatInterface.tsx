@@ -69,9 +69,13 @@ export default function Chatbot({ job_slug }: { job_slug: number }) {
             position: "last",
           },
         ]);
+      } else {
+        setMessages(newMessages.splice(-1, 1));
       }
     } catch (error) {
       console.log(error);
+      console.log("Hello");
+      setMessages(newMessages.splice(-1, 1));
     }
     setTyping(false);
     setQuery("");
@@ -109,86 +113,85 @@ export default function Chatbot({ job_slug }: { job_slug: number }) {
 
   return (
     <>
-      <div
-        className="absolute bottom-0 right-16 cursor-pointer"
-        onClick={handleShowBot}
-      >
-        <ChatBubbleLeftRightIcon className="w-10 h-10 text-blue-700 hover:fill-blue-700" />
-      </div>
-
-      {showBot && (
-        <aside
-          className="absolute right-0 bottom-9 md:w-96 md:h-[500px] transition-transform"
-          // style={{ position: "relative", height: "500px" }}
-        >
-          <MainContainer>
-            <ChatContainer>
-              <ConversationHeader>
-                <Avatar
-                  src={
-                    "https://chatscope.io/storybook/react/static/media/lilly.62d4acff.svg"
-                  }
-                  name="Resume Bot"
-                />
-                <ConversationHeader.Content userName="Zoe" info="Active" />
-                <ConversationHeader.Actions>
-                  <XMarkIcon
-                    className="w-7 h-7 text-blue-700"
-                    onClick={() => setShowBot(false)}
+      <div className="absolute bottom-5 right-2 sm:right-16">
+        <ChatBubbleLeftRightIcon
+          onClick={handleShowBot}
+          className="w-10 h-10 text-blue-700 cursor-pointer hover:fill-blue-700"
+        />
+        {showBot && (
+          <aside
+            className="absolute w-[90vw] h-[70vh] right-0 bottom-9 md:w-96 md:h-[500px] transition-transform"
+            // style={{ position: "relative", height: "500px" }}
+          >
+            <MainContainer>
+              <ChatContainer>
+                <ConversationHeader>
+                  <Avatar
+                    src={
+                      "https://chatscope.io/storybook/react/static/media/lilly.62d4acff.svg"
+                    }
+                    name="Resume Bot"
                   />
-                </ConversationHeader.Actions>
-              </ConversationHeader>
-              <MessageList
-                typingIndicator={
-                  typing ? <TypingIndicator content={"Typing...."} /> : null
-                }
-              >
-                <MessageList.Content>
-                  <div className="mx-auto max-w-2xl p-3">
-                    <div className="rounded-lg border bg-background p-8">
-                      <h1 className="mb-2 text-lg font-bold">
-                        Welcome to ISearch AI Chatbot!
-                      </h1>
+                  <ConversationHeader.Content userName="Zoe" info="Active" />
+                  <ConversationHeader.Actions>
+                    <XMarkIcon
+                      onClick={() => setShowBot(false)}
+                      className="w-7 h-7 text-blue-700"
+                    />
+                  </ConversationHeader.Actions>
+                </ConversationHeader>
+                <MessageList
+                  typingIndicator={
+                    typing ? <TypingIndicator content={"Typing...."} /> : null
+                  }
+                >
+                  <MessageList.Content>
+                    <div className="mx-auto max-w-2xl p-3">
+                      <div className="rounded-lg border bg-background p-8">
+                        <h1 className="mb-2 text-lg font-bold">
+                          Welcome to ISearch AI Chatbot!
+                        </h1>
 
-                      <p className="leading-normal text-gray-500">
-                        You can start a conversation here or try the following
-                        examples:
-                      </p>
-                      <div className="mt-4 flex flex-col items-start space-y-2">
-                        {exampleMessages.map((message, index) => (
-                          <button
-                            key={index}
-                            className="h-auto p-0 inline-flex items-center text-left justify-center rounded-md text-sm font-bold ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 underline-offset-4 hover:underline"
-                            onClick={() => setQuery(message.message)}
-                          >
-                            <ArrowRightIcon className="mr-2 w-4 h-4" />
-                            {message.heading}
-                          </button>
-                        ))}
+                        <p className="leading-normal text-gray-500">
+                          You can start a conversation here or try the following
+                          examples:
+                        </p>
+                        <div className="mt-4 flex flex-col items-start space-y-2">
+                          {exampleMessages.map((message, index) => (
+                            <button
+                              key={index}
+                              className="h-auto p-0 inline-flex items-center text-left justify-center rounded-md text-sm font-bold ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 underline-offset-4 hover:underline"
+                              onClick={() => setQuery(message.message)}
+                            >
+                              <ArrowRightIcon className="mr-2 w-4 h-4" />
+                              {message.heading}
+                            </button>
+                          ))}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  {messages.map((message, index) => {
-                    return <Message key={index} model={message} />;
-                  })}
-                </MessageList.Content>
-                {/* <Message model={messages} /> */}
-              </MessageList>
-              <MessageInput
-                attachButton={false}
-                value={query}
-                onChange={(e) => setQuery(e)}
-                placeholder="Type message here"
-                onSend={handleSend}
-                onPaste={(evt) => {
-                  evt.preventDefault();
-                  setQuery(evt.clipboardData.getData("text"));
-                }}
-              />
-            </ChatContainer>
-          </MainContainer>
-        </aside>
-      )}
+                    {messages.map((message, index) => {
+                      return <Message key={index} model={message} />;
+                    })}
+                  </MessageList.Content>
+                  {/* <Message model={messages} /> */}
+                </MessageList>
+                <MessageInput
+                  attachButton={false}
+                  value={query}
+                  onChange={(e) => setQuery(e)}
+                  placeholder="Type message here"
+                  onSend={handleSend}
+                  onPaste={(evt) => {
+                    evt.preventDefault();
+                    setQuery(evt.clipboardData.getData("text"));
+                  }}
+                />
+              </ChatContainer>
+            </MainContainer>
+          </aside>
+        )}
+      </div>
     </>
   );
 }
