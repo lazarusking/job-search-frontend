@@ -2,7 +2,6 @@ import { useAuth } from "@/context/auth";
 import {
   ArrowRightOnRectangleIcon,
   BriefcaseIcon,
-  ChatBubbleBottomCenterTextIcon,
   Cog8ToothIcon,
 } from "@heroicons/react/24/solid";
 import DashLink from "./DashLink";
