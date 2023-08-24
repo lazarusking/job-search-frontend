@@ -32,7 +32,6 @@
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.3",
-    "@types/node-fetch": "^2.6.4",
     "eslint-config-prettier": "^8.8.0",
     "raw-loader": "^4.0.2"
   }
