@@ -1,9 +1,5 @@
 "use client";
-import {
-  deleteApplicant,
-  deleteSelectedApplicant,
-  getSelectedApplicants,
-} from "@/lib/api";
+import { deleteSelectedApplicant, getSelectedApplicants } from "@/lib/api";
 import { ApplicantDetail } from "@/lib/interfaces";
 import { useEffect, useState } from "react";
 import JobList from "../../JobList";

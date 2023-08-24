@@ -1,14 +1,13 @@
-import Navbar from "@/components/navbar/Navbar";
-import { Inter, Mulish, Montserrat, Poppins } from "next/font/google";
-import "./globals.css";
-import "react-toastify/dist/ReactToastify.css";
-import { ReactNode, Suspense } from "react";
-import Loading from "./loading";
 import { AuthProvider } from "@/context/auth";
-const { TWITTER_CREATOR, TWITTER_SITE, SITE_NAME, SITE_NAME_URL } = process.env;
-import { ToastContainer } from "react-toastify";
-import { Metadata } from "next";
 import Logo from "@/public/logo.svg";
+import { Metadata } from "next";
+import { Mulish } from "next/font/google";
+import { ReactNode, Suspense } from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./globals.css";
+import Loading from "./loading";
+const { TWITTER_CREATOR, TWITTER_SITE, SITE_NAME, SITE_NAME_URL } = process.env;
 const inter = Mulish({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800", "900"],

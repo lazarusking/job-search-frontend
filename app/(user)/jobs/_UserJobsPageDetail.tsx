@@ -1,6 +1,6 @@
 "use client";
 
-export default function UserJobsPageDetail({ title, description }) {
+export default function UserJobsPageDetail({ title, description }: any) {
   return (
     <div>
       <h3 className="text-xl font-bold">{title}</h3>

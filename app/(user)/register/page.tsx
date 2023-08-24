@@ -57,10 +57,10 @@ export default function Register() {
     setUserDetail((user) => ({ ...user, [e.target.name]: e.target.value }));
   }
   const emailRef = useRef<HTMLInputElement | null>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
+  // const passwordRef = useRef<HTMLInputElement>(null);
   const [error, setErrorMessage] = useState<Partial<RegisterError>>({});
   const [isUpdating, setIsUpdating] = useState(false);
-  const { loading, isAuthenticated, register } = useAuth();
+  const { register } = useAuth();
   const [usernameCheck, setUserNameCheck] = useState<
     Partial<UsernameCheckType>
   >({});

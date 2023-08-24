@@ -231,21 +231,27 @@ const Navbar = () => {
                 </p>
                 <div className="text-center">
                   <a className="inline-block px-1" href="#">
-                    <img
+                    <Image
                       src="https://shuffle.dev/atis-assets/social/facebook-purple.svg"
                       alt=""
+                      width={10}
+                      height={10}
                     />
                   </a>
                   <a className="inline-block px-1" href="#">
-                    <img
+                    <Image
                       src="https://shuffle.dev/atis-assets/social/twitter-purple.svg"
                       alt=""
+                      width={10}
+                      height={10}
                     />
                   </a>
                   <a className="inline-block px-1" href="#">
-                    <img
+                    <Image
                       src="https://shuffle.dev/atis-assets/social/instagram-purple.svg"
                       alt=""
+                      width={10}
+                      height={10}
                     />
                   </a>
                 </div>

@@ -1,5 +1,3 @@
-type Props = {};
-
 export default function HowItWorks() {
   return (
     <section className="pt-28 pb-20 overflow-hidden">
@@ -8,7 +6,7 @@ export default function HowItWorks() {
           The features that made us special
         </p>
         <h2 className="mb-20 font-heading font-semibold text-6xl sm:text-7xl text-gray-900 text-center">
-          Here’s how it works
+          {`Here's how it works`}
         </h2>
         <div className="flex flex-wrap -m-4">
           <div className="w-full md:w-1/3 p-4">
@@ -30,8 +28,8 @@ export default function HowItWorks() {
                 />
               </svg>
               <p className="font-heading font-medium text-xl text-gray-900">
-                Subscribe to a plan that suits you better and place orders as
-                many as you want.
+                Browse through a diverse range of job listings from various
+                industries and sectors.
               </p>
             </div>
           </div>
@@ -75,8 +73,7 @@ export default function HowItWorks() {
                 />
               </svg>
               <p className="font-heading font-medium text-xl text-gray-900">
-                Subscribe to a plan that suits you better and place orders as
-                many as you want.
+                Apply to jobs that pique your interest with just a few clicks.
               </p>
             </div>
           </div>
@@ -113,8 +110,8 @@ export default function HowItWorks() {
                 />
               </svg>
               <p className="font-heading font-medium text-xl text-gray-900">
-                Subscribe to a plan that suits you better and place orders as
-                many as you want.
+                Our platform ensures a smooth and user-friendly experience
+                throughout your job search or candidate hunt.
               </p>
             </div>
           </div>

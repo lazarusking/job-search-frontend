@@ -1,19 +1,10 @@
 "use client";
-import { ArrowRightIcon } from "@heroicons/react/24/solid";
-import Link from "next/link";
-import signup from "@/public/Sign up-pana.svg";
 import { rgbDataURL } from "@/lib/image";
+import signup from "@/public/Sign up-pana.svg";
 import Image from "next/image";
-import { FormEvent } from "react";
-import { useRouter } from "next/navigation";
-type Props = {};
+import Link from "next/link";
 
-export default function Page({}: Props) {
-  const router = useRouter();
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    router.push("/register");
-  };
+export default function Page() {
   return (
     <div className="relative flex flex-wrap lg:-m-11">
       <div className="relative h-44 md:h-auto w-full md:w-1/2 md:p-11">

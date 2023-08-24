@@ -4,7 +4,7 @@ import Logo from "../Logo";
 
 export default function DashImage() {
   return (
-    <Link className="flex items-center text-xl font-semibold" href="#">
+    <Link className="flex items-center text-xl font-semibold" href="/">
       <Logo
         className="w-10 h-10"
         // width={14}

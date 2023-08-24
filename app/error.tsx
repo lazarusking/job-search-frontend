@@ -1,5 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Error({
   error,
@@ -9,6 +10,10 @@ export default function Error({
   reset: () => void;
 }) {
   const router = useRouter();
+  useEffect(() => {
+    console.error(error);
+  }, [error]);
+
   return (
     <main className="grid min-h-full place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8">
       <div className="text-center">

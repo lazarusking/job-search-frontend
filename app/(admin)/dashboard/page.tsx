@@ -20,7 +20,6 @@ async function getDetails(): Promise<JobDashboard> {
   try {
     const response = await getDashboardDetails();
     console.log(response);
-
     return response;
   } catch (error: any) {
     console.log(error);
@@ -48,7 +47,7 @@ export default function Dashboard() {
     </section>
   );
 }
-export function JobStatus({ details }: { details: JobDashboard }) {
+function JobStatus({ details }: { details: JobDashboard }) {
   return (
     <div className="flex flex-wrap -m-4 bg-slate-400 sm:bg-white">
       <div className="w-full md:w-1/2 lg:w-1/4 -mx-px p-4 bg--400  shadow border- px-1 border-t-blue-400">

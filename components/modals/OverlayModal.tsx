@@ -11,7 +11,6 @@ export default function OverlayModal({
   setModal: any;
   css?: string;
 }) {
-  const dialogRef = useRef<any>();
   const modalRef = useRef(null);
   function handleOutsideClick(event: any) {
     event.stopPropagation();
@@ -53,6 +52,7 @@ export default function OverlayModal({
       aria-labelledby="modal-title"
       role="dialog"
       aria-modal="true"
+      aria-label={title}
       onClick={handleOutsideClick}
     >
       <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
@@ -62,7 +62,9 @@ export default function OverlayModal({
           ref={modalRef}
           className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0"
         >
-          <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+          <div
+            className={`${css} relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg`}
+          >
             {children}
           </div>
         </div>

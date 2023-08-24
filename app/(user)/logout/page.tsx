@@ -7,10 +7,10 @@ const Logout = (): React.ReactElement => {
 
   useEffect(() => {
     logout();
-  }, []);
+  }, [logout]);
 
   if (isAuthenticated) return <></>;
-  return <h1 className="text-xl pt-3 pb-5">You've been logged out</h1>;
+  return <h1 className="text-xl pt-3 pb-5">{`You've been logged out`}</h1>;
 };
 
 export default Logout;

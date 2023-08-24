@@ -186,10 +186,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         }
         // return tokenData.access;
       }
-      // return "";
+      return "";
     } catch (error) {
       setNotAuthenticated();
-      // return "";
+      return "";
     }
   }, [refreshToken, setAccessToken, setNotAuthenticated, user]);
 
