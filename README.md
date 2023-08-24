@@ -44,6 +44,20 @@ Once you've successfully installed the project's dependencies, you can run the f
    npm run dev
    ```
 
+   OR
+
+   **Build the project:** Run the following command to build the project:
+
+   ```bash
+   npm run build
+   ```
+
+   then run
+
+   ```bash
+   npm run start
+   ```
+
 2. **Access the Application:** Open your web browser and navigate to `http://localhost:3000` to access the frontend of the project.
 
 ## Configuration
