@@ -8,6 +8,17 @@ import { useEffect, useRef, useState } from "react";
 import DropdownProfile from "./DropdownProfile";
 import { NavLink } from "./Navlink";
 import { useToggle } from "usehooks-ts";
+const rec_paths = [
+  { name: "Dashboard", href: "/dashboard" },
+  { name: "Jobs", href: "/dashboard/jobs" },
+  { name: "Profile", href: "/dashboard/profile" },
+];
+const user_paths = [
+  { name: "Profile", href: "/profile" },
+  { name: "Jobs", href: "/jobs/" },
+  // { name: "Services", href: "/services" },
+  { name: "Saved Jobs", href: "/jobs/saved" },
+];
 
 const Navbar = () => {
   const [show, toggle] = useToggle();
@@ -64,12 +75,23 @@ const Navbar = () => {
                 {/* <Link className="text-blue-600 capitalize" href="/profile">
                   <p>{user?.username}</p>
                 </Link> */}
-                <DropdownProfile
-                  username={user?.username}
-                  toggle={toggleDropdown}
-                  show={showDropdown}
-                  logout={logout}
-                />
+                {user.is_recruiter ? (
+                  <DropdownProfile
+                    username={user?.username}
+                    toggle={toggleDropdown}
+                    show={showDropdown}
+                    logout={logout}
+                    paths={rec_paths}
+                  />
+                ) : (
+                  <DropdownProfile
+                    username={user?.username}
+                    toggle={toggleDropdown}
+                    show={showDropdown}
+                    logout={logout}
+                    paths={user_paths}
+                  />
+                )}
                 {/* <button
                   onClick={logout}
                   className="rounded-md text-blue-600 px-2.5 py-2.5 text-sm font-medium"

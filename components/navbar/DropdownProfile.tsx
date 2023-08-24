@@ -7,13 +7,14 @@ interface DropdownType {
   show: boolean;
   toggle: any;
   logout: any;
+  paths: { name: string; href: string }[];
 }
-const paths = [
-  { name: "Profile", href: "/profile" },
-  { name: "Jobs", href: "/jobs/" },
-  // { name: "Services", href: "/services" },
-  { name: "Saved Jobs", href: "/jobs/saved" },
-];
+// const paths = [
+//   { name: "Profile", href: "/profile" },
+//   { name: "Jobs", href: "/jobs/" },
+//   // { name: "Services", href: "/services" },
+//   { name: "Saved Jobs", href: "/jobs/saved" },
+// ];
 
 type Links = {
   title: string;
@@ -40,6 +41,7 @@ export default function DropdownProfile({
   show,
   toggle,
   logout,
+  paths,
 }: DropdownType) {
   const modalRef = useRef(null);
   const handleShow = useCallback(() => {
