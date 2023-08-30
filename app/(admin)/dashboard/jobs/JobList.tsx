@@ -61,7 +61,11 @@ export default function JobList({
         )}
         <div className="truncate">
           <Link href={`/dashboards/jobs/${job.id}/${applicant.user.id}`}>
-            <p className="font-medium">{applicant.user.username}</p>
+            <p className="font-medium">
+              {applicant.user.first_name
+                ? `${applicant.user.first_name} ${applicant.user.last_name}`
+                : applicant.user.username}
+            </p>
             <p className="text-gray-500">{applicant.user.email}</p>
           </Link>
         </div>
